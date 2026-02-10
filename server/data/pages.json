@@ -1,0 +1,22 @@
+[
+    {
+        "slug": "about/history",
+        "title": "History of DCE Darbhanga",
+        "content": "<p>Darbhanga College of Engineering (DCE), Darbhanga is a government engineering college in Darbhanga, Bihar, India. It was established in 2008.</p><p>It is affiliated with Bihar Engineering University, Patna and approved by the All India Council for Technical Education (AICTE), New Delhi.</p><p>The college was inaugurated by the Honorable Chief Minister of Bihar, Shri Nitish Kumar.</p>"
+    },
+    {
+        "slug": "about/principals-message",
+        "title": "Principal's Message",
+        "content": "<p>Dear Students and Parents,</p><p>It is my privilege to welcome you to DCE Darbhanga. our institution is dedicated to providing high-quality technical education...</p><p>We focus on holistic development...</p><p><strong>Dr. Vikash Kumar</strong><br/>Principal</p>"
+    },
+    {
+        "slug": "about/vision-mission",
+        "title": "Vision & Mission",
+        "content": "<h3>Vision</h3><p>To produce competent, innovative, and ethical engineers...</p><h3>Mission</h3><ul><li>To provide state-of-the-art infrastructure.</li><li>To promote research and development.</li><li>To foster industry-institute interaction.</li></ul>"
+    },
+    {
+        "slug": "about/administration",
+        "title": "Administration",
+        "content": "<table class='min-w-full border'><thead><tr class='bg-gray-100'><th class='p-2 border'>Name</th><th class='p-2 border'>Designation</th></tr></thead><tbody><tr><td class='p-2 border'>Dr. Vikash Kumar</td><td class='p-2 border'>Principal</td></tr><tr><td class='p-2 border'>Prof. X.Y.Z</td><td class='p-2 border'>Registrar</td></tr></tbody></table>"
+    }
+]

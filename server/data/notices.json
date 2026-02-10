@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "text": "Registration for B.Tech 1st Semester (2025-29) started.",
+        "date": "2025-10-12",
+        "link": "#"
+    },
+    {
+        "id": 2,
+        "text": "Mid-Semester exam schedule for 3rd and 5th Semester.",
+        "date": "2025-10-10",
+        "link": "#"
+    },
+    {
+        "id": 3,
+        "text": "Holiday declared on 15th Oct due to local festival.",
+        "date": "2025-10-09",
+        "link": "#"
+    },
+    {
+        "id": 4,
+        "text": "Scholarship applications open for OBC students.",
+        "date": "2025-10-05",
+        "link": "#"
+    },
+    {
+        "id": 5,
+        "text": "Workshop on AI and Machine Learning scheduled next week.",
+        "date": "2025-10-01",
+        "link": "#"
+    },
+    {
+        "id": 6,
+        "text": "Sports meet postponed due to rain.",
+        "date": "2025-09-28",
+        "link": "#"
+    }
+]

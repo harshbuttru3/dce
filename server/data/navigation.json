@@ -1,0 +1,139 @@
+[
+    {
+        "label": "Home",
+        "path": "/"
+    },
+    {
+        "label": "About Us",
+        "children": [
+            {
+                "label": "History",
+                "path": "/about/history"
+            },
+            {
+                "label": "Principal's Message",
+                "path": "/about/principals-message"
+            },
+            {
+                "label": "Vision & Mission",
+                "path": "/about/vision-mission"
+            },
+            {
+                "label": "Administration",
+                "path": "/about/administration"
+            },
+            {
+                "label": "Seat Approval & Affiliation",
+                "path": "/about/affiliation"
+            },
+            {
+                "label": "Visit Us",
+                "path": "/about/visit-us"
+            },
+            {
+                "label": "Contact Us",
+                "path": "/contact"
+            }
+        ]
+    },
+    {
+        "label": "Academics",
+        "children": [
+            {
+                "label": "Admission",
+                "path": "/academics/admission"
+            },
+            {
+                "label": "Academic Regulation",
+                "path": "/academics/regulation"
+            },
+            {
+                "label": "Academic Calendar",
+                "path": "/academics/calendar"
+            },
+            {
+                "label": "Syllabus",
+                "path": "/academics/syllabus"
+            },
+            {
+                "label": "Notices",
+                "path": "/academics/notices"
+            }
+        ]
+    },
+    {
+        "label": "Facilities",
+        "children": [
+            {
+                "label": "Computer Center",
+                "path": "/facilities/computer-center"
+            },
+            {
+                "label": "Central Library",
+                "path": "/facilities/library"
+            },
+            {
+                "label": "Hostels",
+                "path": "/facilities/hostels"
+            },
+            {
+                "label": "Sports Facilities",
+                "path": "/facilities/sports"
+            },
+            {
+                "label": "Wi-Fi",
+                "path": "/facilities/wifi"
+            },
+            {
+                "label": "Bank",
+                "path": "/facilities/bank"
+            }
+        ]
+    },
+    {
+        "label": "T & P",
+        "children": [
+            {
+                "label": "About Placement",
+                "path": "/placement/about"
+            },
+            {
+                "label": "Placement Brochure",
+                "path": "/placement/brochure"
+            },
+            {
+                "label": "Placement List",
+                "path": "/placement/list"
+            },
+            {
+                "label": "Gate & CAT Qualified",
+                "path": "/placement/gate-cat"
+            }
+        ]
+    },
+    {
+        "label": "Activities",
+        "children": [
+            {
+                "label": "Awards & Accolades",
+                "path": "/activities/awards"
+            },
+            {
+                "label": "Startup Cell",
+                "path": "/activities/startup"
+            },
+            {
+                "label": "Internship",
+                "path": "/activities/internship"
+            },
+            {
+                "label": "Hackathon",
+                "path": "/activities/hackathon"
+            }
+        ]
+    },
+    {
+        "label": "Alumni",
+        "path": "/alumni"
+    }
+]
