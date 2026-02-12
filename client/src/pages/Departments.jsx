@@ -6,6 +6,7 @@ const departments = [
     { id: 2, name: 'Civil Engineering', icon: <PenTool size={48} />, intakes: 60, head: "Dr. B. Singh" },
     { id: 3, name: 'Mechanical Engineering', icon: <Cpu size={48} />, intakes: 60, head: "Dr. C. Roy" },
     { id: 4, name: 'Electrical & Electronics Engineering', icon: <Zap size={48} />, intakes: 60, head: "Dr. D. Jha" },
+    {id:5 , name: 'Computer Science & Engineering(cyber Security)' , icons :<Monitor size {...65} /> , intakes:65, head:"Dr. c.k jha"},
 ];
 
 const Departments = () => {

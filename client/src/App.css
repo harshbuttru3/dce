@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+.drpdown{
+      color: #000;
+    font-size: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    list-style: none;
+    margin-bottom: 0;
+    width: 280px;
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.5);
+    position: absolute;
+    top: 100%;
+    bottom: inherit;
+    left: 0;
+    z-index: 999;
+    transform-origin: 0 0 0;
+    transform: scaleY(0);
+}
