@@ -21,6 +21,9 @@ import Calender from './pages/Acedmics/Calender';
 import Regulation from './pages/Acedmics/Regulation';
 import Notice from './pages/Acedmics/Notice';
 import Syllabus from './pages/Acedmics/Syllabus';
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
+import Gallery from './pages/Gallery';
 
 function App() {
   return (
@@ -33,27 +36,33 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/Department" element={<Departments />} />
             {/* nested path for about  */}
-            <Route path="/About" element={<About/>}>
-            <Route path="PrincipalMessage" element={<PrincipalMessage />} />
-             <Route path="visionmission" element={ <VissionMessage />} />
-             <Route path="administration" element={<Administration />} />
-             <Route path="Seat" element={ <Seat />} />
-             <Route path="visit" element={ <Visit />}></Route>
-             
+            <Route path="/About" element={<About />}>
+              <Route path="PrincipalMessage" element={<PrincipalMessage />} />
+              <Route path="visionmission" element={<VissionMessage />} />
+              <Route path="administration" element={<Administration />} />
+              <Route path="Seat" element={<Seat />} />
+              <Route path="visit" element={<Visit />}></Route>
 
-            <Route path="history"  element={<History />}/></Route>
+
+              <Route path="history" element={<History />} /></Route>
             {/* nested path for Acedmics */}
             <Route path="/Acedmics" element={<Acedmics />}>
-            <Route path = "Admission" element={<Admission />} />
-            <Route path="Attendence" element={<Attendence />} />
-            <Route path="Calender" element={<Calender />} />
-            <Route path="Notice"  element= {<Notice />} />
-            <Route path="Regulation" element={<Regulation />} />
-            <Route path="Syllabus" element={<Syllabus />} />
+              <Route path="Admission" element={<Admission />} />
+              <Route path="Attendence" element={<Attendence />} />
+              <Route path="Calender" element={<Calender />} />
+              <Route path="Notice" element={<Notice />} />
+              <Route path="Regulation" element={<Regulation />} />
+              <Route path="Syllabus" element={<Syllabus />} />
             </Route>
 
-            <Route path="/Admin" element={<Admin />} />
+            {/* Protected Admin Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/Admin" element={<Admin />} />
+            </Route>
+
+            <Route path="/login" element={<Login />} />
             {/* Catch-all for other generic pages */}
+            <Route path="/image" element={<Gallery />} />
             <Route path="*" element={<GenericPage />} />
           </Routes>
         </main>
