@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2, FileText, Image as ImageIcon } from "lucide-react";
+import { Trash2, FileText, Image as ImageIcon, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
@@ -30,9 +30,14 @@ const Admin = () => {
   const [linkTitle, setLinkTitle] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
 
+  // Messages State
+  const [messages, setMessages] = useState([]);
+
   // Get token from localStorage
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const token = userInfo?.token;
+
+  const MESSAGE_API_URL = "http://localhost:5000/api/messages";
 
   useEffect(() => {
     if (!userInfo) {
@@ -47,7 +52,21 @@ const Admin = () => {
     if (activeTab === "links") {
       fetchLinks();
     }
+    if (activeTab === "messages") {
+      fetchMessages();
+    }
   }, [activeTab, navigate, userInfo]); // Added userInfo to dependency array
+
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(MESSAGE_API_URL, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
 
   const fetchNotices = async () => {
     try {
@@ -213,6 +232,20 @@ const Admin = () => {
     }
   };
 
+  const handleDeleteMessage = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this message?")) return;
+    try {
+      await axios.delete(`${MESSAGE_API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessages(messages.filter(m => m._id !== id));
+      setMessage("Message deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      setMessage("Failed to delete message.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
@@ -224,6 +257,7 @@ const Admin = () => {
           <li onClick={() => setActiveTab("images")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'images' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Manage Images</li>
           <li onClick={() => setActiveTab("links")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'links' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Important Links</li>
           <li onClick={() => setActiveTab("notifications")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'notifications' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Notices / News</li>
+          <li onClick={() => setActiveTab("messages")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'messages' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Messages</li>
         </ul>
       </div>
 
@@ -478,6 +512,55 @@ const Admin = () => {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {activeTab === "messages" && (
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">Contact Messages</h2>
+              {message && <p className={`mb-4 p-2 rounded ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{message}</p>}
+
+              {messages.length === 0 ? (
+                <p className="text-gray-500 text-center py-4">No messages found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 text-gray-700 border-b">
+                        <th className="p-3 font-medium">Date</th>
+                        <th className="p-3 font-medium">From</th>
+                        <th className="p-3 font-medium">Subject</th>
+                        <th className="p-3 font-medium">Message</th>
+                        <th className="p-3 font-medium text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {messages.map((msg) => (
+                        <tr key={msg._id} className="border-b hover:bg-gray-50 transition">
+                          <td className="p-3 text-sm text-gray-500">
+                            {new Date(msg.createdAt).toLocaleDateString()}
+                          </td>
+                          <td className="p-3">
+                            <div className="font-medium text-gray-800">{msg.name}</div>
+                            <div className="text-xs text-gray-500">{msg.email}</div>
+                          </td>
+                          <td className="p-3 text-gray-800 font-medium">{msg.subject}</td>
+                          <td className="p-3 text-gray-600 max-w-xs break-words">{msg.message}</td>
+                          <td className="p-3 text-center">
+                            <button
+                              onClick={() => handleDeleteMessage(msg._id)}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition"
+                              title="Delete Message"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
         </div>
