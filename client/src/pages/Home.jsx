@@ -133,11 +133,90 @@ const Home = () => {
 
 
           {/* CENTER CARD - DIRECTOR */}
+ <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
+
+  <div className="flex justify-center">
+    <img
+      src="/Dsttelogo.jpg"
+      alt="DStte"
+      className="w-40 h-40 rounded-full object-cover"
+    />
+  </div>
+
+  {/* Badge */}
+  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
+    DSTTE, BIHAR
+  </span>
+
+  {/* Title */}
+  <h2 className="text-xl font-semibold mt-4">
+    Department of Science, Technology & Technical Education
+  </h2>
+
+  {/* Description */}
+  <p className="text-gray-600 text-sm mt-3 leading-relaxed">
+    The Department of Science, Technology and Technical Education,
+    Bihar plays a vital role in promoting technical education,
+    innovation, and skill development across the state.
+  </p>
+
+  
+
+
+</div>
+
+
+          {/* RIGHT CARD - KNOW US */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition duration-300">
+
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-sky-100 p-4 rounded-xl text-primary text-2xl">
+                <FaQuoteLeft />
+              </div>
+              <h2 className="text-2xl font-bold text-primary tracking-wide">
+                About BEU
+              </h2>
+            </div>
+
+            <h3 className="font-semibold text-lg text-gray-800">
+              About University
+            </h3>
+
+            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+               Bihar Engineering University (BEU)
+            </p>
+
+            
+
+            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+
+            </p>
+
+            <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 mt-6 text-sm text-gray-700">
+               Bihar Engineering University (BEU), Patna is the affiliating university 
+    for engineering colleges across Bihar. The university focuses on 
+    maintaining academic excellence, curriculum modernization, and 
+    promoting research and innovation among technical institutions.
+            </div>
+
+            <button className="mt-6 w-full bg-gray-100 hover:bg-gray-200 py-2 rounded-lg text-sm font-medium transition">
+              Explore More
+            </button>
+          </div>
+
+        </div>
+      </div>
+      {/* 2nd box rows */}
+      <div className="max-w-7xl mx-auto px-4 py-16 -mt-10 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {/* 2nd row LEFT CARD - director */}
+          
           <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
 
             <div className="flex justify-center">
               <img
-                src="/director.jpg"
+                src="./chandan-sir.jpeg"
                 alt="Director"
                 className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
               />
@@ -175,43 +254,74 @@ const Home = () => {
           </div>
 
 
-          {/* RIGHT CARD - KNOW US */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition duration-300">
+          {/*  2nd row CENTER CARD - nitish kumar */}
+         <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
 
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-sky-100 p-4 rounded-xl text-primary text-2xl">
-                <FaQuoteLeft />
-              </div>
-              <h2 className="text-2xl font-bold text-primary tracking-wide">
-                KNOW US
-              </h2>
-            </div>
+  <div className="flex justify-center">
+    <img
+      src="https://www.orissapost.com/wp-content/uploads/2023/11/Nitish-Kumar-.png"
+      alt="Chief Minister"
+      className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
+    />
+  </div>
 
-            <h3 className="font-semibold text-lg text-gray-800">
-              About Director
-            </h3>
+  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
+    Chancellor
+  </span>
 
-            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-              Prof. chandan kumar joined as Lecturer...
-            </p>
+  <h2 className="text-2xl font-bold text-blue-700 mt-4">
+    Shri Nitish Kumar
+  </h2>
 
-            <h3 className="font-semibold text-lg text-gray-800 mt-6">
-              Director's Message
-            </h3>
+  <p className="text-sm text-gray-600 mt-1">
+    Chief Minister of Bihar
+  </p>
 
-            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+  {/* Short Bio */}
+  <p className="text-sm text-gray-600 mt-4 leading-relaxed">
+    Shri Nitish Kumar has been serving as the Chief Minister of Bihar,
+    focusing on development, governance reforms, infrastructure growth,
+    and strengthening education and healthcare systems across the state.
+  </p>
 
-            </p>
 
-            <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 mt-6 text-sm text-gray-700">
-              It is an honour to serve as the Principal of DCE Darbhanga. the institute holds a proud place in Bihar and continues to provide quality technological education to the youth.
-            </div>
+ 
 
-            <button className="mt-6 w-full bg-gray-100 hover:bg-gray-200 py-2 rounded-lg text-sm font-medium transition">
-              Explore More
-            </button>
-          </div>
+</div>
 
+
+          {/* 2nd row RIGHT CARD -   */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
+
+  <div className="flex justify-center">
+    <img
+      src="https://i1.rgstatic.net/ii/profile.image/1020399039037441-1620293497466_Q512/Suresh-Verma-6.jpg"
+      alt="Vice-Chancellor:"
+      className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
+    />
+  </div>
+
+  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
+    Vice-Chancellor
+  </span>
+
+  <h2 className="text-2xl font-bold text-blue-700 mt-4">
+    Prof. Suresh Kant Verma
+  </h2>
+
+  <p className="text-sm text-gray-600 mt-1">
+    Vice-Chancellor of BEU
+  </p>
+
+  {/* Short Bio */}
+  <p className="text-sm text-gray-600 mt-4 leading-relaxed bg-blue-50 rounded-xl">
+    Prof. Suresh Kant Verma envisions Bihar Engineering University as a hub of academic excellence and innovation in technical education. His vision emphasizes quality learning, research advancement, and strong industry collaboration to prepare skilled engineers for national development.
+  </p>
+
+
+ 
+
+</div>
         </div>
       </div>
       <div className="bg-gray-100 flex flex-col overflow-x-hidden">

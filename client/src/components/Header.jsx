@@ -59,8 +59,8 @@ const opentop = () => {
     label: "Academics",
     children: [
       { label: "Admission", path: "/academics/Admission" },
-      { label: "Academic Regulation", path: "/academic/Regulation" },
-      { label: "Academic Calendar", path: "/academic/Calendar" },
+      { label: "Academic Regulation", path: "/academics/Regulation" },
+      { label: "Academic Calendar", path: "/academics/Calendar" },
      
       { label: "Attendance", path: "/academics/Attendance" },
       { label: "Syllabus", path: "/academics/Syllabus" },
@@ -72,11 +72,11 @@ const opentop = () => {
     label: "Department",
     children: [
       {label:"Department", path:"/Department"},
-      { label: "Civil Engineering", path: "/Department/civil" },
-      { label: "Computer Science & Engineering", path: "/Department/cse" },
-      { label: "CSE (Cyber Security)", path: "/Department/cyber" },
-      { label: "Electrical & Electronic Engineering", path: "/Department/eee" },
-      { label: "Mechanical Engineering", path: "/Department/mechanical" },
+      { label: "Civil Engineering", path: "civil" },
+      { label: "Computer Science & Engineering", path: "cse" },
+      { label: "CSE (Cyber Security)", path: "cyber" },
+      { label: "Electrical & Electronic Engineering", path: "eee" },
+      { label: "Mechanical Engineering", path: "mechanical" },
   
     ]
   },
@@ -84,50 +84,50 @@ const opentop = () => {
     label: "Facilities",
     children: [
     
-      { label: "Computer Center", path: "/facilities/computer-center" },
-      { label: "Central Library", path: "/facilities/library" },
-      { label: "Hostels", path: "/facilities/hostels" },
-      { label: "Sports Facilities", path: "/facilities/sports" },
+      { label: "Computer Center", path: "Computercenter" },
+      { label: "Central Library", path: "Centrallibrary" },
+      { label: "Hostels", path: "Hostel" },
+      { label: "Sports Facilities", path: "Sports" },
 
-      { label: "Bank", path: "/facilities/bank" },
+      { label: "Bank", path: "Bank" },
 
-      { label: "Wi-Fi", path: "/facilities/wifi" }
+      { label: "Wi-Fi", path: "Wifi" }
     ]
   },
   {
     label: "T&P",
     children: [
-      { label: "About Placement", path: "/placement/about" },
-      { label: "Placement Brochure", path: "/placement/brochure" },
-      { label: "Placement List", path: "/placement/list" },
-      { label: "GATE & CAT Qualified List", path: "/placement/gate-cat" },
+      { label: "About Placement", path: "Aboutplacement" },
+      { label: "Placement Brochure", path: "Brochure" },
+      { label: "Placement List", path: "Placementlist" },
+      { label: "GATE & CAT Qualified List", path: "Gatecat" },
 
     ]
   },
   {
     label: "Activities",
     children: [
-      { label: "Awards and Accolades", path: "/activities/awards" },
+      { label: "Awards and Accolades", path: "Award" },
       
-      { label: "StartUp Cell", path: "/activities/startup" },
-      { label: "Internship", path: "/activities/internship" },
-      { label: "Hackathon", path: "/activities/hackathon" },
+      { label: "StartUp Cell", path: "Startup" },
+      { label: "Internship", path: "Internship" },
+      { label: "Hackathon", path: "Hackathon" },
 
     ]
   },
   {
     label: "Alumni",
     children: [
-      { label: "About DCE-Alumni", path: "/about-alumni" },
-      { label: "Membership", path: "/membership" },
-      { label: "Alumni Media Galleries", path: "/alumni-gallery" }
+      { label: "About DCE-Alumni", path: "/Alumni/AboutDceAlumni" },
+      { label: "Membership", path: "/Alumni/membership" },
+      { label: "Alumni Media Galleries", path: "/Alumni/mediagallary" }
     ]
   },
   {
     label: "Approval",
     children: [
-      { label: "AICTE", path: "/aicte" },
-      { label: "NIRF", path: "/nirf" }
+      { label: "AICTE", path: "/Approval/Aicte" },
+      { label: "NIRF", path: "/Approval/Nirf" }
     ]
   },
   {
@@ -156,7 +156,7 @@ const opentop = () => {
                     <li><a href = "/student">Students</a></li>
                     <li><a href = "/Facultystaff"><span className='whitespace-nowrap'>Faculty & staff</span></a></li>
                     <li><a href = "/Alumni">Alumni</a></li>
-                    <li><a href="/Meity">Mittie</a></li>
+                    <li><a href="https://miitie.org/about">Mittie</a></li>
                     </ul>
             <button onClick={opentop} className="md:hidden text-white text-xl pl-5">
             {topheader ?   <X size={24} />: <Menu size={24} />}

@@ -3,21 +3,19 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
 
-const Acedmics = () => {
+const Alumni = () => {
   const location = useLocation();
 
   const links = [
-    { name: "Admission", path: "Admission" },
-    { name: "Attendence", path: "Attendance" },
-    { name: "Calender", path: "Calender" },
-    { name: "Notice", path: "Notice" },
-    { name: "Regulation", path: "Regulation" },
-    { name: "Syllabus", path: "Syllabus" },
+    { name: "AboutDCeAlumni", path: "AboutDceAlumni" },
+    { name: "membership", path: "membership" },
+    { name: "mediagallery", path: "mediagallary" },
+
   ];
 
   const currentPage =
     links.find((link) => location.pathname.includes(link.path))?.name ||
-    "Acedmics";
+    "About Us";
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
@@ -56,7 +54,7 @@ const Acedmics = () => {
         <div className="w-72 ">
           <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-28">
             <h2 className="bg-gray-100 px-6 py-4 font-semibold text-gray-700 border-b">
-              Acedmics
+              About Us
             </h2>
 
             <ul>
@@ -88,4 +86,4 @@ const Acedmics = () => {
   );
 };
 
-export default Acedmics;
+export default Alumni;

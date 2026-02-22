@@ -36,10 +36,20 @@ const Contact = () => {
                             </div>
                         </div>
 
-                        <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
-                            <span className="text-gray-500">Google Map Placeholder (Embed Here)</span>
-                        </div>
-                    </div>
+                      <div className="w-full rounded-lg overflow-hidden">
+  <div className="relative w-full h-0 pb-[56.25%]"> 
+    {/* 16:9 Aspect Ratio */}
+    <iframe
+      title="Darbhanga College of Engineering Location"
+      src="https://www.google.com/maps?q=Darbhanga+College+of+Engineering,+Darbhanga&output=embed"
+      className="absolute top-0 left-0 w-full h-full border-0"
+      allowFullScreen
+      loading="lazy"
+    ></iframe>
+  </div>
+</div>
+
+</div>
 
                     {/* Contact Form */}
                     <div className="bg-white p-8 rounded-lg shadow-md">
