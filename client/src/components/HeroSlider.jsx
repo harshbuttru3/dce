@@ -36,7 +36,7 @@ const HeroSlider = () => {
     const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
 
     return (
-        <div className="relative h-[60vh] md:h-[80vh] overflow-hidden bg-gray-900 mt-1">
+        <div className="relative h-screen overflow-hidden bg-gray-900">
             {slides.map((slide, index) => (
                 <div
                     key={slide.id}
@@ -48,28 +48,28 @@ const HeroSlider = () => {
                         alt={slide.title}
                         className="w-full h-full object-cover opacity-60"
                     />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-4 transform transition-transform duration-700 translate-y-0">{slide.title}</h2>
-                        <p className="text-xl md:text-2xl">{slide.subtitle}</p>
+                    <div className="absolute inset-0 flex flex-col items-start justify-end text-left text-white px-8 pb-32 md:px-16 md:pb-40 w-full md:w-2/3">
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-4 transform transition-transform duration-700 translate-y-0 leading-tight uppercase tracking-wider">{slide.title}</h2>
+                        <p className="text-xl md:text-2xl lg:text-3xl font-bold"><span className="text-yellow-400">{slide.subtitle.split('–')[0]}</span> {slide.subtitle.includes('–') ? `– ${slide.subtitle.split('–')[1]}` : ''}</p>
                     </div>
                 </div>
             ))}
 
-            <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors">
-                <ChevronLeft size={32} />
-            </button>
-            <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors">
-                <ChevronRight size={32} />
-            </button>
+            {/* Subtitle logic here assumes we want to highlight the first part if there's a dash, otherwise it just prints it all. The GD screenshot highlights "Admissions Open" in yellow */}
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* Pagination Dots - Bottom Right */}
+            <div className="absolute bottom-8 right-8 md:right-16 flex items-center gap-3">
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrent(index)}
-                        className={`w-3 h-3 rounded-full transition-colors ${index === current ? 'bg-accent' : 'bg-gray-400'
+                        className={`transition-all duration-300 flex items-center justify-center font-bold text-xs ${index === current
+                                ? 'w-6 h-6 bg-transparent text-white border border-gray-400 rounded-full'
+                                : 'w-2 h-2 bg-gray-400 rounded-full hover:bg-gray-300'
                             }`}
-                    />
+                    >
+                        {index === current ? index + 1 : ''}
+                    </button>
                 ))}
             </div>
         </div>

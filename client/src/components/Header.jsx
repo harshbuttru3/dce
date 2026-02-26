@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchNavigation } from '../services/api';
-import { Menu, X, ChevronDown  } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { IoCall } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
@@ -14,353 +14,257 @@ import { BiMessageSquareDetail } from "react-icons/bi"
 
 const Header = () => {
 
-   
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null);
-    // mobile view menu
-    const [topheader,setTopheader] = useState(false);
-const opentop = () => {
-   setTopheader((prev) => !prev);
 
-}   
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  // mobile view menu
+  const [topheader, setTopheader] = useState(false);
+  const opentop = () => {
+    setTopheader((prev) => !prev);
+
+  }
 
 
-    // useEffect(() => {
-    //     fetchNavigation().then(setNavItems);
-    // }, []);
+  // useEffect(() => {
+  //     fetchNavigation().then(setNavItems);
+  // }, []);
 
-    const toggleDropdown = (label) => {
-        if (activeDropdown === label) {
-            setActiveDropdown(null);
-        } else {
-            setActiveDropdown(label);
-        }
+  const toggleDropdown = (label) => {
+    if (activeDropdown === label) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(label);
+    }
+  };
+
+  const StaticNavItems = [
+    {
+      label: "Institute",
+      children: [
+        {
+          label: "About",
+          children: [
+            { label: "About Institute", path: "/about/institute" },
+            { label: "Vision", path: "/about/vision" },
+            { label: "Infrastructure", path: "/about/infrastructure" },
+            { label: "Contact Us", path: "/about/contact-us" },
+          ]
+        },
+        { label: "Magazine", path: "/magazine" },
+        { label: "NIRF", path: "/nirf" },
+        { label: "T&P", path: "/t-and-p" },
+        { label: "MITTIE", path: "/institute/mittie" },
+      ]
+    },
+    {
+      label: "Academics",
+      children: [
+        {
+          label: "Department",
+          children: [
+            { label: "Computer Science and Engineering", path: "/department/cse" },
+            { label: "Computer Science Specialisation with Cyber Security", path: "/department/cse-cyber-security" },
+            { label: "Civil Engineering", path: "/department/ce" },
+            { label: "Mechanical Engineering", path: "/department/me" },
+            { label: "Electrical and Electronics Engineering", path: "/department/eee" },
+            { label: "Fire Safety and Technology", path: "/department/fst" },
+          ]
+        },
+        {
+          label: "Programmes",
+          children: [
+            { label: "LANGUAGE LAB", path: "/programmes/language-lab" },
+            { label: "C DAC", path: "/programmes/c-dac" }
+          ]
+        },
+        { label: "Academic Calendar", path: "/academic-calendar" },
+        { label: "Rules and Regulation", path: "/rules" },
+        { label: "Admission", path: "/admission" },
+        { label: "Fee Structure", path: "/fee-structure" },
+      ]
+    },
+    {
+      label: "Student Life",
+      children: [
+        { label: "Student Fest", path: "/student-fest" },
+        {
+          label: "Student Society",
+          children: [
+            { label: "KALA & KALAKAR", path: "/student-society/kala-and-kalakar" }
+          ]
+        },
+        { label: "Testimonial", path: "/testimonial" },
+      ]
+    },
+    {
+      label: "Approval",
+      children: [
+        { label: "AICTE", path: "/approval/aicte" },
+        { label: "NIRF", path: "/approval/nirf" },
+        { label: "BEU", path: "/approval/beu" },
+      ]
+    },
+    {
+      label: "Login",
+      children: [
+        { label: "Admin", path: "/admin" },
+        { label: "Coordinator", path: "/coordinator" },
+      ]
+    }
+  ];
+
+  const [navItems, setNavItems] = useState(StaticNavItems);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
     };
 
-   const  StaticNavItems = [
-  {
-    label: "Home",
-    path: "/"
-  },
-  {
-    label: "About",
-    children: [
-      { label: "History", path: "/about/history" },
-      { label: "Principal's Message", path: "/about/principalmessage" },
-      { label: "Vision and Mission", path: "/about/visionmission" },
-      { label: "Administration", path: "/about/administration" },
-      { label: "Seat Approval & Affiliation", path: "/about/Seat" },
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-      { label: "Visit Us", path: "/about/visit" },
-      { label: "Contact Us", path: "contact" }
-    ]
-  },
-  {
-    label: "Academics",
-    children: [
-      { label: "Admission", path: "/academics/Admission" },
-      { label: "Academic Regulation", path: "/academics/Regulation" },
-      { label: "Academic Calendar", path: "/academics/Calendar" },
-     
-      { label: "Attendance", path: "/academics/Attendance" },
-      { label: "Syllabus", path: "/academics/Syllabus" },
+  return (
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/30 backdrop-blur-lg shadow-sm border-b border-gray-200/30' : 'bg-transparent'}`}>
+      <div className={`w-full px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'py-4' : 'pt-6 pb-2'}`}>
+        <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0 animate-slide-in-down">
+          <div className="bg-transparent flex items-center justify-center">
+            <img src="https://i.imageupload.app/dd3b1dc01f02a2400117.png" alt="DceLogo" className='w-12 h-12 md:w-16 md:h-16' />
+          </div>
+          <div>
+            <h1 className={`text-[12px] sm:text-[14px] md:text-xl font-bold uppercase tracking-wide transition-colors duration-300 ${isScrolled ? 'text-gray-900' : 'text-white'}`}>Darbhanga College of Engineering</h1>
+            <p className={`text-[10px] sm:text-xs transition-colors duration-300 ${isScrolled ? 'text-sky-700' : 'text-sky-300'}`}>Estd. 2008 &bull; Govt. of Bihar</p>
+          </div>
+        </Link>
 
-      { label: "Notice", path: "/academics/Notice" }
-    ]
-  },
-  {
-    label: "Department",
-    children: [
-      {label:"Department", path:"/Department"},
-      { label: "Civil Engineering", path: "civil" },
-      { label: "Computer Science & Engineering", path: "cse" },
-      { label: "CSE (Cyber Security)", path: "cyber" },
-      { label: "Electrical & Electronic Engineering", path: "eee" },
-      { label: "Mechanical Engineering", path: "mechanical" },
-  
-    ]
-  },
-  {
-    label: "Facilities",
-    children: [
-    
-      { label: "Computer Center", path: "Computercenter" },
-      { label: "Central Library", path: "Centrallibrary" },
-      { label: "Hostels", path: "Hostel" },
-      { label: "Sports Facilities", path: "Sports" },
-
-      { label: "Bank", path: "Bank" },
-
-      { label: "Wi-Fi", path: "Wifi" }
-    ]
-  },
-  {
-    label: "T&P",
-    children: [
-      { label: "About Placement", path: "Aboutplacement" },
-      { label: "Placement Brochure", path: "Brochure" },
-      { label: "Placement List", path: "Placementlist" },
-      { label: "GATE & CAT Qualified List", path: "Gatecat" },
-
-    ]
-  },
-  {
-    label: "Activities",
-    children: [
-      { label: "Awards and Accolades", path: "Award" },
-      
-      { label: "StartUp Cell", path: "Startup" },
-      { label: "Internship", path: "Internship" },
-      { label: "Hackathon", path: "Hackathon" },
-
-    ]
-  },
-  {
-    label: "Alumni",
-    children: [
-      { label: "About DCE-Alumni", path: "/Alumni/AboutDceAlumni" },
-      { label: "Membership", path: "/Alumni/membership" },
-      { label: "Alumni Media Galleries", path: "/Alumni/mediagallary" }
-    ]
-  },
-  {
-    label: "Approval",
-    children: [
-      { label: "AICTE", path: "/Approval/Aicte" },
-      { label: "NIRF", path: "/Approval/Nirf" }
-    ]
-  },
-  {
-    label: "Login",
-    children: [
-      { label: "WebMail", path: "/webmail" },
-      { label: "Admin Home Page", path: "/admin" },
-      { label: "Faculty Login", path: "/faculty-login" },
-      { label: "Student Login", path: "/student-login" }
-    ]
-  }
-];
-
- const [navItems, setNavItems] = useState(StaticNavItems);
-
-
-
-    return (
-        <header className="bg-white shadow-md relative z-50">
-            {/* header top menu start */}
-            <div className='w-full bg-primary'>
-            <div className="min-h-10 max-w-7xl mx-auto w-full flex justify-between items-center md:pl-7">
-
-               
-            <ul class="nav-list mx-10 hidden md:flex  font-semibold text-white text-sm  pl-7 ">
-                    <li><a href = "/student">Students</a></li>
-                    <li><a href = "/Facultystaff"><span className='whitespace-nowrap'>Faculty & staff</span></a></li>
-                    <li><a href = "/Alumni">Alumni</a></li>
-                    <li><a href="https://miitie.org/about">Mittie</a></li>
-                    </ul>
-            <button onClick={opentop} className="md:hidden text-white text-xl pl-5">
-            {topheader ?   <X size={24} />: <Menu size={24} />}
-            </button>
-            <ul className="nav-list mx-10 flex  text-white text-sm items-center">
-                      <li className='flex items-center gap-x-2'> <a href="mailto:dcedarbhanga@gmail.com" className='flex gap-x-2 items-center'><span><MdEmail color="white"/>
-                      </span> <span className='hidden sm:flex'>DceDarbhanga@gmail.com</span></a></li>
-                       <li className=' flex items-center gap-x-2'><a href="tel:+916262457584" className='flex gap-x-2 items-center'>
-                        <span><IoCall color="white"/></span>  <span className='hidden sm:flex'>6262457584</span></a></li>
-            </ul></div>
-            </div>
-            {/* mobile view navbar  */}
-             {topheader && ( <div className="fixed inset-0 bg-black/30 z-30" onClick={() => setTopheader(false)}  /> )}
-             <aside className={`absolute  right-0 top-10 left-0 min-h-10 w-full bg-primary text-white transform transition duration-300 ease-in-out 
-             ${topheader ? "translate-x-0" : "-translate-x-full"} z-40  `} > 
-             <ul className='nav-mobile absolute flex bg-primary gap-x-[px] md:gap-x-2 pl-0 sm:pl-5 text-sm mx-0 '>
-                            <li><a href = "">Students</a></li>
-                            <li><a href = ""><span className='whitespace-nowrap'>Faculty & staff</span></a></li>
-                            <li><a href = "">ALumni</a></li>
-                            <li><a href="">Meity</a></li>
-             </ul> </aside>
-   
-            {/* header topmenu end */}
-            
-
-            
-            {/* Logo Section */}
-            
-            <div className="container w-full  pt-4 flex items-center justify-between border-b border-gray-100">
-                <Link to="/" className="flex items-center gap-4">
-                    {/* Placeholder Logo */}
-                    
-                  <div className=" bg-gray-200  flex items-center justify-center text-primary font-bold text-xl">
-                  <img src="https://i.imageupload.app/dd3b1dc01f02a2400117.png" alt="DceLogo" className='w-15 h-15 md:w-30 md:h-30 sm:w-20 sm:h-20'/>
-                  </div>
-                  <div>
-                      <h1 className="Dce-text sm:text-2xl font-bold text-primary uppercase text-[14px]">Darbhanga College of Engineering</h1>
-                      <p className="sm:text-sm text-blue-600 text-[10px]">(Under Dept. of Science, Technology & Technical Education, Govt. Of Bihar)</p>
-                  </div>
-                  </Link>
-                  <div className='hlnk lg:flex gap-2 items-baseline hidden '>
-            <div className="relative group inline-block">
-            {/* Button */}
-            <button className="flex items-center gap-1 text-[16px] font-bold text-sky-700 cursor-pointer">
-                Important Link
-            <span className="transition-transform duration-300 group-hover:rotate-180">
-              <MdOutlineKeyboardArrowDown size={20} />
-            </span>
-            </button>
-
-             {/* Dropdown */}
-            <div className=" absolute left-0 mt-3 w-56  bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible
-             transition-all duration-300 transform group-hover:-translate-y-1 z-50 ">
-            <ul className="py-2 text-gray-700 divide-y divide-gray-200">
-      
-             <li>
-                <a href="#" className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-                    <FaQuestionCircle className="text-sky-600" />
-                        Inquiry Form
-                </a>
-               </li>
-
-            <li>
-              <a href="#" className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-              <HiClipboardDocumentList className="text-sky-600" />
-              Open Grievance
-            </a>
-            </li>
-
-             <li>
-            <a href="#" className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-            <BiMessageSquareDetail className="text-sky-600" />
-            Track Grievance
-            </a>
-            </li>
-
-          <li>
-          <a href="#" className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-          <BiMessageSquareDetail className="text-sky-600" />
-          Feedback
-        </a>
-      </li>
-
-      <li>
-        <a href="#" className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-          <FaSearch className="text-sky-600" />
-          Search Student
-        </a>
-      </li>
-
-         </ul>
-       </div>
-     </div>    
-
-                    <button className='lnk text-[16px] font-semibold text-gray-800 hover:underline'><a href="/image">gallery</a> </button>
-                    <img src="./Tlogo.png" alt=""  className='h-20 hidden md:flex'/>
-                   </div>
-        
-                     {/* Mobile Menu Button */}
-                <button className="lg:hidden p-2" onClick={() => setMobileMenuOpen((prev) => !prev)}>
-                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:block ml-auto animate-slide-in-right">
+          <ul className="flex items-center justify-end gap-6 xl:gap-8 text-sm font-semibold">
+            {navItems.map((item) => (
+              <li key={item.label} className="group py-4 relative">
+                <button
+                  className={`transition-colors text-[14px] xl:text-[16px] uppercase tracking-wider whitespace-nowrap flex items-center gap-1 ${isScrolled ? 'text-gray-800 hover:text-sky-600' : 'text-white hover:text-sky-300'}`}
+                >
+                  {item.label}
+                  <ChevronDown size={16} className="transition-transform duration-300 group-hover:rotate-180" />
                 </button>
-            </div>
-            
+                <span className="absolute bottom-4 left-0 w-0 h-0.5 bg-sky-300 transition-all duration-300 group-hover:w-full"></span>
 
-            {/* Navigation */}
-<nav
-  className={`
-    ${mobileMenuOpen ? 'block' : 'hidden'}
-    lg:block
-     top-0 z-50
-    bg-primary lg:bg-white lg:border-b border-gray-200
-  `}
->
+                {/* Dropdown Menu - Mega Menu Style */}
+                <div className="absolute top-full right-0 bg-white/30 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[250px] p-6 border-t-4 border-sky-800">
+                  <h3 className="text-gray-900 font-bold mb-4 uppercase tracking-wider border-b border-gray-900/20 pb-2">{item.label}</h3>
+                  <ul className="flex flex-col gap-3">
+                    {item.children.map((child) => (
+                      <li key={child.label}>
+                        {child.children ? (
+                          <div className="relative group/sub">
+                            <span className="text-gray-900 hover:text-sky-800 hover:bg-white/50 transition-colors text-[14px] py-1 px-2 -mx-2 rounded cursor-pointer flex items-center justify-between font-medium">
+                              {child.label}
+                              <ChevronDown size={14} className="rotate-90" />
+                            </span>
+                            <ul className="absolute top-0 right-full mr-4 bg-white/30 backdrop-blur-lg shadow-xl rounded-sm opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[200px] p-4 border-r-4 border-sky-800 z-50">
+                              {child.children.map(subChild => (
+                                <li key={subChild.label}>
+                                  <Link
+                                    to={subChild.path}
+                                    className="text-gray-900 hover:text-sky-800 hover:bg-white/50 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                                  >
+                                    {subChild.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : (
+                          <Link
+                            to={child.path}
+                            className="text-gray-900 hover:text-sky-800 hover:bg-white/50 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                          >
+                            {child.label}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button className={`lg:hidden p-2 ml-auto transition-colors duration-300 ${isScrolled ? 'text-gray-900' : 'text-white'}`} onClick={() => setMobileMenuOpen((prev) => !prev)}>
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
 
 
-      <div className="container">
-        <ul className="flex flex-col lg:flex-row lg:items-center text-sm font-medium lg:flex-wrap">
-          {navItems.map((item) => (
-        <li
-          key={item.label}
-          className="relative group border-b lg:border-none border-gray-700"
-        >
-          {item.children ? (
-            <>
-              {/* Main Button */}
-              <button
-                onClick={() => toggleDropdown(item.label)}
-                className="w-full lg:w-auto text-left flex items-center justify-between px-4 py-3 lg:py-4
-                text-white  lg:text-gray-700  lg:hover:bg-gray-50  lg:text-[18px]
-                transition-colors lg:overflow-hidde "
-              >
-                {item.label}
+      {/* Mobile Navigation Dropdown */}
+      <nav
+        className={`
+          ${mobileMenuOpen ? 'flex' : 'hidden'}
+          lg:hidden
+          absolute top-full left-0 w-full bg-black/95 flex-col max-h-[70vh] overflow-y-auto
+        `}
+      >
+        <div className="container py-4">
+          <ul className="flex flex-col text-sm font-semibold">
+            {navItems.map((item) => (
+              <li key={item.label} className="border-b border-gray-700 last:border-0 relative">
+                <button
+                  onClick={() => toggleDropdown(item.label)}
+                  className="text-white hover:text-sky-300 text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
+                >
+                  {item.label}
+                  <ChevronDown size={18} className={`transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
+                </button>
 
-                {/* Arrow */}
-                <ChevronDown
-                  size={16}
-                  className={`
-                    ml-1 transition-transform duration-300
-                    ${activeDropdown === item.label ? 'rotate-180' : ''}
-                    lg:group-hover:rotate-180
-                  `}
-                /> 
-              </button>
+                {/* Mobile Submenu */}
+                <ul className={`
+                    ${activeDropdown === item.label ? 'block' : 'hidden'}
+                    pl-4 pb-4 space-y-3
+                `}>
+                  {item.children.map((child) => (
+                    <li key={child.label}>
+                      {child.children ? (
+                        <div>
+                          <span className="text-gray-400 text-[15px] block py-1 font-bold">{child.label}</span>
+                          <ul className="pl-4 space-y-2 mt-2 border-l border-gray-600">
+                            {child.children.map(subChild => (
+                              <li key={subChild.label}>
+                                <Link
+                                  to={subChild.path}
+                                  className="text-gray-300 hover:text-white text-[13px] block py-1"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {subChild.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <Link
+                          to={child.path}
+                          className="text-gray-300 hover:text-white text-[14px] block py-1"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      )}
 
-              {/* 🔽 DROPDOWN */}
-              <ul
-                className={`
-                  ${activeDropdown === item.label ? 'block' : 'hidden'}
-                 
-                  lg:block lg:absolute lg:right-0 lg:left-0 lg:top-full lg:mt-4       
-                  lg:w-50 lg:bg-white lg:shadow-lg lg:rounded
-                  divide-y divide-gray-600 lg:divide-gray-300
-                  
-                  lg:opacity-0 lg:invisible
-                  lg:group-hover:opacity-100 lg:group-hover:visible
-                  lg:translate-y-0 lg:group-hover:-translate-y-4
-                  
-                  lg:transition-all lg:duration-300 lg:transform
-                  
-                  bg-gray-800 
-                `}
-              >
-                {item.children.map((child) => (
-                  <li key={child.label}>
-                    <Link
-                      to={child.path}
-                      className="block px-6 py-2 
-                      text-gray-300 lg:text-gray-700
-                      hover:bg-gray-700 lg:hover:bg-primary
-                      lg:hover:text-white transition-colors  md:border-none border-b-2 "
-                     
-                    >
-                      {child.label}
-                    </Link>
-                  </li>
-          
-                
-                ))}
-              </ul>
-            </>
-          ) : (
-            <Link
-              to={item.path}
-              className="block px-4 py-3 lg:py-4
-              text-white lg:text-gray-700
-              hover:text-accent lg:hover:bg-gray-50
-              transition-colors lg:text-[20px] "
-            >
-              {item.label}
-            </Link>
-          )}
-        </li>
-      ))}
-    </ul>
-  </div>
-</nav>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
-            <hr className='max-w-7xl w-full text-gray-400 mx-auto'/>
-            {/* header btn */}
-  
-
-        </header>
-    );
+    </header>
+  );
 };
 
 export default Header;

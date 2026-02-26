@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeroSlider from '../components/HeroSlider';
 import NoticeBoard from '../components/NoticeBoard';
 import axios from 'axios';
-import ImageModal from '../components/ImageModal';
-import { FaUniversity } from "react-icons/fa";
-import { FaQuoteLeft } from "react-icons/fa";
-import { useState, useEffect } from "react";
-
+import { FaUniversity, FaQuoteLeft } from "react-icons/fa";
+import CampusLife from '../components/CampusLife';
+import SocialWall from '../components/SocialWall';
+import CampusPlacements from '../components/CampusPlacements';
 import AcademicSlider from './Slider/AcedmicSlider';
 
 const Home = () => {
@@ -51,10 +50,16 @@ const Home = () => {
       <div className='parent-container '>
         <div className="relative grid md:grid-cols-3 gap-6 px-6 py-12">
 
+          {/* ================= ACADEMIC NOTICES (SLIDER) ================= */}
+          <AcademicSlider />
+
+          {/* ================= EVENTS (SLIDER) ================= */}
+          <NoticeBoard />
+
           {/* ================= NOTICE ================= */}
-          <div className="bg-white rounded-xl shadow-md border p-6">
+          <div className="bg-white rounded-xl shadow-md p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Important links</h2>
+              <h2 className="text-xl font-semibold">Important Link</h2>
               <a href="#" className="text-blue-600 text-sm">View all</a>
             </div>
 
@@ -75,311 +80,65 @@ const Home = () => {
             </div>
           </div>
 
-
-          {/* ================= EVENTS (SLIDER) ================= */}
-          <NoticeBoard />
-
-
-          {/* ================= ACADEMIC NOTICES (SLIDER) ================= */}
-          <AcademicSlider />
-
         </div>
 
       </div>
-      <div className="text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-primary tracking-wide">
-          <span className="block text-lg md:text-xl font-medium text-gray-500 mb-2">
-            About
-          </span>
-          DCE Darbhanga
-        </h2>
+      {/* ================= PRINCIPAL MESSAGE SECTION ================= */}
+      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-24">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
 
-        <div className="w-24 h-1 bg-primary mx-auto mt-3 rounded-full"></div>
-      </div>
-      <div className="max-w-7xl mx-auto px-4 py-16 -mt-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Area - Principal Photo */}
+          <div className="w-full md:w-1/3 flex justify-center md:justify-end">
+            <div className="relative group">
+              {/* Decorative Background Box */}
+              <div className="absolute inset-0 bg-yellow-500 translate-x-4 translate-y-4 rounded-xl -z-10 transition-transform duration-300 group-hover:translate-x-6 group-hover:translate-y-6"></div>
 
-          {/* LEFT CARD - ABOUT US */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition duration-300">
-
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-sky-100 p-4 rounded-xl text-primary text-2xl">
-                <FaUniversity />
-              </div>
-              <h2 className="text-2xl font-bold text-primary tracking-wide">
-                ABOUT US
-              </h2>
-            </div>
-
-            <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-              Darbhanga College of Engineering (DCE), Darbhanga is a premier government engineering institution in Bihar, established in 2008,
-            </p>
-
-            <h3 className="font-semibold text-lg text-gray-800 mt-4">Vision</h3>
-            <p className="text-sm text-gray-600 mt-2">
-              committed to providing quality technical education, fostering innovation
-            </p>
-
-            <h3 className="font-semibold text-lg text-gray-800 mt-4">Mission</h3>
-            <p className="text-sm text-gray-600 mt-2">
-              developing skilled professionals for the nation.
-            </p>
-
-            <button className="mt-6 w-full bg-gray-100 hover:bg-gray-200 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
-              <a href="./about/history">Read More</a>
-
-            </button>
-          </div>
-
-
-          {/* CENTER CARD - DIRECTOR */}
- <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
-
-  <div className="flex justify-center">
-    <img
-      src="/Dsttelogo.jpg"
-      alt="DStte"
-      className="w-40 h-40 rounded-full object-cover"
-    />
-  </div>
-
-  {/* Badge */}
-  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
-    DSTTE, BIHAR
-  </span>
-
-  {/* Title */}
-  <h2 className="text-xl font-semibold mt-4">
-    Department of Science, Technology & Technical Education
-  </h2>
-
-  {/* Description */}
-  <p className="text-gray-600 text-sm mt-3 leading-relaxed">
-    The Department of Science, Technology and Technical Education,
-    Bihar plays a vital role in promoting technical education,
-    innovation, and skill development across the state.
-  </p>
-
-  
-
-
-</div>
-
-
-          {/* RIGHT CARD - KNOW US */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition duration-300">
-
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-sky-100 p-4 rounded-xl text-primary text-2xl">
-                <FaQuoteLeft />
-              </div>
-              <h2 className="text-2xl font-bold text-primary tracking-wide">
-                About BEU
-              </h2>
-            </div>
-
-            <h3 className="font-semibold text-lg text-gray-800">
-              About University
-            </h3>
-
-            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-               Bihar Engineering University (BEU)
-            </p>
-
-            
-
-            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-
-            </p>
-
-            <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 mt-6 text-sm text-gray-700">
-               Bihar Engineering University (BEU), Patna is the affiliating university 
-    for engineering colleges across Bihar. The university focuses on 
-    maintaining academic excellence, curriculum modernization, and 
-    promoting research and innovation among technical institutions.
-            </div>
-
-            <button className="mt-6 w-full bg-gray-100 hover:bg-gray-200 py-2 rounded-lg text-sm font-medium transition">
-              Explore More
-            </button>
-          </div>
-
-        </div>
-      </div>
-      {/* 2nd box rows */}
-      <div className="max-w-7xl mx-auto px-4 py-16 -mt-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          {/* 2nd row LEFT CARD - director */}
-          
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
-
-            <div className="flex justify-center">
               <img
-                src="./chandan-sir.jpeg"
-                alt="Director"
-                className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
+                alt="Principal"
+                className="w-64 h-80 md:w-full md:h-auto max-w-[320px] object-cover rounded-xl shadow-lg border border-gray-100 relative z-10"
               />
             </div>
+          </div>
 
-            <span className="inline-block bg-primary text-white text-xs px-4 py-1 rounded-full mt-4">
-              Director
-            </span>
+          {/* Right Area - Message Text */}
+          <div className="w-full md:w-2/3 flex flex-col justify-center">
 
-            <h2 className="text-2xl font-bold text-primary mt-4">
-              Prof. chandan kumar
+            <h2 className="text-[#00338d] text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">
+              Message from the Principal
             </h2>
 
-            <p className="text-sm text-gray-600 mt-2">
-              Director, D.C.E Darbhanga
-            </p>
-
-            <p className="text-sm text-gray-600 mt-2">
-              director@Dce.in
-            </p>
-
-            <div className="flex gap-4 mt-6">
-              <button className="flex-1 border border-sky-500 text-primary py-2 rounded-lg hover:bg-sky-50 transition">
-                Email
-              </button>
-
-              <button className="flex-1 bg-gray-100 py-2 rounded-lg hover:bg-gray-200 transition">
-                Profile
-              </button>
+            <div className="text-gray-600 text-base md:text-lg leading-relaxed space-y-4 font-light">
+              <p>
+                Welcome to DCE Darbhanga. Empowering young minds with robust technical knowledge and instilling an innovative spirit has always been the cornerstone of our philosophy.
+              </p>
+              <p>
+                In today's rapidly evolving global landscape, engineers are the architects of the future. We strive to create an academic ecosystem that nurtures creativity, critical thinking, and a passion for excellence. Our dedicated faculty and state-of-the-art facilities ensure that our students are not just industry-ready, but are visionary leaders who can construct solutions for tomorrow's complex challenges.
+              </p>
+              <p>
+                As you embark on this exciting journey with us, I urge you to dream big, work tirelessly, and remember that your potential is truly limitless.
+              </p>
             </div>
 
-            <p className="text-sm text-gray-500 mt-6">
-              Professor since 2001
-            </p>
-          </div>
-
-
-          {/*  2nd row CENTER CARD - nitish kumar */}
-         <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
-
-  <div className="flex justify-center">
-    <img
-      src="https://www.orissapost.com/wp-content/uploads/2023/11/Nitish-Kumar-.png"
-      alt="Chief Minister"
-      className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
-    />
-  </div>
-
-  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
-    Chancellor
-  </span>
-
-  <h2 className="text-2xl font-bold text-blue-700 mt-4">
-    Shri Nitish Kumar
-  </h2>
-
-  <p className="text-sm text-gray-600 mt-1">
-    Chief Minister of Bihar
-  </p>
-
-  {/* Short Bio */}
-  <p className="text-sm text-gray-600 mt-4 leading-relaxed">
-    Shri Nitish Kumar has been serving as the Chief Minister of Bihar,
-    focusing on development, governance reforms, infrastructure growth,
-    and strengthening education and healthcare systems across the state.
-  </p>
-
-
- 
-
-</div>
-
-
-          {/* 2nd row RIGHT CARD -   */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center hover:shadow-lg transition duration-300">
-
-  <div className="flex justify-center">
-    <img
-      src="https://i1.rgstatic.net/ii/profile.image/1020399039037441-1620293497466_Q512/Suresh-Verma-6.jpg"
-      alt="Vice-Chancellor:"
-      className="w-40 h-40 rounded-full object-cover border-4 border-sky-100 shadow"
-    />
-  </div>
-
-  <span className="inline-block bg-blue-600 text-white text-xs px-4 py-1 rounded-full mt-4">
-    Vice-Chancellor
-  </span>
-
-  <h2 className="text-2xl font-bold text-blue-700 mt-4">
-    Prof. Suresh Kant Verma
-  </h2>
-
-  <p className="text-sm text-gray-600 mt-1">
-    Vice-Chancellor of BEU
-  </p>
-
-  {/* Short Bio */}
-  <p className="text-sm text-gray-600 mt-4 leading-relaxed bg-blue-50 rounded-xl">
-    Prof. Suresh Kant Verma envisions Bihar Engineering University as a hub of academic excellence and innovation in technical education. His vision emphasizes quality learning, research advancement, and strong industry collaboration to prepare skilled engineers for national development.
-  </p>
-
-
- 
-
-</div>
-        </div>
-      </div>
-      <div className="bg-gray-100 flex flex-col overflow-x-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-
-          {/* Heading */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">
-              Campus Gallery
-            </h2>
-            <div className="w-20 h-1 bg-secondary mx-auto mt-3 rounded-full"></div>
-          </div>
-
-          {/* Gallery Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-            {galleryImages.length > 0 ? (
-              galleryImages.map((img, index) => (
-                <div
-                  key={img._id}
-                  className="overflow-hidden rounded-xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"
-                  onClick={() => openModal(index)}
-                >
-                  <img
-                    src={img.imageUrl}
-                    alt={img.title || "Campus"}
-                    className="w-full h-48 object-cover hover:scale-105 transition duration-500"
-                  />
-                </div>
-              ))
-            ) : (
-              <p className="col-span-full text-center text-gray-500">Loading gallery...</p>
-            )}
+            <div className="mt-10 border-l-4 border-yellow-500 pl-4">
+              <h4 className="text-xl font-bold text-gray-800 tracking-wide">Dr. Placeholder Name</h4>
+              <p className="text-sm font-medium text-gray-500 uppercase tracking-widest mt-1">Principal, DCE Darbhanga</p>
+            </div>
 
           </div>
 
         </div>
       </div>
 
+      {/* ================= CAMPUS LIFE SECTION ================= */}
+      <CampusLife />
 
+      {/* ================= SOCIAL WALL SECTION ================= */}
+      <SocialWall />
 
+      {/* ================= CAMPUS PLACEMENTS SECTION ================= */}
+      <CampusPlacements />
 
-
-
-
-
-
-
-      {/* Image Viewer Modal */}
-      {selectedImageIndex !== null && (
-        <ImageModal
-          images={galleryImages}
-          currentIndex={selectedImageIndex}
-          onClose={closeModal}
-          onNext={nextImage}
-          onPrev={prevImage}
-        />
-      )}
     </div>
   );
 };

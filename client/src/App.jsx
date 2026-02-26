@@ -65,15 +65,15 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             {/*  path for department */}
             <Route path="/Department" element={<Departments />} />
-              <Route path="cse" element={<Cse />} />
-              <Route path="civil" element={<Civil />} />
-              <Route path="cyber" element={<Cyber />} />
-              <Route path="eee" element={<Eee />} />
-              <Route path="mechanical" element={<Mech />} />
-            
-          
+            <Route path="cse" element={<Cse />} />
+            <Route path="civil" element={<Civil />} />
+            <Route path="cyber" element={<Cyber />} />
+            <Route path="eee" element={<Eee />} />
+            <Route path="mechanical" element={<Mech />} />
 
-            
+
+
+
 
 
             {/* nested path for about  */}
@@ -94,12 +94,12 @@ function App() {
               <Route path="Syllabus" element={<Syllabus />} />
             </Route>
             {/* path for facilites */}
-            <Route path="/Computercenter"  element={< Computercenter/> } />
-            <Route path="/Bank"  element={<Bank/> } />
-              <Route path="/Hostel"  element={<Hostel/> } />
-                <Route path="/Centrallibrary"  element={<Centrallibrary/> } />
-                  <Route path="/Sports"  element={<Sports/> } />
-                    <Route path="/Wifi"  element={<Wifi/> } />
+            <Route path="/Computercenter" element={< Computercenter />} />
+            <Route path="/Bank" element={<Bank />} />
+            <Route path="/Hostel" element={<Hostel />} />
+            <Route path="/Centrallibrary" element={<Centrallibrary />} />
+            <Route path="/Sports" element={<Sports />} />
+            <Route path="/Wifi" element={<Wifi />} />
             {/*  path for T&P */}
             <Route path="/Aboutplacement" element={<Aboutplacement />}></Route>
             <Route path="/Brochure" element={<Brochure />}></Route>
@@ -112,24 +112,24 @@ function App() {
             <Route path="/Startup" element={<Startup />}></Route>
             {/* nested path for alumni */}
             <Route path="/Alumni" element={<Alumni />} >
-            <Route path="AboutDceAlumni"  element={<AboutDceAlumni /> } />
-            <Route path='mediagallary' element={<Mediagallary />} />
-            <Route path='membership' element={<Membership />} /></Route>
+              <Route path="AboutDceAlumni" element={<AboutDceAlumni />} />
+              <Route path='mediagallary' element={<Mediagallary />} />
+              <Route path='membership' element={<Membership />} /></Route>
             {/* nested path for approval  */}
             <Route path="/Approval" element={<Approval />} >
-            <Route path="Aicte" element={<Aicte />}></Route>
-            <Route path="Nirf" element={ <Nirf />}></Route>
-            
+              <Route path="Aicte" element={<Aicte />}></Route>
+              <Route path="Nirf" element={<Nirf />}></Route>
 
-          
-            
+
+
+
             </Route>
             {/* heading bar */}
-            <Route path="/student" element={<Students/>}></Route>
+            <Route path="/student" element={<Students />}></Route>
             <Route path="/Facultystaff" element={<Facultystaff />} />
 
-           
-            
+
+
 
             {/* Protected Admin Routes */}
             <Route element={<ProtectedRoute />}>

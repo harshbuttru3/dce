@@ -21,12 +21,12 @@ const academicData = [
 
 const AcademicSlider = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden h-full">
-      
+    <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
+
       {/* Header */}
       <div className="bg-white text-blue-600 p-3 flex justify-between items-center">
         <h3 className="font-bold text-lg flex items-center gap-2">
-          <FileText size={20} /> Academic Notices
+          <FileText size={20} /> Academic Notice
         </h3>
         <button className="text-xs  hover:bg-sky-100 px-2 py-1 rounded transition-colors">
           View All
@@ -36,7 +36,7 @@ const AcademicSlider = () => {
       {/* Scrolling Area */}
       <div className="relative h-[300px] overflow-hidden p-2">
         <div className="animate-marquee-vertical space-y-4">
-          
+
           {academicData.concat(academicData).map((notice, index) => (
             <div
               key={`${notice.id}-${index}`}
