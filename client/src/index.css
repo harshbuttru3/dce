@@ -8,6 +8,10 @@
   --font-mono: 'Roboto Mono', monospace;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   body {
     @apply antialiased text-gray-800 bg-gray-50;
@@ -190,8 +194,13 @@ a {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -199,6 +208,7 @@ a {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -210,6 +220,7 @@ a {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

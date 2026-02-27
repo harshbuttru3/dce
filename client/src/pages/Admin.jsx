@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2, FileText, Image as ImageIcon, Mail } from "lucide-react";
+import { Trash2, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
@@ -20,10 +20,17 @@ const Admin = () => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [stats, setStats] = useState({
+    notices: 0,
+    images: 0,
+    links: 0,
+    messages: 0
+  });
 
   const API_URL = "http://localhost:5000/api/notices";
   const IMAGE_API_URL = "http://localhost:5000/api/images";
   const LINK_API_URL = "http://localhost:5000/api/important-links";
+  const MESSAGE_API_URL = "http://localhost:5000/api/messages";
 
   // Important Links State
   const [links, setLinks] = useState([]);
@@ -36,8 +43,6 @@ const Admin = () => {
   // Get token from localStorage
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const token = userInfo?.token;
-
-  const MESSAGE_API_URL = "http://localhost:5000/api/messages";
 
   useEffect(() => {
     if (!userInfo) {
@@ -63,6 +68,7 @@ const Admin = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(response.data);
+      setStats(prev => ({ ...prev, messages: response.data.length }));
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -72,6 +78,7 @@ const Admin = () => {
     try {
       const response = await axios.get(API_URL);
       setNotices(response.data);
+      setStats(prev => ({ ...prev, notices: response.data.length }));
     } catch (error) {
       console.error("Error fetching notices:", error);
     }
@@ -81,6 +88,7 @@ const Admin = () => {
     try {
       const response = await axios.get(IMAGE_API_URL);
       setImages(response.data);
+      setStats(prev => ({ ...prev, images: response.data.length }));
     } catch (error) {
       console.error("Error fetching images:", error);
     }
@@ -90,6 +98,7 @@ const Admin = () => {
     try {
       const response = await axios.get(LINK_API_URL);
       setLinks(response.data);
+      setStats(prev => ({ ...prev, links: response.data.length }));
     } catch (error) {
       console.error("Error fetching links:", error);
     }
@@ -247,310 +256,521 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-[#f8fafc] font-sans">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 text-white p-5 fixed h-full transition-all duration-300">
-        <h2 className="text-2xl font-bold mb-6 text-center border-b border-gray-700 pb-4">Admin Panel</h2>
+      <div className="w-72 bg-[#133b5c] text-white fixed h-full transition-all duration-300 shadow-2xl z-30">
+        <div className="p-8 border-b border-white/10">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 bg-[#c6b677] rounded-lg flex items-center justify-center text-[#133b5c] shadow-lg">
+              <ShieldCheck size={24} />
+            </div>
+            <h2 className="text-xl font-serif font-bold tracking-tight">DCE Admin</h2>
+          </div>
+          <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">Systems Control Panel</p>
+        </div>
 
-        <ul className="space-y-4">
-          <li onClick={() => setActiveTab("dashboard")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'dashboard' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Dashboard</li>
-          <li onClick={() => setActiveTab("images")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'images' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Manage Images</li>
-          <li onClick={() => setActiveTab("links")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'links' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Important Links</li>
-          <li onClick={() => setActiveTab("notifications")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'notifications' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Notices / News</li>
-          <li onClick={() => setActiveTab("messages")} className={`cursor-pointer px-4 py-2 rounded-md transition-colors ${activeTab === 'messages' ? 'bg-amber-500 text-white' : 'hover:bg-gray-800 hover:text-amber-400'}`}>Messages</li>
-        </ul>
+        <nav className="p-6">
+          <ul className="space-y-2">
+            {[
+              { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
+              { id: 'notifications', label: 'Notices & News', icon: <Bell size={20} /> },
+              { id: 'images', label: 'Gallery Assets', icon: <ImageIcon size={20} /> },
+              { id: 'links', label: 'Quick Links', icon: <LinkIcon size={20} /> },
+              { id: 'messages', label: 'Inquiries', icon: <Mail size={20} /> },
+            ].map((item) => (
+              <li
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex items-center gap-4 px-4 py-3.5 rounded-xl cursor-pointer transition-all duration-200 group ${activeTab === item.id
+                  ? 'bg-[#c6b677] text-[#133b5c] shadow-lg shadow-[#c6b677]/20 font-bold translate-x-1'
+                  : 'hover:bg-white/5 text-white/70 hover:text-white capitalize'
+                  }`}
+              >
+                <span className={`${activeTab === item.id ? 'text-[#133b5c]' : 'text-[#c6b677] group-hover:scale-110 transition-transform'}`}>
+                  {item.icon}
+                </span>
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-[#0d2a42]">
+          <div
+            onClick={() => {
+              localStorage.removeItem('userInfo');
+              navigate('/login');
+            }}
+            className="flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer text-red-300 hover:bg-red-500/10 hover:text-red-400 transition-all group"
+          >
+            <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-bold uppercase tracking-wider">Sign Out</span>
+          </div>
+        </div>
       </div>
 
       {/* Main Section */}
-      <div className="flex-1 ml-64">
-        {/* Navbar */}
-        <div className="flex justify-between items-center bg-white p-4 shadow-md sticky top-0 z-10">
-          <h1 className="text-xl font-semibold text-gray-800">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-          </h1>
+      <div className="flex-1 ml-72">
+        {/* Top Navbar */}
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 h-20 sticky top-0 z-20 px-10 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-serif font-bold text-[#133b5c] capitalize">
+              {activeTab === 'dashboard' ? 'Institutional Overview' : activeTab.replace(/([A-Z])/g, ' $1').trim()}
+            </h1>
+            <div className="h-4 w-[1px] bg-gray-200 mx-2"></div>
+            <p className="text-gray-400 text-xs font-medium">Dashboard / {activeTab}</p>
+          </div>
 
-          {/* Profile Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowProfile(!showProfile)}
-              className="flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-full hover:bg-gray-200 transition"
-            >
-              <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">A</div>
-              <span>Admin</span>
-            </button>
+          <div className="flex items-center gap-6">
+            <div className="relative group">
+              <button
+                onClick={() => setShowProfile(!showProfile)}
+                className="flex items-center gap-3 bg-gray-50 border border-gray-100 pl-2 pr-4 py-1.5 rounded-full hover:bg-gray-100 transition-all"
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-[#133b5c] to-[#1a4b73] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
+                  AD
+                </div>
+                <div className="text-left hidden md:block">
+                  <p className="text-[12px] font-bold text-[#133b5c] leading-tight">Administrator</p>
+                  <p className="text-[10px] text-gray-400">Main Control</p>
+                </div>
+                <ChevronRight size={14} className={`text-gray-400 transition-transform ${showProfile ? 'rotate-90' : ''}`} />
+              </button>
 
-            {showProfile && (
-              <div className="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-md py-2 border border-gray-100 z-50">
-                <ul>
-                  <li className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-gray-700">Profile</li>
-                  <li
+              {showProfile && (
+                <div className="absolute right-0 mt-3 w-56 bg-white shadow-2xl rounded-2xl p-2 border border-blue-50/50 animate-zoom-in overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-50 mb-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Active Session</p>
+                  </div>
+                  <button className="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:bg-blue-50 hover:text-[#133b5c] rounded-xl flex items-center gap-3 transition-colors">
+                    <User size={16} /> My Account
+                  </button>
+                  <button
                     onClick={() => {
                       localStorage.removeItem('userInfo');
                       navigate('/login');
                     }}
-                    className="px-4 py-2 hover:bg-red-50 cursor-pointer text-red-500"
+                    className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-xl flex items-center gap-3 transition-colors"
                   >
-                    Logout
-                  </li>
-                </ul>
-              </div>
-            )}
+                    <LogOut size={16} /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </header>
 
         {/* Content Area */}
-        <div className="p-8">
+        <main className="p-10 max-w-7xl mx-auto">
           {activeTab === "dashboard" && (
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-2xl font-bold mb-4">Welcome to the Admin Dashboard</h2>
-              <p className="text-gray-600">Select an option from the sidebar to manage website content.</p>
+            <div className="space-y-10 animate-fade-in">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { label: "Active Notices", val: stats.notices, icon: <Bell className="text-blue-600" />, color: "bg-blue-50" },
+                  { label: "Gallery Assets", val: stats.images, icon: <ImageIcon className="text-amber-600" />, color: "bg-amber-50" },
+                  { label: "Quick Links", val: stats.links, icon: <LinkIcon className="text-emerald-600" />, color: "bg-emerald-50" },
+                  { label: "New Inquiries", val: stats.messages, icon: <Mail className="text-rose-600" />, color: "bg-rose-50" },
+                ].map((stat, i) => (
+                  <div key={i} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className={`p-3 rounded-2xl ${stat.color} group-hover:scale-110 transition-transform`}>
+                        {stat.icon}
+                      </div>
+                      <span className="text-xs font-bold text-gray-400 uppercase tracking-tighter">Live</span>
+                    </div>
+                    <div className="text-3xl font-bold text-[#133b5c] mb-1">{stat.val}</div>
+                    <p className="text-sm font-medium text-gray-400">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                {/* Recent Activity / Quick Actions */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-xl font-serif font-bold text-[#133b5c]">System Performance</h3>
+                      <BarChart3 size={20} className="text-[#c6b677]" />
+                    </div>
+                    <div className="space-y-6">
+                      <div className="p-5 bg-gray-50 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-blue-50 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
+                            <Plus size={20} />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[#133b5c]">New Notice Publication</p>
+                            <p className="text-xs text-gray-400 mt-0.5">Push latest updates to the main board</p>
+                          </div>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-300 group-hover:translate-x-1 transition-transform" />
+                      </div>
+
+                      <div className="p-5 bg-gray-50 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-amber-50 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-600 shadow-sm group-hover:bg-amber-600 group-hover:text-white transition-all">
+                            <ImageIcon size={20} />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[#133b5c]">Update Campus Gallery</p>
+                            <p className="text-xs text-gray-400 mt-0.5">Manage carousel and event photography</p>
+                          </div>
+                        </div>
+                        <ChevronRight size={18} className="text-gray-300 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* System Status */}
+                <div className="bg-[#133b5c] p-8 rounded-3xl shadow-xl relative overflow-hidden text-white">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                  <h3 className="text-xl font-serif font-bold mb-6">Server Status</h3>
+                  <div className="space-y-6 relative z-10">
+                    <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle2 size={16} className="text-[#c6b677]" />
+                        <span className="text-sm font-medium">Database API</span>
+                      </div>
+                      <span className="text-[10px] bg-[#c6b677] text-[#133b5c] px-2 py-0.5 rounded-full font-bold">ACTIVE</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle2 size={16} className="text-[#c6b677]" />
+                        <span className="text-sm font-medium">Media Storage</span>
+                      </div>
+                      <span className="text-[10px] bg-[#c6b677] text-[#133b5c] px-2 py-0.5 rounded-full font-bold">STABLE</span>
+                    </div>
+                  </div>
+                  <div className="mt-10 pt-10 border-t border-white/10">
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Last Synchronized</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Clock size={14} className="text-[#c6b677]" />
+                      <p className="text-sm font-medium">Recently Updated</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
           {activeTab === "images" && (
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-lg font-semibold mb-4">Add / Change Image</h2>
-              {message && <p className={`mb-4 p-2 rounded ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{message}</p>}
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Gallery Assets</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage institutional photography and event banners</p>
+                  </div>
+                  <div className="p-3 bg-amber-50 rounded-2xl text-amber-600">
+                    <ImageIcon size={24} />
+                  </div>
+                </div>
 
-              <div className="mb-6">
-                <input
-                  type="text"
-                  placeholder="Image Title (Optional)"
-                  value={imageTitle}
-                  onChange={(e) => setImageTitle(e.target.value)}
-                  className="w-full mb-3 p-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setImageFile(e.target.files[0])}
-                  className="mb-3 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
-                />
-                <button
-                  onClick={handleImageUpload}
-                  disabled={loading}
-                  className="bg-amber-500 text-white px-6 py-2 rounded-md hover:bg-amber-600 transition"
-                >
-                  {loading ? "Uploading..." : "Upload Image"}
-                </button>
+                {message && (
+                  <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-slide-in-right ${message.includes("success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                    <CheckCircle2 size={18} />
+                    <span className="text-sm font-bold">{message}</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-dashed border-gray-200">
+                  <div className="md:col-span-2 space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Asset Description</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Annual Tech Fest 2024 - Robotics Competition"
+                        value={imageTitle}
+                        onChange={(e) => setImageTitle(e.target.value)}
+                        className="w-full p-4 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                      />
+                    </div>
+                    <div className="relative group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <label
+                        htmlFor="image-upload"
+                        className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-gray-200 rounded-3xl cursor-pointer hover:bg-white hover:border-[#c6b677] transition-all group-hover:shadow-lg"
+                      >
+                        <ImageIcon size={32} className="text-gray-300 group-hover:text-[#c6b677] mb-2 transition-colors" />
+                        <span className="text-sm font-bold text-gray-500 group-hover:text-[#133b5c]">
+                          {imageFile ? imageFile.name : "Select Asset Image"}
+                        </span>
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Highly Recommended: JPG/PNG, Max 5MB</p>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-end gap-3">
+                    <button
+                      onClick={handleImageUpload}
+                      disabled={loading || !imageFile}
+                      className={`w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 ${loading || !imageFile ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+                    >
+                      {loading ? "Processing..." : <><Plus size={18} className="text-[#c6b677]" /> Upload to Cloud</>}
+                    </button>
+                    <p className="text-[10px] text-center text-gray-400 uppercase font-bold tracking-widest">Assets auto-optimize for web</p>
+                  </div>
+                </div>
               </div>
 
-              <h3 className="text-md font-semibold mb-3">Existing Gallery Images</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {images.map((img) => (
-                  <div key={img._id} className="relative group">
-                    <img src={img.imageUrl} alt={img.title} className="w-full h-32 object-cover rounded shadow" />
-                    <button
-                      onClick={() => handleDeleteImage(img._id)}
-                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                    {img.title && <p className="text-xs mt-1 text-gray-600 truncate">{img.title}</p>}
-                  </div>
-                ))}
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <h3 className="text-lg font-serif font-bold text-[#133b5c] mb-6 flex items-center gap-2">
+                  Cloud Repository <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-sans uppercase tracking-widest">{images.length} Objects</span>
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {images.map((img) => (
+                    <div key={img._id} className="relative group aspect-square rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                      <img src={img.imageUrl} alt={img.title} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end">
+                        <p className="text-white text-[10px] font-bold truncate mb-2 uppercase tracking-tight">{img.title || "Untitled Asset"}</p>
+                        <button
+                          onClick={() => handleDeleteImage(img._id)}
+                          className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <Trash2 size={14} /> Purge Object
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === "links" && (
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-lg font-semibold mb-4">Manage Important Links</h2>
-              {message && <p className={`mb-4 p-2 rounded ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{message}</p>}
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Quick Links</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage important external resources and institutional portals</p>
+                  </div>
+                  <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
+                    <LinkIcon size={24} />
+                  </div>
+                </div>
 
-              <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                <input
-                  type="text"
-                  placeholder="Link Title (e.g. Exam Schedule)"
-                  value={linkTitle}
-                  onChange={(e) => setLinkTitle(e.target.value)}
-                  className="w-full mb-3 p-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="URL (e.g. https://google.com or /files/schedule.pdf)"
-                  value={linkUrl}
-                  onChange={(e) => setLinkUrl(e.target.value)}
-                  className="w-full mb-3 p-2 border border-gray-300 rounded"
-                />
-                <button
-                  onClick={handleLinkUpload}
-                  disabled={loading}
-                  className="bg-amber-500 text-white px-6 py-2 rounded-md hover:bg-amber-600 transition"
-                >
-                  {loading ? "Adding..." : "Add Link"}
-                </button>
+                {message && (
+                  <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-slide-in-right ${message.includes("success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                    <CheckCircle2 size={18} />
+                    <span className="text-sm font-bold">{message}</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-gray-200">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Portal Name</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. AICTE Approval Portal"
+                        value={linkTitle}
+                        onChange={(e) => setLinkTitle(e.target.value)}
+                        className="w-full p-4 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL / Destination</label>
+                      <input
+                        type="text"
+                        placeholder="https://example.com"
+                        value={linkUrl}
+                        onChange={(e) => setLinkUrl(e.target.value)}
+                        className="w-full p-4 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-end">
+                    <button
+                      onClick={handleLinkUpload}
+                      disabled={loading || !linkTitle || !linkUrl}
+                      className={`w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 ${loading || !linkTitle || !linkUrl ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+                    >
+                      {loading ? "Adding..." : <><Plus size={18} className="text-[#c6b677]" /> Register Link</>}
+                    </button>
+                    <p className="text-[10px] text-center text-gray-400 mt-4 uppercase font-bold tracking-widest">Links appear globally in the footer</p>
+                  </div>
+                </div>
               </div>
 
-              <h3 className="text-md font-semibold mb-3">Existing Links</h3>
-              <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link._id} className="flex justify-between items-center bg-gray-50 p-3 rounded border">
-                    <div>
-                      <p className="font-medium text-gray-800">{link.title}</p>
-                      <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">{link.url}</a>
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                <h3 className="text-lg font-serif font-bold text-[#133b5c] mb-6 flex items-center gap-2">
+                  Active Links <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-sans uppercase tracking-widest">{links.length} Entries</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {links.map((link) => (
+                    <div key={link._id} className="flex justify-between items-center p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:shadow-xl hover:border-[#c6b677]/30 transition-all duration-300 group">
+                      <div className="flex-1 min-w-0 pr-4">
+                        <p className="font-bold text-[#133b5c] truncate">{link.title}</p>
+                        <p className="text-[10px] text-blue-500 font-medium truncate mt-0.5">{link.url}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <a href={link.url} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-blue-500 hover:bg-white rounded-lg transition-all shadow-sm">
+                          <ExternalLink size={14} />
+                        </a>
+                        <button
+                          onClick={() => handleDeleteLink(link._id)}
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-white rounded-lg transition-all shadow-sm"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => handleDeleteLink(link._id)}
-                      className="text-red-500 hover:bg-red-50 p-2 rounded-full"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
           {activeTab === "notifications" && (
-            <div className="space-y-8">
-              {/* Upload Form */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Add New Notice</h2>
-                {message && <p className={`mb-4 p-2 rounded ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{message}</p>}
-                <form onSubmit={handleUpload} className="space-y-4">
+            <div className="space-y-10 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-2 h-full bg-[#c6b677]"></div>
+                <div className="flex items-center justify-between mb-8">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Enter notice title"
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
-                      required
-                    />
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Notices & News Board</h2>
+                    <p className="text-gray-400 text-sm mt-1">Publish critical updates for students and faculty</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Enter detailed description"
-                      rows="3"
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
-                      required
-                    ></textarea>
+                  <div className="p-3 bg-blue-50 rounded-2xl text-[#133b5c]">
+                    <Bell size={24} />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
-                      required
-                    />
+                </div>
+
+                {message && (
+                  <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-slide-in-right ${message.includes("success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                    <CheckCircle2 size={18} />
+                    <span className="text-sm font-bold">{message}</span>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Attachment (PDF/Image)</label>
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
-                      required
-                    />
+                )}
+
+                <form onSubmit={handleUpload} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Notice Headline</label>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="e.g. End Semester Examination Schedule - Spring 2024"
+                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm font-bold text-[#133b5c]"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Extended Description</label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Provide deep details about the notification..."
+                        rows="4"
+                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                        required
+                      ></textarea>
+                    </div>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className={`w-full bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600 transition font-medium ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {loading ? "Uploading..." : "Publish Notice"}
-                  </button>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Publication Date</label>
+                        <input
+                          type="date"
+                          value={date}
+                          onChange={(e) => setDate(e.target.value)}
+                          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all text-sm font-bold text-[#133b5c]"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Media Attachment</label>
+                        <div className="relative h-[58px]">
+                          <input
+                            type="file"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            id="notice-file"
+                            required
+                          />
+                          <label
+                            htmlFor="notice-file"
+                            className="absolute inset-0 flex items-center gap-3 px-4 bg-gray-100 border border-gray-200 rounded-2xl cursor-pointer hover:bg-white hover:border-[#c6b677] transition-all"
+                          >
+                            <FileText size={16} className="text-[#c6b677]" />
+                            <span className="text-xs font-bold text-gray-500 truncate max-w-[120px]">
+                              {file ? file.name : "Select Document"}
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-[#133b5c]/5 p-6 rounded-3xl border border-[#133b5c]/10">
+                      <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest mb-4">Submission Check</p>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className={`w-full bg-[#133b5c] text-white py-5 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {loading ? "Transmitting..." : <><Plus size={20} className="text-[#c6b677]" /> Broadcast Notice</>}
+                      </button>
+                    </div>
+                  </div>
                 </form>
               </div>
 
-              {/* Notices List */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Existing Notices</h2>
-                {notices.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No notices found.</p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-gray-50 text-gray-700 border-b">
-                          <th className="p-3 font-medium">Date</th>
-                          <th className="p-3 font-medium">Title</th>
-                          <th className="p-3 font-medium">Description</th>
-                          <th className="p-3 font-medium">File</th>
-                          <th className="p-3 font-medium">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {notices.map((notice) => (
-                          <tr key={notice._id} className="border-b hover:bg-gray-50 transition">
-                            <td className="p-3 text-sm text-gray-500">
-                              {notice.date || new Date(notice.createdAt).toLocaleDateString()}
-                            </td>
-                            <td className="p-3 font-medium text-gray-800">{notice.title}</td>
-                            <td className="p-3 text-gray-600 max-w-xs truncate">{notice.description}</td>
-                            <td className="p-3">
-                              <a
-                                href={notice.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-amber-600 hover:underline flex items-center gap-1"
-                              >
-                                {notice.fileType.includes("pdf") ? <FileText size={16} /> : <ImageIcon size={16} />}
-                                View
-                              </a>
-                            </td>
-                            <td className="p-3">
-                              <button
-                                onClick={() => handleDelete(notice._id)}
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition"
-                                title="Delete"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "messages" && (
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Contact Messages</h2>
-              {message && <p className={`mb-4 p-2 rounded ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{message}</p>}
-
-              {messages.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No messages found.</p>
-              ) : (
+              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+                  <h3 className="text-lg font-serif font-bold text-[#133b5c]">Active Broadcasts</h3>
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">Live Repository</div>
+                </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full text-left">
                     <thead>
-                      <tr className="bg-gray-50 text-gray-700 border-b">
-                        <th className="p-3 font-medium">Date</th>
-                        <th className="p-3 font-medium">From</th>
-                        <th className="p-3 font-medium">Subject</th>
-                        <th className="p-3 font-medium">Message</th>
-                        <th className="p-3 font-medium text-center">Action</th>
+                      <tr className="bg-gray-50/50 text-[#133b5c] border-b border-gray-100">
+                        <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest">Schedule Date</th>
+                        <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest">Notice Details</th>
+                        <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest">Document</th>
+                        <th className="px-8 py-5 text-xs font-bold uppercase tracking-widest text-right">Operations</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {messages.map((msg) => (
-                        <tr key={msg._id} className="border-b hover:bg-gray-50 transition">
-                          <td className="p-3 text-sm text-gray-500">
-                            {new Date(msg.createdAt).toLocaleDateString()}
+                    <tbody className="divide-y divide-gray-50">
+                      {notices.map((notice) => (
+                        <tr key={notice._id} className="hover:bg-blue-50/30 transition-colors group">
+                          <td className="px-8 py-6">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white rounded-lg shadow-sm text-[#133b5c]">
+                                <Clock size={14} />
+                              </div>
+                              <span className="text-sm font-bold text-gray-500 whitespace-nowrap">
+                                {notice.date || new Date(notice.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
                           </td>
-                          <td className="p-3">
-                            <div className="font-medium text-gray-800">{msg.name}</div>
-                            <div className="text-xs text-gray-500">{msg.email}</div>
+                          <td className="px-8 py-6">
+                            <p className="font-bold text-[#133b5c] text-sm group-hover:text-amber-600 transition-colors">{notice.title}</p>
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-1">{notice.description}</p>
                           </td>
-                          <td className="p-3 text-gray-800 font-medium">{msg.subject}</td>
-                          <td className="p-3 text-gray-600 max-w-xs break-words">{msg.message}</td>
-                          <td className="p-3 text-center">
+                          <td className="px-8 py-6">
+                            <a
+                              href={notice.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-xs font-bold text-[#133b5c] hover:bg-white hover:border-[#c6b677] transition-all"
+                            >
+                              {notice.fileType?.includes("pdf") ? <FileText size={14} className="text-red-500" /> : <ImageIcon size={14} className="text-blue-500" />}
+                              View Resource
+                            </a>
+                          </td>
+                          <td className="px-8 py-6 text-right">
                             <button
-                              onClick={() => handleDeleteMessage(msg._id)}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition"
-                              title="Delete Message"
+                              onClick={() => handleDelete(notice._id)}
+                              className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              title="Delete Notice"
                             >
                               <Trash2 size={18} />
                             </button>
@@ -560,10 +780,79 @@ const Admin = () => {
                     </tbody>
                   </table>
                 </div>
-              )}
+              </div>
             </div>
           )}
-        </div>
+
+          {activeTab === "messages" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Communication Inquiries</h2>
+                  <p className="text-gray-400 text-sm mt-1">Direct messages from the institutional portal</p>
+                </div>
+                <div className="p-3 bg-rose-50 rounded-2xl text-rose-600">
+                  <Mail size={24} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6">
+                {messages.length === 0 ? (
+                  <div className="bg-white p-20 rounded-3xl border border-gray-100 shadow-sm text-center">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                      <Mail size={32} />
+                    </div>
+                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No active inquiries</p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <div key={msg._id} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                      <div className="flex flex-col md:flex-row justify-between gap-6">
+                        <div className="space-y-4 flex-1">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-[#133b5c] font-bold text-lg border border-gray-100 shadow-sm group-hover:bg-[#c6b677] group-hover:text-[#133b5c] group-hover:border-[#c6b677] transition-all">
+                              {msg.name?.[0]?.toUpperCase() || "I"}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[#133b5c] text-lg">{msg.name}</p>
+                              <p className="text-xs text-blue-500 font-medium">{msg.email}</p>
+                            </div>
+                            <div className="h-4 w-[1px] bg-gray-100"></div>
+                            <span className="text-[10px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">
+                              {new Date(msg.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-[#c6b677] uppercase tracking-widest mb-1">Subject</p>
+                            <p className="text-[#133b5c] font-bold">{msg.subject}</p>
+                          </div>
+                          <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                            <p className="text-gray-600 leading-relaxed text-sm">{msg.message}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-row md:flex-col justify-end gap-3 pt-4 border-t border-gray-50 md:border-t-0 md:pt-0">
+                          <button
+                            onClick={() => handleDeleteMessage(msg._id)}
+                            className="flex-1 md:flex-initial p-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center"
+                            title="Delete Inquiry"
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                          <a
+                            href={`mailto:${msg.email}`}
+                            className="flex-1 md:flex-initial p-4 bg-blue-50 text-blue-500 rounded-2xl hover:bg-blue-500 hover:text-white transition-all shadow-sm flex items-center justify-center"
+                          >
+                            <Mail size={20} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
