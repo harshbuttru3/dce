@@ -57,4 +57,5 @@ npm run dev
 ## Notes
 
 - Images are placeholders from `via.placeholder.com`.
-- Not all pages have unique content; unpopulated pages fallback to a "Page Not Found" or generic template.
+- Not all pages have unique content; unpopulated pages fallback to a "Page Not Found" or generic template.hi
+- 
