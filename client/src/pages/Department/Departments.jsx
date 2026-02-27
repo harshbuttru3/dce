@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { Outlet } from "react-router-dom";
 
 const departments = [
-  { id: 1, name: 'Computer Science & Engineering', icon: <Monitor size={48} />, intakes: 60, head: "Dr. A. Kumar", path: "/cse" },
-  { id: 2, name: 'Civil Engineering', icon: <PenTool size={48} />, intakes: 60, head: "Dr. B. Singh", path: "/civil" },
-  { id: 3, name: 'Mechanical Engineering', icon: <Cpu size={48} />, intakes: 60, head: "Dr. C. Roy", path: "/mechanical" },
-  { id: 4, name: 'Electrical & Electronics Engineering', icon: <Zap size={48} />, intakes: 60, head: "Dr. D. Jha", path: "/eee" },
-  { id: 5, name: 'Computer Science & Engineering (Cyber Security)', icon: <Monitor size={48} />, intakes: 65, head: "Dr. C.K. Jha", path: "/cyber" },
+  { id: 1, name: 'Computer Science & Engineering', icon: <Monitor size={48} />, intakes: 60, head: "Dr. Rohit Verma", path: "/department/cse" },
+  { id: 2, name: 'Computer Science & Engineering (Cyber Security)', icon: <Monitor size={48} />, intakes: 60, head: "Dr. C.K. Jha", path: "/department/cse-cyber-security" },
+  { id: 3, name: 'Civil Engineering', icon: <PenTool size={48} />, intakes: 60, head: "Dr. B. Singh", path: "/department/ce" },
+  { id: 4, name: 'Mechanical Engineering', icon: <Cpu size={48} />, intakes: 60, head: "Dr. C. Roy", path: "/department/me" },
+  { id: 5, name: 'Electrical & Electronics Engineering', icon: <Zap size={48} />, intakes: 60, head: "Dr. D. Jha", path: "/department/eee" },
+  { id: 6, name: 'Fire Technology & Safety', icon: <Zap size={48} />, intakes: 30, head: "Dr. S. K. Singh", path: "/department/fst" },
+  { id: 7, name: 'M.Tech Power System', icon: <Zap size={48} />, intakes: 30, head: "Dr. D. Jha", path: "/department/ps" },
 ];
 
 const Departments = () => {
@@ -48,13 +50,13 @@ const Departments = () => {
                 >
                   View Details →
                 </Link>
-          
+
               </div>
             </div>
           ))}
         </div>
       </div>
-          
+
     </div>
   );
 };

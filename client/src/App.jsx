@@ -1,149 +1,102 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import GenericPage from './pages/GenericPage';
-import Contact from './pages/Aboutus/Contact';
-import Departments from './pages/Department/Departments';
 import About from './pages/Aboutus/About';
-import Admin from './pages/Admin';
 import History from './pages/Aboutus/History';
-import PrincipalMessage from './pages/Aboutus/PrincipalMessage';
-import VissionMessage from './pages/Aboutus/VissionMessage';
-import Administration from './pages/Aboutus/Administration';
-import Seat from './pages/Aboutus/Seat';
-import Visit from './pages/Aboutus/Visit';
-import Acedmics from './pages/Acedmics/Acedmics';
+import Infrastructure from './pages/Aboutus/Infrastructure';
+import Contact from './pages/Aboutus/Contact';
+import Magazine from './pages/Magazine';
+import Placements from './pages/T&P/Placements';
+import AicteApproval from './pages/Approval/AicteApproval';
+import NirfApproval from './pages/Approval/NirfApproval';
+import BeuApproval from './pages/Approval/BeuApproval';
+import Admin from './pages/Admin';
+import Login from './pages/Login';
+import CoordinatorLogin from './pages/CoordinatorLogin';
+import HolidayCalendar from './pages/Acedmics/HolidayCalendar';
 import Admission from './pages/Acedmics/Admission';
-import Attendence from './pages/Acedmics/Attendence';
-import { Calendar, Library } from 'lucide-react';
 import Calender from './pages/Acedmics/Calender';
 import Regulation from './pages/Acedmics/Regulation';
-import Notice from './pages/Acedmics/Notice';
-import Syllabus from './pages/Acedmics/Syllabus';
-import Login from './pages/Login';
-import ProtectedRoute from './components/ProtectedRoute';
-import Gallery from './pages/Gallery';
-import Civil from './pages/Department/Civil';
-import Cyber from './pages/Department/Cyber';
-import Cse from './pages/Department/Cse';
-import Eee from './pages/Department/Eee';
-import Mech from './pages/Department/Mech';
-import Computercenter from './pages/Facilities/Computercenter';
-import Bank from './pages/Facilities/Bank';
-import Hostel from './pages/Facilities/Hostel';
-import Wifi from './pages/Facilities/Wifi';
-import Sports from './pages/Facilities/Sports';
-import Centrallibrary from './pages/Facilities/Library';
-import Aboutplacement from './pages/T&P/Aboutplacement';
-import Brochure from './pages/T&P/Brochure';
-import Gatecat from './pages/T&P/Gatecat';
-import Placementlist from './pages/T&P/Placementlist';
-import Award from './pages/Activites/Award';
-import Hackathon from './pages/Activites/Hackathon';
-import Internship from './pages/Activites/Internship';
-import Startup from './pages/Activites/Startup';
-import Alumni from './pages/Alumni/Alumni';
-import AboutDceAlumni from './pages/Alumni/AboutDceAlumni';
-import Mediagallary from './pages/Alumni/mediagallary';
-import Membership from './pages/Alumni/Membership';
-import Approval from './pages/Aprroval/Approval';
-import Aicte from './pages/Aprroval/Aicte';
-import Nirf from './pages/Aprroval/Nirf';
-import Students from './pages/Students';
-import Facultystaff from './Facultystaff';
+import FeeStructure from './pages/Acedmics/FeeStructure';
+import LanguageLab from './pages/Programmes/LanguageLab';
+import CDac from './pages/Programmes/CDac';
+import StudentFest from './pages/StudentLife/StudentFest';
+import KalaKalakar from './pages/StudentLife/KalaKalakar';
+import Testimonials from './pages/StudentLife/Testimonials';
 
+// Department Imports
+import Cse from './pages/Department/Cse';
+import Cyber from './pages/Department/Cyber';
+import Civil from './pages/Department/Civil';
+import Mech from './pages/Department/Mech';
+import Eee from './pages/Department/Eee';
+import Fire from './pages/Department/Fire';
+import PowerSystem from './pages/Department/PowerSystem';
+
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const noLayoutPaths = ['/login', '/Admin', '/coordinator-login'];
+  const hideLayout = noLayoutPaths.includes(location.pathname);
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      {!hideLayout && <Header />}
+      <main className="grow">{children}</main>
+      {!hideLayout && <Footer />}
+    </div>
+  );
+};
 
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
-            {/*  path for department */}
-            <Route path="/Department" element={<Departments />} />
-            <Route path="cse" element={<Cse />} />
-            <Route path="civil" element={<Civil />} />
-            <Route path="cyber" element={<Cyber />} />
-            <Route path="eee" element={<Eee />} />
-            <Route path="mechanical" element={<Mech />} />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/magazine" element={<Magazine />} />
+          <Route path="/t-and-p" element={<Placements />} />
+          <Route path="/approval/aicte" element={<AicteApproval />} />
+          <Route path="/approval/nirf" element={<NirfApproval />} />
+          <Route path="/approval/beu" element={<BeuApproval />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Admin" element={<Admin />} />
+          <Route path="/coordinator-login" element={<CoordinatorLogin />} />
 
+          {/* Department Routes */}
+          <Route path="/department/cse" element={<Cse />} />
+          <Route path="/department/cse-cyber-security" element={<Cyber />} />
+          <Route path="/department/ce" element={<Civil />} />
+          <Route path="/department/me" element={<Mech />} />
+          <Route path="/department/eee" element={<Eee />} />
+          <Route path="/department/fst" element={<Fire />} />
+          <Route path="/department/ps" element={<PowerSystem />} />
+          <Route path="/holiday-calendar" element={<HolidayCalendar />} />
+          <Route path="/admission" element={<Admission />} />
+          <Route path="/academic-calendar" element={<Calender />} />
+          <Route path="/rules" element={<Regulation />} />
+          <Route path="/fee-structure" element={<FeeStructure />} />
+          <Route path="/programmes/language-lab" element={<LanguageLab />} />
+          <Route path="/programmes/c-dac" element={<CDac />} />
+          <Route path="/student-fest" element={<StudentFest />} />
+          <Route path="/student-society/kala-and-kalakar" element={<KalaKalakar />} />
+          <Route path="/testimonial" element={<Testimonials />} />
 
+          {/* nested path for about  */}
+          <Route path="/about" element={<About />}>
+            <Route path="institute" element={<History />} />
+            <Route path="infrastructure" element={<Infrastructure />} />
+            <Route path="contact-us" element={<Contact />} />
+          </Route>
 
-
-
-
-            {/* nested path for about  */}
-            <Route path="/About" element={<About />}>
-              <Route path="PrincipalMessage" element={<PrincipalMessage />} />
-              <Route path="visionmission" element={<VissionMessage />} />
-              <Route path="administration" element={<Administration />} />
-              <Route path="Seat" element={<Seat />} />
-              <Route path="visit" element={<Visit />}></Route>
-              <Route path="history" element={<History />} /></Route>
-            {/* nested path for Acedmics */}
-            <Route path="/academics" element={<Acedmics />}>
-              <Route path="Admission" element={<Admission />} />
-              <Route path="Attendance" element={<Attendence />} />
-              <Route path="Calender" element={<Calender />} />
-              <Route path="Notice" element={<Notice />} />
-              <Route path="Regulation" element={<Regulation />} />
-              <Route path="Syllabus" element={<Syllabus />} />
-            </Route>
-            {/* path for facilites */}
-            <Route path="/Computercenter" element={< Computercenter />} />
-            <Route path="/Bank" element={<Bank />} />
-            <Route path="/Hostel" element={<Hostel />} />
-            <Route path="/Centrallibrary" element={<Centrallibrary />} />
-            <Route path="/Sports" element={<Sports />} />
-            <Route path="/Wifi" element={<Wifi />} />
-            {/*  path for T&P */}
-            <Route path="/Aboutplacement" element={<Aboutplacement />}></Route>
-            <Route path="/Brochure" element={<Brochure />}></Route>
-            <Route path="/Gatecat" element={<Gatecat />}></Route>
-            <Route path="/Placementlist" element={<Placementlist />}></Route>
-            {/* path for Activites */}
-            <Route path="/Award" element={<Award />}></Route>
-            <Route path="/Hackathon" element={<Hackathon />}></Route>
-            <Route path='/Internship' element={<Internship />}></Route>
-            <Route path="/Startup" element={<Startup />}></Route>
-            {/* nested path for alumni */}
-            <Route path="/Alumni" element={<Alumni />} >
-              <Route path="AboutDceAlumni" element={<AboutDceAlumni />} />
-              <Route path='mediagallary' element={<Mediagallary />} />
-              <Route path='membership' element={<Membership />} /></Route>
-            {/* nested path for approval  */}
-            <Route path="/Approval" element={<Approval />} >
-              <Route path="Aicte" element={<Aicte />}></Route>
-              <Route path="Nirf" element={<Nirf />}></Route>
-
-
-
-
-            </Route>
-            {/* heading bar */}
-            <Route path="/student" element={<Students />}></Route>
-            <Route path="/Facultystaff" element={<Facultystaff />} />
-
-
-
-
-            {/* Protected Admin Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/Admin" element={<Admin />} />
-            </Route>
-
-            <Route path="/login" element={<Login />} />
-            {/* Catch-all for other generic pages */}
-            <Route path="/image" element={<Gallery />} />
-            <Route path="*" element={<GenericPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+          {/* Catch-all for undefined routes */}
+          <Route path="*" element={
+            <div className="flex items-center justify-center min-h-[50vh]">
+              <h2 className="text-2xl font-semibold text-gray-400">Page under construction</h2>
+            </div>
+          } />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
