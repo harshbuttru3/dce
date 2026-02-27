@@ -1,26 +1,65 @@
 import React from 'react';
 import { ChevronRight, ChevronLeft, Info } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const CampusPlacements = () => {
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1.0] }
+        }
+    };
+
+    // The distinct logos required by the user
+    const partnerLogos = [
+        { id: 1, element: <div className="font-bold text-xl md:text-2xl tracking-tighter flex items-center gap-2"><span className="text-sky-400">tcs</span> <span className="text-[10px] md:text-xs font-normal leading-tight">TATA<br />CONSULTANCY<br />SERVICES</span></div> },
+        { id: 2, element: <div className="font-bold text-lg md:text-xl font-sans leading-tight">Tech<br />Mahindra</div> },
+        { id: 3, element: <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-dashed border-white/80 flex items-center justify-center font-bold text-xs uppercase">wipro</div> },
+        { id: 4, element: <div className="text-4xl md:text-6xl font-sans font-light leading-none opacity-50">&gt;</div> },
+        { id: 5, element: <div className="font-black text-2xl md:text-3xl tracking-tighter">NIIT</div> }
+    ];
+
+    // Duplicate array to create the infinite scrolling effect seamlessly
+    const infiniteLogos = [...partnerLogos, ...partnerLogos.map(l => ({ ...l, id: l.id + 10 }))];
+
     return (
-        <section className="w-full flex flex-col lg:flex-row min-h-screen lg:min-h-[600px] font-sans overflow-hidden">
+        <section className="w-full flex flex-col lg:flex-row min-h-[600px] font-sans overflow-hidden bg-[#133b5c]">
 
             {/* Left Panel - Placement Stats & Image Overlay */}
-            <div className="lg:w-[65%] w-full relative bg-[#133b5c] text-white flex flex-col justify-between overflow-hidden">
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={containerVariants}
+                className="lg:w-[65%] w-full relative bg-[#133b5c] text-white flex flex-col justify-between overflow-hidden"
+            >
 
                 {/* Background Image with Deep Blue Overlay */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1471&auto=format&fit=crop"
                         alt="Students"
-                        className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+                        className="w-full h-full object-cover opacity-50 mix-blend-overlay"
                     />
                     {/* Linear gradient to darken the bottom for logos and right edge for transition */}
                     <div className="absolute inset-0 bg-linear-to-t from-[#0a2339] via-transparent to-transparent opacity-90"></div>
                 </div>
 
                 {/* Top Content Area */}
-                <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-2xl">
+                <motion.div variants={itemVariants} className="relative z-10 p-8 md:p-12 lg:p-16 max-w-2xl">
                     <h4 className="text-gray-300 tracking-wide text-sm md:text-base font-light mb-2">Campus Placements</h4>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif leading-tight mb-6">
                         PLACEMENT SUPPORT AT<br />DCE DARBHANGA
@@ -35,16 +74,16 @@ const CampusPlacements = () => {
                     <div className="border border-white/50 rounded-full p-2 inline-flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#133b5c] transition-colors">
                         <ChevronRight size={18} />
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Bottom Stats & Logos Area */}
-                <div className="relative z-10 p-8 md:p-12 lg:px-16 pt-0">
+                <div className="relative z-10 p-8 md:p-12 lg:px-16 pt-0 mt-auto">
 
                     {/* Stats Row */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-16 mb-12">
+                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-16 mb-12">
                         {/* Stat 1 */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-5xl md:text-6xl font-serif tracking-tight">460</span>
+                        <div className="flex items-center gap-4 group">
+                            <span className="text-5xl md:text-6xl font-serif tracking-tight text-white group-hover:text-yellow-400 transition-colors duration-300">460</span>
                             <span className="text-sm text-gray-300 leading-tight max-w-[80px]">companies participated</span>
                         </div>
 
@@ -52,38 +91,37 @@ const CampusPlacements = () => {
                         <div className="hidden sm:block w-px h-12 bg-white/20"></div>
 
                         {/* Stat 2 */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-5xl md:text-6xl font-serif tracking-tight">1788</span>
+                        <div className="flex items-center gap-4 group">
+                            <span className="text-5xl md:text-6xl font-serif tracking-tight text-white group-hover:text-yellow-400 transition-colors duration-300">1788</span>
                             <span className="text-sm text-gray-300 leading-tight max-w-[100px]">drives hosted on campus</span>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Partner Logos Strip */}
-                    <div className="flex flex-wrap items-center justify-between gap-6 opacity-80 border-t border-white/10 pt-8 mt-auto">
-                        {/* Logo Placeholders (Using Text/Simple SVGs for now, should replace with actual images) */}
-                        <div className="font-bold text-xl md:text-2xl tracking-tighter flex items-center gap-1">
-                            <span className="text-sky-400">tcs</span> <span className="text-xs font-normal leading-none">TATA<br />CONSULTANCY<br />SERVICES</span>
+                    {/* Infinite Partner Logos Strip */}
+                    <motion.div variants={itemVariants} className="flex overflow-hidden border-t border-white/10 pt-8 mt-auto w-full relative -mx-8 sm:mx-0 px-8 sm:px-0 mask-image-linear-edges">
+
+                        <div className="flex w-max animate-marquee items-center gap-12 sm:gap-16 md:gap-24 opacity-80 pr-12 sm:pr-16 md:pr-24 cursor-default">
+                            {infiniteLogos.map((logo) => (
+                                <div key={logo.id} className="inline-flex shrink-0 hover:opacity-100 transition-opacity">
+                                    {logo.element}
+                                </div>
+                            ))}
                         </div>
-                        <div className="font-bold text-lg md:text-xl font-sans">
-                            Tech<br />Mahindra
-                        </div>
-                        <div className="w-12 h-12 rounded-full border-2 border-dashed border-white flex items-center justify-center font-bold text-xs">
-                            wipro
-                        </div>
-                        <div className="text-5xl md:text-7xl font-sans font-light leading-none">
-                            &gt;
-                        </div>
-                        <div className="font-black text-2xl md:text-3xl tracking-tighter">
-                            NIIT
-                        </div>
-                    </div>
+
+                    </motion.div>
 
                 </div>
-            </div>
+            </motion.div>
 
 
             {/* Right Panel - Gold Testimonial Block */}
-            <div className="lg:w-[35%] w-full bg-[#c8b472] p-8 md:p-12 flex flex-col text-white relative">
+            <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1.0] }}
+                className="lg:w-[35%] w-full bg-[#c8b472] p-8 md:p-12 flex flex-col text-white relative"
+            >
 
                 {/* Large Quotation Mark */}
                 <div className="text-6xl font-serif font-black mb-4 opacity-90 leading-none">
@@ -91,42 +129,42 @@ const CampusPlacements = () => {
                 </div>
 
                 {/* Testimonial Text */}
-                <p className="text-sm lg:text-base leading-relaxed mb-10 w-11/12 opacity-90">
-                    A heartfelt thank you to DCE Darbhanga and the placement team for their invaluable support in my placement journey. <Info size={14} className="inline ml-1 text-white/70" />
+                <p className="text-lg lg:text-[17px] font-medium leading-relaxed mb-10 w-11/12 opacity-95">
+                    A heartfelt thank you to DCE Darbhanga and the placement team for their invaluable support in my placement journey. <Info size={14} className="inline ml-1 text-white/80" />
                 </p>
 
                 {/* Alumni Details */}
                 <div className="space-y-1 text-sm font-medium opacity-90">
-                    <p>Alumni Name: <span className="font-bold">Deepakshi</span></p>
-                    <p>Course: <span className="font-bold">B.Tech (CSE)</span></p>
-                    <p>Batch: <span className="font-bold">2020-24</span></p>
+                    <p>Alumni Name: <span className="font-bold tracking-wide">Deepakshi</span></p>
+                    <p>Course: <span className="font-bold tracking-wide">B.Tech (CSE)</span></p>
+                    <p>Batch: <span className="font-bold tracking-wide">2020-24</span></p>
                 </div>
 
                 {/* Placed Company Logo */}
-                <div className="mt-6 mb-8 text-blue-900 font-black text-3xl font-serif italic tracking-tighter">
+                <div className="mt-6 mb-8 text-blue-900 font-black text-3xl font-serif italic tracking-tighter mix-blend-color-burn opacity-80">
                     KPMG
                 </div>
 
                 {/* Alumni Photo */}
-                <div className="w-48 h-40 bg-gray-200 mb-6 overflow-hidden mt-auto shadow-md">
+                <div className="w-48 h-40 bg-gray-200 mb-6 overflow-hidden mt-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
                     <img
                         src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
                         alt="Alumni Portrait"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                     />
                 </div>
 
                 {/* Carousel Controls */}
                 <div className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors">
-                        <ChevronLeft size={16} />
+                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors group">
+                        <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
                     </div>
-                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors">
-                        <ChevronRight size={16} />
+                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors group">
+                        <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                     </div>
                 </div>
 
-            </div>
+            </motion.div>
 
         </section>
     );

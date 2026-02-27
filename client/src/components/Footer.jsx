@@ -5,36 +5,36 @@ import { FaXTwitter } from "react-icons/fa6"; // Using FaXTwitter for modern X l
 
 const Footer = () => {
     return (
-        <footer className="w-full font-sans flex flex-col md:flex-row min-h-[400px]">
+        <footer className="w-full font-sans flex flex-col md:flex-row min-h-[400px] relative bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-fixed">
 
-            {/* ================= LEFT SECTION (Blue) ================= */}
-            <div className="md:w-[35%] w-full bg-[#133b5c] text-white p-10 md:p-14 lg:p-16 flex flex-col justify-between">
+            {/* Dark overlay to ensure text remains readable */}
+            <div className="absolute inset-0 bg-black/60"></div>
+
+            {/* ================= LEFT SECTION (Glassy Blue) ================= */}
+            <div className="md:w-[35%] w-full bg-[#133b5c]/70 backdrop-blur-md text-white p-10 md:p-14 lg:p-16 flex flex-col justify-between relative z-10 border-r border-white/10">
 
                 <div>
                     {/* Logo Area */}
                     <div className="mb-6">
-                        <h2 className="text-2xl font-serif tracking-wider font-semibold">
-                            <span className="text-yellow-500 italic pr-1">DCE</span> DARBHANGA
+                        <h2 className="text-2xl font-serif tracking-wider font-semibold drop-shadow-md">
+                            <span className="text-yellow-400 italic pr-1">DCE</span> <span className="text-white">DARBHANGA</span>
                         </h2>
-                        <div className="flex items-center mt-2">
-                            <div className="h-px bg-white/30 flex-1"></div>
-                            <span className="px-3 text-xs tracking-widest uppercase opacity-90 font-light">Thrive. For life.</span>
-                            <div className="h-px bg-white/30 flex-1"></div>
-                        </div>
                     </div>
 
                     {/* Contact Details with separators */}
-                    <div className="space-y-4 mt-12 text-sm lg:text-[15px] font-light tracking-wide text-white/90">
+                    <div className="space-y-4 mt-8 text-sm lg:text-[15px] font-medium tracking-wide text-white drop-shadow-md">
 
-                        <p className="pb-4 border-b border-white/20 hover:text-white transition-colors">
-                            Mabbi, Darbhanga, Bihar – India
+                        <p className="pb-4 border-b border-white/30 hover:text-yellow-300 transition-colors leading-relaxed">
+                            <span className="text-yellow-400 font-bold block mb-1">Darbhanga College of Engineering, Darbhanga</span>
+                            P.O, Lal Sahpur, Mabbi Belauna,<br />
+                            Darbhanga, Bihar 846005
                         </p>
 
-                        <p className="py-4 border-b border-white/20 hover:text-white transition-colors">
+                        <p className="py-4 border-b border-white/30 hover:text-yellow-300 transition-colors">
                             +91-XXXXX-XXXXX
                         </p>
 
-                        <p className="py-4 border-b border-white/20 hover:text-white transition-colors">
+                        <p className="py-4 border-b border-white/30 hover:text-yellow-300 transition-colors">
                             info@dcedarbhanga.org
                         </p>
 
@@ -42,8 +42,8 @@ const Footer = () => {
                 </div>
 
                 {/* Social Icons */}
-                <div className="mt-16">
-                    <h4 className="text-sm font-semibold tracking-wide mb-4">Follow Us</h4>
+                <div className="mt-16 text-white drop-shadow-md">
+                    <h4 className="text-sm font-bold tracking-wide mb-4 text-yellow-400">Follow Us</h4>
                     <div className="flex gap-3">
                         <a href="#" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
                             <FaFacebookF size={14} />
@@ -63,43 +63,19 @@ const Footer = () => {
             </div>
 
 
-            {/* ================= RIGHT SECTION (Dark Gray) ================= */}
-            <div className="md:w-[65%] w-full bg-[#1e1e1e] text-white/90 p-10 md:p-14 lg:p-16 flex flex-col relative">
+            {/* ================= RIGHT SECTION (Glassy Dark) ================= */}
+            <div className="md:w-[65%] w-full bg-[#1e1e1e]/60 backdrop-blur-md text-white/90 p-10 md:p-14 lg:p-16 flex flex-col relative z-10">
 
-                {/* Link Grids */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-16 grow">
-
-                    {/* Column 1 - Main Links */}
-                    <div className="flex flex-col space-y-4 text-sm lg:text-[15px] tracking-wide font-light">
-                        <Link to="/about" className="hover:text-yellow-500 transition-colors w-max">About Us</Link>
-                        <Link to="/academics" className="hover:text-yellow-500 transition-colors w-max">Academics</Link>
-                        <Link to="/corporate-resource-centre" className="hover:text-yellow-500 transition-colors w-max">Corporate Resource Centre</Link>
-                        <Link to="/facilities" className="hover:text-yellow-500 transition-colors w-max">Facilities</Link>
-                        <Link to="/campus-life" className="hover:text-yellow-500 transition-colors w-max">Campus Life</Link>
-                        <Link to="/research" className="hover:text-yellow-500 transition-colors w-max">Research</Link>
-                        <Link to="/internationalisation" className="hover:text-yellow-500 transition-colors w-max">Internationalisation</Link>
-                        <Link to="/blog" className="hover:text-yellow-500 transition-colors w-max">Blog</Link>
-                    </div>
-
-                    {/* Column 2 - Quick Links (Part 1) */}
-                    <div className="flex flex-col space-y-4 text-sm lg:text-[15px] tracking-wide font-light">
-                        <h3 className="font-semibold text-white mb-2 tracking-wider text-base">Quick Links</h3>
-                        <Link to="/grievance" className="hover:text-yellow-500 transition-colors">Student Grievance Handling<br />Mechanism</Link>
-                        <Link to="/privacy-policy" className="hover:text-yellow-500 transition-colors">Privacy and Security Policy</Link>
-                        <Link to="/academic-bank" className="hover:text-yellow-500 transition-colors">Academic Bank of Credits</Link>
-                        <Link to="/internal-committee" className="hover:text-yellow-500 transition-colors">Internal Committee</Link>
-                        <Link to="/ombudsperson" className="hover:text-yellow-500 transition-colors">Ombudsperson</Link>
-                    </div>
-
-                    {/* Column 3 - Quick Links (Part 2) */}
-                    <div className="flex flex-col space-y-4 text-sm lg:text-[15px] tracking-wide pt-0 sm:pt-9 font-light">
-                        <Link to="/rti" className="hover:text-yellow-500 transition-colors">RTI Disclosure</Link>
-                        <Link to="/public-disclosure" className="hover:text-yellow-500 transition-colors">Public Self Disclosure</Link>
-                        <Link to="/certificate-verification" className="hover:text-yellow-500 transition-colors">Digital Certificate Verification<br />& WES</Link>
-                        <Link to="/library" className="hover:text-yellow-500 transition-colors">Library</Link>
-                        <Link to="/nad" className="hover:text-yellow-500 transition-colors">National Academic<br />Depository (NAD)</Link>
-                    </div>
-
+                {/* Google Maps Location Embed */}
+                <div className="w-full h-full mb-16 grow rounded-xl overflow-hidden border border-white/10 shadow-2xl relative min-h-[250px] md:min-h-0 bg-white/5">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14352.09349603565!2d85.8858544!3d26.1555543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39edc5c0d2e8e7a5%3A0x7d6b38c31a7f6f14!2sDarbhanga%20College%20of%20Engineering%2C%20Darbhanga!5e0!3m2!1sen!2sin!4v1709140001011!5m2!1sen!2sin"
+                        className="absolute inset-0 w-full h-full border-0 grayscale invert-[0.9] contrast-[1.1] opacity-80 hover:opacity-100 hover:grayscale-0 hover:invert-0 transition-all duration-700 ease-in-out"
+                        allowFullScreen=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="DCE Darbhanga Location"
+                    ></iframe>
                 </div>
 
                 {/* Copyright Bar */}
