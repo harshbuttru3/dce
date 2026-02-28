@@ -141,11 +141,11 @@ const Header = () => {
         <div className={`w-full px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${isScrolled || !isHomePage ? 'py-4' : 'pt-6 pb-2'}`}>
           <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0 animate-slide-in-down">
             <div className="bg-transparent flex items-center justify-center">
-              <img src="https://i.imageupload.app/dd3b1dc01f02a2400117.png" alt="DceLogo" className='w-12 h-12 md:w-16 md:h-16' />
+              <img src="/dce_logo.png" alt="DceLogo" className='w-12 h-12 md:w-16 md:h-16' />
             </div>
             <div>
               <h1 className="text-[12px] sm:text-[14px] md:text-xl font-bold uppercase tracking-wide transition-colors duration-300 text-white">Darbhanga College of Engineering</h1>
-              <p className="text-[10px] sm:text-xs transition-colors duration-300 text-sky-300">Estd. 2008 &bull; Govt. of Bihar</p>
+              <p className="text-[10px] sm:text-xs transition-colors duration-300 text-[#c6b677]">Estd. 2008 &bull; Govt. of Bihar</p>
             </div>
           </Link>
 
@@ -160,12 +160,12 @@ const Header = () => {
                   onMouseLeave={() => setHoveredNav(null)}
                 >
                   <button
-                    className={`transition-colors text-[14px] xl:text-[16px] uppercase tracking-wider whitespace-nowrap flex items-center gap-1 text-white hover:text-sky-300`}
+                    className={`transition-colors text-[14px] xl:text-[16px] uppercase tracking-wider whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
                   >
                     {item.label}
                     <ChevronDown size={16} className="transition-transform duration-300 group-hover:rotate-180" />
                   </button>
-                  <span className="absolute bottom-4 left-0 w-0 h-0.5 bg-sky-300 transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-4 left-0 w-0 h-0.5 bg-[#c6b677] transition-all duration-300 group-hover:w-full"></span>
 
                   {/* Dropdown Menu - Mega Menu Style */}
                   <div className="absolute top-full right-0 bg-[#133b5c]/95 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[280px] p-6 border-t-4 border-yellow-500">
@@ -252,7 +252,7 @@ const Header = () => {
                 <li key={item.label} className="border-b border-gray-700 last:border-0 relative">
                   <button
                     onClick={() => toggleDropdown(item.label)}
-                    className="text-white hover:text-sky-300 text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
+                    className="text-white hover:text-[#c6b677] text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
                   >
                     {item.label}
                     <ChevronDown size={18} className={`transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />

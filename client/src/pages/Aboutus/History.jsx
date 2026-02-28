@@ -159,25 +159,25 @@ const History = () => {
 
       {/* Extended Institutional Focus Section (Optional) */}
       <div className="w-full bg-[#f4f4f4] py-20 px-4 flex flex-col items-center">
-        <h2 className="text-[#133b5c] text-3xl font-serif font-bold mb-12 text-center uppercase tracking-wider underline underline-offset-8 decoration-yellow-500">Extended Institutional Focus</h2>
+        <h2 className="text-[#133b5c] text-3xl font-serif font-bold mb-12 text-center uppercase tracking-wider underline underline-offset-8 decoration-[#c6b677]">Extended Institutional Focus</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-yellow-500 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-[#c6b677] flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
             <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
             <p className="text-gray-700 font-medium italic">Promote innovation, startups, and entrepreneurship culture</p>
           </div>
-          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-sky-800 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-[#133b5c] flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
             <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💻</div>
             <p className="text-gray-700 font-medium italic">Encourage interdisciplinary learning and emerging technologies</p>
           </div>
-          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-yellow-500 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-[#c6b677] flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
             <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🏘️</div>
             <p className="text-gray-700 font-medium italic">Strengthen digital infrastructure and smart campus initiatives</p>
           </div>
-          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-sky-800 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
+          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-[#133b5c] flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300">
             <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🎓</div>
             <p className="text-gray-700 font-medium italic">Support holistic student development including technical, cultural, and leadership skills</p>
           </div>
-          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-yellow-500 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300 md:col-span-2 lg:col-span-1">
+          <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-[#c6b677] flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-300 md:col-span-2 lg:col-span-1">
             <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🌿</div>
             <p className="text-gray-700 font-medium italic">Foster sustainability awareness and environmentally responsible engineering practices</p>
           </div>
@@ -201,7 +201,7 @@ const History = () => {
         <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 mt-16 text-xs text-gray-500 text-left">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden grayscale opacity-70">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bihar_Government_Logo.png" alt="Bihar Govt" className="w-8 h-8 object-contain" />
+              <img src="/Tlogo.png" alt="Bihar Govt" className="w-8 h-8 object-contain" />
             </div>
             <p>Department of Science, Tech &<br />Technical Education, Govt. of Bihar</p>
           </div>

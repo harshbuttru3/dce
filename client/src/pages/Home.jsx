@@ -57,13 +57,13 @@ const Home = () => {
           <NoticeBoard />
 
           {/* ================= NOTICE ================= */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Important Link</h2>
-              <a href="#" className="text-blue-600 text-sm">View all</a>
+          <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
+            <div className="bg-[#133b5c] text-[#c6b677] p-3 flex justify-between items-center border-b-2 border-[#c6b677]">
+              <h2 className="font-bold text-lg flex items-center gap-2 text-white">Important Link</h2>
+              <a href="#" className="text-xs text-[#c6b677] hover:text-white transition-colors px-2 py-1">View all</a>
             </div>
 
-            <div className="space-y-5 text-sm">
+            <div className="space-y-4 text-sm p-4">
               {importantLinks.length > 0 ? (
                 importantLinks.map((link) => (
                   <div key={link._id}>
@@ -91,7 +91,7 @@ const Home = () => {
           <div className="w-full md:w-1/3 flex justify-center md:justify-end">
             <div className="relative group">
               {/* Decorative Background Box */}
-              <div className="absolute inset-0 bg-yellow-500 translate-x-4 translate-y-4 rounded-xl -z-10 transition-transform duration-300 group-hover:translate-x-6 group-hover:translate-y-6"></div>
+              <div className="absolute inset-0 bg-[#c6b677] translate-x-4 translate-y-4 rounded-xl -z-10 transition-transform duration-300 group-hover:translate-x-6 group-hover:translate-y-6"></div>
 
               <img
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
@@ -104,7 +104,7 @@ const Home = () => {
           {/* Right Area - Message Text */}
           <div className="w-full md:w-2/3 flex flex-col justify-center">
 
-            <h2 className="text-[#00338d] text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">
+            <h2 className="text-[#133b5c] text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">
               Message from the Principal
             </h2>
 
@@ -120,7 +120,7 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="mt-10 border-l-4 border-yellow-500 pl-4">
+            <div className="mt-10 border-l-4 border-[#c6b677] pl-4">
               <h4 className="text-xl font-bold text-gray-800 tracking-wide">Dr. Placeholder Name</h4>
               <p className="text-sm font-medium text-gray-500 uppercase tracking-widest mt-1">Principal, DCE Darbhanga</p>
             </div>

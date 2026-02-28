@@ -20,7 +20,7 @@ const BeuApproval = () => {
             {/* 1. Hero Banner */}
             <div className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
                 <img
-                    src="https://images.unsplash.com/photo-1541829070764-84a7d30dee3f?q=80&w=2000&auto=format&fit=crop"
+                    src="/beu.jpeg"
                     className="absolute inset-0 w-full h-full object-cover scale-105 animate-zoom-in brightness-[0.4]"
                     alt="BEU Banner"
                 />
