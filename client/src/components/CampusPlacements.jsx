@@ -1,8 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const CampusPlacements = () => {
+    const [testimonials, setTestimonials] = useState([]);
+    const [currentIdx, setCurrentIdx] = useState(0);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const { data } = await axios.get('http://localhost:5000/api/student-life/testimonials');
+                setTestimonials(data);
+            } catch (err) {
+                console.error("Failed to load testimonials:", err);
+            }
+        };
+        fetchTestimonials();
+    }, []);
+
+    const handleNext = () => {
+        if (testimonials.length > 0) {
+            setCurrentIdx((prev) => (prev + 1) % testimonials.length);
+        }
+    };
+
+    const handlePrev = () => {
+        if (testimonials.length > 0) {
+            setCurrentIdx((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+        }
+    };
+
+    const currentTestimonial = testimonials[currentIdx];
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -128,40 +158,77 @@ const CampusPlacements = () => {
                     &ldquo;
                 </div>
 
-                {/* Testimonial Text */}
-                <p className="text-lg lg:text-[17px] font-medium leading-relaxed mb-10 w-11/12 opacity-95">
-                    A heartfelt thank you to DCE Darbhanga and the placement team for their invaluable support in my placement journey. <Info size={14} className="inline ml-1 text-white/80" />
-                </p>
+                {testimonials.length > 0 && currentTestimonial ? (
+                    <>
+                        <p className="text-lg lg:text-[17px] font-medium leading-relaxed mb-6 w-11/12 opacity-95 line-clamp-4 min-h-[110px]">
+                            {currentTestimonial.text} <Info size={14} className="inline ml-1 text-white/80" />
+                        </p>
 
-                {/* Alumni Details */}
-                <div className="space-y-1 text-sm font-medium opacity-90">
-                    <p>Alumni Name: <span className="font-bold tracking-wide">Deepakshi</span></p>
-                    <p>Course: <span className="font-bold tracking-wide">B.Tech (CSE)</span></p>
-                    <p>Batch: <span className="font-bold tracking-wide">2020-24</span></p>
-                </div>
+                        {/* Alumni Details */}
+                        <div className="space-y-1 text-sm font-medium opacity-90">
+                            <p>Name: <span className="font-bold tracking-wide">{currentTestimonial.name}</span></p>
+                            <p>Branch: <span className="font-bold tracking-wide">{currentTestimonial.branch}</span></p>
+                            <p>Batch: <span className="font-bold tracking-wide">{currentTestimonial.batch}</span></p>
+                        </div>
 
-                {/* Placed Company Logo */}
-                <div className="mt-6 mb-8 text-blue-900 font-black text-3xl font-serif italic tracking-tighter mix-blend-color-burn opacity-80">
-                    KPMG
-                </div>
+                        {/* Placed Company Logo */}
+                        <div className="mt-6 mb-8 text-blue-900 font-black text-3xl font-serif italic tracking-tighter mix-blend-color-burn opacity-80 min-h-[36px]">
+                            {currentTestimonial.company}
+                        </div>
 
-                {/* Alumni Photo */}
-                <div className="w-48 h-40 bg-gray-200 mb-6 overflow-hidden mt-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-                    <img
-                        src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
-                        alt="Alumni Portrait"
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                    />
-                </div>
+                        {/* Alumni Photo */}
+                        <div className="w-48 h-64 lg:h-72 bg-[#133b5c] mb-6 overflow-hidden mt-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                            {currentTestimonial.imageUrl ? (
+                                <img
+                                    src={currentTestimonial.imageUrl}
+                                    alt="Alumni Portrait"
+                                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-4xl text-white font-bold opacity-30">{currentTestimonial.name.charAt(0)}</div>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <p className="text-lg lg:text-[17px] font-medium leading-relaxed mb-10 w-11/12 opacity-95">
+                            A heartfelt thank you to DCE Darbhanga and the placement team for their invaluable support in my placement journey. <Info size={14} className="inline ml-1 text-white/80" />
+                        </p>
 
-                {/* Carousel Controls */}
-                <div className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors group">
-                        <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+                        <div className="space-y-1 text-sm font-medium opacity-90">
+                            <p>Alumni Name: <span className="font-bold tracking-wide">Deepakshi</span></p>
+                            <p>Course: <span className="font-bold tracking-wide">B.Tech (CSE)</span></p>
+                            <p>Batch: <span className="font-bold tracking-wide">2020-24</span></p>
+                        </div>
+
+                        <div className="mt-6 mb-8 text-blue-900 font-black text-3xl font-serif italic tracking-tighter mix-blend-color-burn opacity-80 min-h-[36px]">
+                            KPMG
+                        </div>
+
+                        <div className="w-48 h-64 lg:h-72 bg-gray-200 mb-6 overflow-hidden mt-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                            <img
+                                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
+                                alt="Alumni Portrait"
+                                className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                            />
+                        </div>
+                    </>
+                )}
+
+                {/* Footer Controls */}
+                <div className="flex items-center justify-between w-full">
+                    <div className="flex gap-3">
+                        <div onClick={handlePrev} className={`w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer transition-colors group ${testimonials.length > 1 ? 'hover:bg-white hover:text-[#c8b472]' : 'opacity-50 cursor-not-allowed'}`}>
+                            <ChevronLeft size={16} className={`${testimonials.length > 1 ? 'group-hover:-translate-x-0.5' : ''} transition-transform`} />
+                        </div>
+                        <div onClick={handleNext} className={`w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer transition-colors group ${testimonials.length > 1 ? 'hover:bg-white hover:text-[#c8b472]' : 'opacity-50 cursor-not-allowed'}`}>
+                            <ChevronRight size={16} className={`${testimonials.length > 1 ? 'group-hover:translate-x-0.5' : ''} transition-transform`} />
+                        </div>
                     </div>
-                    <div className="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center cursor-pointer hover:bg-white hover:text-[#c8b472] transition-colors group">
-                        <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                    </div>
+
+                    <Link to="/testimonial" className="flex items-center gap-1 text-[11px] md:text-xs font-bold tracking-widest uppercase hover:text-white/80 transition-all group cursor-pointer border-b border-transparent hover:border-white pb-0.5 mt-1">
+                        View More <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
                 </div>
 
             </motion.div>

@@ -1,9 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Palette, Music4, Theater, Mic2, Users, Image as ImageIcon, Sparkles, Heart } from 'lucide-react';
+import * as Icons from 'lucide-react';
 
 const KalaKalakar = () => {
+    const [activities, setActivities] = useState([]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        // Fetch Societies from API
+        const fetchSocieties = async () => {
+            try {
+                const { data } = await axios.get('http://localhost:5000/api/student-life/societies');
+                setActivities(data);
+            } catch (err) {
+                console.error("Error fetching societies:", err);
+            }
+        };
+        fetchSocieties();
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -16,28 +32,11 @@ const KalaKalakar = () => {
         return () => observer.disconnect();
     }, []);
 
-    const activities = [
-        {
-            title: "Rhythmic Vibes (Dance)",
-            desc: "From classical Kathak to modern freestyle, our dance wing electrifies every stage.",
-            icon: <Palette size={32} />
-        },
-        {
-            title: "Symphony (Music)",
-            desc: "The soul of our club, bringing together vocalists and instrumentalists for magical ensembles.",
-            icon: <Music4 size={32} />
-        },
-        {
-            title: "Rang Manch (Drama)",
-            desc: "Powerful street plays and stage dramas that address social issues and entertain alike.",
-            icon: <Theater size={32} />
-        },
-        {
-            title: "Dhwani (Literature)",
-            desc: "Poetry slams, debates, and creative writing workshops for the budding wordsmiths.",
-            icon: <Mic2 size={32} />
-        }
-    ];
+    // Helper to render dynamic icon
+    const getIcon = (iconName) => {
+        const IconComponent = Icons[iconName] || Icons.Users;
+        return <IconComponent size={32} />;
+    };
 
     return (
         <div className="min-h-screen bg-white">
@@ -63,7 +62,7 @@ const KalaKalakar = () => {
                 <div className="flex flex-col lg:flex-row gap-20 items-center">
                     <div className="lg:w-1/2 reveal">
                         <span className="text-yellow-600 font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Our Philosophy</span>
-                        <h2 className="text-4xl font-serif font-bold text-[#133b5c] mb-8 leading-tight italic italic">More than just a club, it's an emotion.</h2>
+                        <h2 className="text-4xl font-serif font-bold text-[#133b5c] mb-8 leading-tight italic">More than just a club, it's an emotion.</h2>
                         <div className="space-y-6 text-gray-500 text-lg leading-relaxed font-light">
                             <p>
                                 <span className="text-[#133b5c] font-bold">Kala & Kalakar</span> is the premier cultural society of Darbhanga College of Engineering. We believe that engineering isn't just about logic and calculations; it's about the creative fire that burns within every visionary.
@@ -101,13 +100,17 @@ const KalaKalakar = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {activities.map((act, i) => (
+                        {activities.length === 0 ? (
+                            <div className="col-span-full py-12 text-center text-white/50 italic border border-dashed border-white/20 rounded-2xl">
+                                Stay tuned for upcoming societies!
+                            </div>
+                        ) : activities.map((act, i) => (
                             <div key={i} className="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 hover:bg-white/10 transition-all text-center group">
                                 <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-[#c6b677] mx-auto mb-8 group-hover:rotate-6 transition-transform">
-                                    {act.icon}
+                                    {getIcon(act.iconName)}
                                 </div>
-                                <h4 className="text-xl font-bold mb-4 text-[#c6b677]">{act.title}</h4>
-                                <p className="text-white/50 text-sm leading-relaxed font-light">{act.desc}</p>
+                                <h4 className="text-xl font-bold mb-4 text-[#c6b677]">{act.name}</h4>
+                                <p className="text-white/50 text-sm leading-relaxed font-light">{act.description}</p>
                             </div>
                         ))}
                     </div>

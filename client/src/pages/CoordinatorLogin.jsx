@@ -16,14 +16,14 @@ const CoordinatorLogin = () => {
         setError('');
 
         try {
-            // Placeholder endpoint for coordinator login - adjust if real endpoint exists
+            // Updated to real coordinator login endpoint
             const { data } = await axios.post('http://localhost:5000/api/auth/coordinator/login', {
                 userId,
                 password,
             });
 
             localStorage.setItem('coordinatorInfo', JSON.stringify(data));
-            navigate('/coordinator/dashboard');
+            navigate('/coordinator/dashboard'); // Keeping this route as is for now depending on how coordinator dashboard is setup
         } catch (err) {
             setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
         } finally {

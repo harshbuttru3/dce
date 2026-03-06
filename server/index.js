@@ -42,11 +42,11 @@ app.use('/api/navigation', require('./routes/navigationRoutes'));
 app.use('/api/content', require('./routes/contentRoutes'));
 app.use('/api/notices', require('./routes/noticeRoutes'));
 app.use('/api/auth', authRoutes);
-app.use('/api/notices', require('./routes/noticeRoutes'));
-app.use('/api/auth', authRoutes);
 app.use('/api/images', require('./routes/imageRoutes'));
 app.use('/api/important-links', require('./routes/importantLinkRoutes')); // Mount link routes
 app.use('/api/messages', require('./routes/messageRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/student-life', require('./routes/studentLifeRoutes'));
 
 app.get('/', (req, res) => {
   res.send('DCE Darbhanga Clone API is running');

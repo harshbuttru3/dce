@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck } from "lucide-react";
+import { Trash2, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
@@ -24,13 +24,15 @@ const Admin = () => {
     notices: 0,
     images: 0,
     links: 0,
-    messages: 0
+    messages: 0,
+    testimonials: 0
   });
 
   const API_URL = "http://localhost:5000/api/notices";
   const IMAGE_API_URL = "http://localhost:5000/api/images";
   const LINK_API_URL = "http://localhost:5000/api/important-links";
   const MESSAGE_API_URL = "http://localhost:5000/api/messages";
+  const TESTIMONIAL_API_URL = "http://localhost:5000/api/student-life/testimonials";
 
   // Important Links State
   const [links, setLinks] = useState([]);
@@ -39,6 +41,17 @@ const Admin = () => {
 
   // Messages State
   const [messages, setMessages] = useState([]);
+
+  // Testimonials State
+  const [testimonials, setTestimonials] = useState([]);
+  const [selectedTestimonialImage, setSelectedTestimonialImage] = useState(null);
+
+  // Coordinators State
+  const [coordinators, setCoordinators] = useState([]);
+  const [coordEmail, setCoordEmail] = useState("");
+  const [coordPassword, setCoordPassword] = useState("");
+
+  const COORDINATOR_API_URL = "http://localhost:5000/api/users/coordinators";
 
   // Get token from localStorage
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -60,6 +73,12 @@ const Admin = () => {
     if (activeTab === "messages") {
       fetchMessages();
     }
+    if (activeTab === "coordinators") {
+      fetchCoordinators();
+    }
+    if (activeTab === "testimonials") {
+      fetchTestimonials();
+    }
   }, [activeTab, navigate, userInfo]); // Added userInfo to dependency array
 
   const fetchMessages = async () => {
@@ -71,6 +90,69 @@ const Admin = () => {
       setStats(prev => ({ ...prev, messages: response.data.length }));
     } catch (error) {
       console.error("Error fetching messages:", error);
+    }
+  };
+
+  const fetchTestimonials = async () => {
+    try {
+      const response = await axios.get(`${TESTIMONIAL_API_URL}/admin`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTestimonials(response.data);
+      setStats(prev => ({ ...prev, testimonials: response.data.filter(t => !t.isApproved).length }));
+    } catch (error) {
+      console.error("Error fetching testimonials:", error);
+    }
+  };
+
+  const fetchCoordinators = async () => {
+    try {
+      const response = await axios.get(COORDINATOR_API_URL, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCoordinators(response.data);
+    } catch (error) {
+      console.error("Error fetching coordinators:", error);
+    }
+  };
+
+  const handleCoordinatorUpload = async (e) => {
+    e.preventDefault();
+    if (!coordEmail || !coordPassword) {
+      setMessage("Please enter email and password.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      await axios.post(COORDINATOR_API_URL, { email: coordEmail, password: coordPassword }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMessage("Coordinator added successfully!");
+      setCoordEmail("");
+      setCoordPassword("");
+      fetchCoordinators();
+    } catch (error) {
+      console.error("Error adding coordinator:", error);
+      setMessage("Failed to add coordinator. " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCoordinator = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this coordinator?")) return;
+    try {
+      await axios.delete(`${COORDINATOR_API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCoordinators(coordinators.filter(c => c._id !== id));
+      setMessage("Coordinator deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting coordinator:", error);
+      setMessage("Failed to delete coordinator.");
     }
   };
 
@@ -255,6 +337,34 @@ const Admin = () => {
     }
   };
 
+  const handleApproveTestimonial = async (id) => {
+    try {
+      await axios.patch(`${TESTIMONIAL_API_URL}/${id}/approve`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessage("Testimonial approved & published!");
+      fetchTestimonials();
+    } catch (error) {
+      console.error("Error approving testimonial:", error);
+      setMessage("Failed to approve testimonial.");
+    }
+  };
+
+  const handleDeleteTestimonial = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this testimonial?")) return;
+    try {
+      await axios.delete(`${TESTIMONIAL_API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTestimonials(testimonials.filter(t => t._id !== id));
+      setMessage("Testimonial deleted.");
+      fetchTestimonials();
+    } catch (error) {
+      console.error("Error deleting testimonial:", error);
+      setMessage("Failed to delete testimonial.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-[#f8fafc] font-sans">
       {/* Sidebar */}
@@ -273,10 +383,12 @@ const Admin = () => {
           <ul className="space-y-2">
             {[
               { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
-              { id: 'notifications', label: 'Notices & News', icon: <Bell size={20} /> },
+              { id: 'notices', label: 'Notices & News', icon: <Bell size={20} /> },
               { id: 'images', label: 'Gallery Assets', icon: <ImageIcon size={20} /> },
               { id: 'links', label: 'Quick Links', icon: <LinkIcon size={20} /> },
               { id: 'messages', label: 'Inquiries', icon: <Mail size={20} /> },
+              { id: 'testimonials', label: 'Testimonials', icon: <MessageSquare size={20} /> },
+              { id: 'coordinators', label: 'Coordinators', icon: <User size={20} /> },
             ].map((item) => (
               <li
                 key={item.id}
@@ -370,6 +482,7 @@ const Admin = () => {
                   { label: "Active Notices", val: stats.notices, icon: <Bell className="text-blue-600" />, color: "bg-blue-50" },
                   { label: "Gallery Assets", val: stats.images, icon: <ImageIcon className="text-amber-600" />, color: "bg-amber-50" },
                   { label: "Quick Links", val: stats.links, icon: <LinkIcon className="text-emerald-600" />, color: "bg-emerald-50" },
+                  { label: "Pending Testimonials", val: stats.testimonials, icon: <MessageSquare className="text-purple-600" />, color: "bg-purple-50" },
                   { label: "New Inquiries", val: stats.messages, icon: <Mail className="text-rose-600" />, color: "bg-rose-50" },
                 ].map((stat, i) => (
                   <div key={i} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
@@ -629,7 +742,7 @@ const Admin = () => {
             </div>
           )}
 
-          {activeTab === "notifications" && (
+          {activeTab === "notices" && (
             <div className="space-y-10 animate-fade-in">
               <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-2 h-full bg-[#c6b677]"></div>
@@ -849,6 +962,210 @@ const Admin = () => {
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+          )}
+          {activeTab === "testimonials" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Testimonials Moderation</h2>
+                  <p className="text-gray-400 text-sm mt-1">Review and approve public student/alumni submissions</p>
+                </div>
+                <div className="p-3 bg-purple-50 rounded-2xl text-purple-600">
+                  <MessageSquare size={24} />
+                </div>
+              </div>
+
+              {message && (
+                <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-slide-in-right ${message.includes("success") || message.includes("approved") || message.includes("deleted") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                  <CheckCircle2 size={18} />
+                  <span className="text-sm font-bold">{message}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-6">
+                {testimonials.length === 0 ? (
+                  <div className="bg-white p-20 rounded-3xl border border-gray-100 shadow-sm text-center">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                      <MessageSquare size={32} />
+                    </div>
+                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No pending or approved testimonials.</p>
+                  </div>
+                ) : (
+                  testimonials.map((t) => (
+                    <div key={t._id} className={`bg-white p-8 rounded-[2rem] border ${t.isApproved ? 'border-gray-100' : 'border-purple-200 bg-purple-50/10'} shadow-sm transition-all duration-300 group`}>
+                      <div className="flex flex-col md:flex-row gap-6">
+                        
+                        {/* Avatar */}
+                        <div className="shrink-0 flex items-start pt-2">
+                           <div 
+                              className={`w-16 h-16 rounded-full overflow-hidden border-2 cursor-pointer hover:opacity-80 transition-opacity ${t.isApproved ? 'border-gray-200' : 'border-[#c6b677]'}`}
+                              onClick={() => t.imageUrl && setSelectedTestimonialImage(t.imageUrl)}
+                            >
+                              {t.imageUrl ? (
+                                  <img src={t.imageUrl} alt={t.name} className="w-full h-full object-cover" />
+                              ) : (
+                                  <div className="w-full h-full bg-[#133b5c] text-white flex justify-center items-center font-bold text-xl uppercase">
+                                    {t.name.charAt(0)}
+                                  </div>
+                              )}
+                           </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 space-y-3">
+                           <div className="flex items-center justify-between">
+                              <div>
+                                <h3 className="font-bold text-[#133b5c] text-xl">{t.name}</h3>
+                                <div className="flex items-center gap-3 text-xs mt-1">
+                                    <span className="text-gray-500 font-bold tracking-widest uppercase">{t.branch} • {t.batch}</span>
+                                    {t.company && (
+                                        <>
+                                          <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                          <span className="text-emerald-600 font-bold tracking-widest uppercase">{t.company}</span>
+                                        </>
+                                    )}
+                                </div>
+                              </div>
+                              <div className="shrink-0">
+                                {t.isApproved ? (
+                                    <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-full">Approved</span>
+                                ) : (
+                                    <span className="px-3 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold uppercase tracking-widest rounded-full animate-pulse">Pending Review</span>
+                                )}
+                              </div>
+                           </div>
+                           
+                           <div className="bg-gray-50 p-5 rounded-2xl mt-4">
+                              <p className="text-gray-600 italic font-serif leading-relaxed">"{t.text}"</p>
+                           </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-row md:flex-col justify-end gap-3 shrink-0 pt-4 border-t border-gray-100 md:border-t-0 md:pt-0">
+                            {!t.isApproved && (
+                                <button
+                                    onClick={() => handleApproveTestimonial(t._id)}
+                                    className="flex-1 md:flex-initial p-4 bg-emerald-50 text-emerald-600 rounded-2xl hover:bg-emerald-500 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
+                                    title="Approve & Publish"
+                                >
+                                    <CheckCircle2 size={20} /> <span className="text-sm font-bold md:hidden">Approve</span>
+                                </button>
+                            )}
+                            <button
+                                onClick={() => handleDeleteTestimonial(t._id)}
+                                className="flex-1 md:flex-initial p-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
+                                title={t.isApproved ? "Unpublish & Delete" : "Reject & Delete"}
+                            >
+                                <Trash2 size={20} /> <span className="text-sm font-bold md:hidden">Delete</span>
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Lightbox Modal */}
+              {selectedTestimonialImage && (
+                <div 
+                    className="fixed inset-0 z-100 bg-black/95 backdrop-blur-md flex items-center justify-center p-4" 
+                    onClick={() => setSelectedTestimonialImage(null)}
+                >
+                    <button 
+                        onClick={() => setSelectedTestimonialImage(null)} 
+                        className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-3 rounded-full backdrop-blur-sm z-50"
+                    >
+                       <X size={24} />
+                    </button>
+                    <img 
+                        src={selectedTestimonialImage} 
+                        className="max-h-[90vh] max-w-full object-contain rounded-xl shadow-2xl animate-zoom-in" 
+                        alt="Testimonial Full Size"
+                        onClick={e => e.stopPropagation()} 
+                    />
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "coordinators" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Department Coordinators</h2>
+                  <p className="text-gray-400 text-sm mt-1">Manage personnel with access to the Coordinator Portal</p>
+                </div>
+                <div className="p-3 bg-purple-50 rounded-2xl text-purple-600">
+                  <User size={24} />
+                </div>
+              </div>
+
+              {message && (
+                <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-slide-in-right ${message.includes("success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                  <CheckCircle2 size={18} />
+                  <span className="text-sm font-bold">{message}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-gray-200">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Coordinator Email/ID</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. coordinator@dce.ac.in"
+                      value={coordEmail}
+                      onChange={(e) => setCoordEmail(e.target.value)}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Initial Password</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={coordPassword}
+                      onChange={(e) => setCoordPassword(e.target.value)}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#c6b677]/30 focus:border-[#c6b677] outline-none transition-all placeholder:text-gray-300 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col justify-end">
+                  <button
+                    onClick={handleCoordinatorUpload}
+                    disabled={loading || !coordEmail || !coordPassword}
+                    className={`w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 ${loading || !coordEmail || !coordPassword ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+                  >
+                    {loading ? "Registering..." : <><Plus size={18} className="text-[#c6b677]" /> Create Coordinator</>}
+                  </button>
+                  <p className="text-[10px] text-center text-gray-400 mt-4 uppercase font-bold tracking-widest">Grants access to Coordinator Portal</p>
+                </div>
+              </div>
+
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                <h3 className="text-lg font-serif font-bold text-[#133b5c] mb-6 flex items-center gap-2">
+                  Active Coordinators <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full font-sans uppercase tracking-widest">{coordinators.length} Users</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {coordinators.map((c) => (
+                    <div key={c._id} className="flex justify-between items-center p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:shadow-xl hover:border-[#c6b677]/30 transition-all duration-300 group">
+                      <div className="flex-1 min-w-0 pr-4">
+                        <p className="font-bold text-[#133b5c] truncate">{c.email}</p>
+                        <p className="text-[10px] text-blue-500 font-medium truncate mt-0.5">Coordinator Privileges</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleDeleteCoordinator(c._id)}
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-white rounded-lg transition-all shadow-sm"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}

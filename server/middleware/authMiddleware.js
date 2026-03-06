@@ -27,4 +27,20 @@ const protect = async (req, res, next) => {
     }
 };
 
-module.exports = { protect };
+const admin = (req, res, next) => {
+    if (req.user && req.user.isAdmin) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as an admin' });
+    }
+};
+
+const coordinatorOrAdmin = (req, res, next) => {
+    if (req.user && (req.user.isCoordinator || req.user.isAdmin)) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as coordinator or admin' });
+    }
+};
+
+module.exports = { protect, admin, coordinatorOrAdmin };

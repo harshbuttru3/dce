@@ -65,3 +65,27 @@ exports.register = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// @desc    Auth coordinator & get token
+// @route   POST /api/auth/coordinator/login
+// @access  Public
+exports.coordinatorLogin = async (req, res) => {
+    try {
+        const { userId, password } = req.body;
+
+        const user = await User.findOne({ email: userId });
+
+        if (user && user.isCoordinator && (await user.matchPassword(password))) {
+            res.json({
+                _id: user._id,
+                email: user.email,
+                isCoordinator: user.isCoordinator,
+                token: generateToken(user._id)
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid ID or password, or access denied' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

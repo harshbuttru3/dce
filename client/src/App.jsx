@@ -14,6 +14,7 @@ import BeuApproval from './pages/Approval/BeuApproval';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import CoordinatorLogin from './pages/CoordinatorLogin';
+import CoordinatorDashboard from './pages/CoordinatorDashboard'; // New Import
 import HolidayCalendar from './pages/Acedmics/HolidayCalendar';
 import Admission from './pages/Acedmics/Admission';
 import Calender from './pages/Acedmics/Calender';
@@ -36,7 +37,7 @@ import PowerSystem from './pages/Department/PowerSystem';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const noLayoutPaths = ['/login', '/Admin', '/coordinator-login'];
+  const noLayoutPaths = ['/login', '/Admin', '/coordinator-login', '/coordinator/dashboard']; // Hide layout for coordinator dashboard
   const hideLayout = noLayoutPaths.includes(location.pathname);
 
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/coordinator-login" element={<CoordinatorLogin />} />
+          <Route path="/coordinator/dashboard" element={<CoordinatorDashboard />} />
 
           {/* Department Routes */}
           <Route path="/department/cse" element={<Cse />} />
