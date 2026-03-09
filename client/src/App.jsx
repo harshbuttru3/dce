@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import About from './pages/Aboutus/About';
 import History from './pages/Aboutus/History';
@@ -25,6 +26,7 @@ import CDac from './pages/Programmes/CDac';
 import StudentFest from './pages/StudentLife/StudentFest';
 import KalaKalakar from './pages/StudentLife/KalaKalakar';
 import Testimonials from './pages/StudentLife/Testimonials';
+import SocietyPage from './pages/StudentLife/SocietyPage';
 
 // Department Imports
 import Cse from './pages/Department/Cse';
@@ -52,6 +54,7 @@ const Layout = ({ children }) => {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -82,6 +85,7 @@ function App() {
           <Route path="/programmes/c-dac" element={<CDac />} />
           <Route path="/student-fest" element={<StudentFest />} />
           <Route path="/student-society/kala-and-kalakar" element={<KalaKalakar />} />
+          <Route path="/student-society/:id" element={<SocietyPage />} />
           <Route path="/testimonial" element={<Testimonials />} />
 
           {/* nested path for about  */}

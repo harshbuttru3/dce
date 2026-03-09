@@ -7,9 +7,9 @@ const { cloudinary } = require('../config/cloudinary');
 exports.addFest = async (req, res) => {
     try {
         const { title, description, youtubeLink } = req.body;
-        
+
         let uploadedImages = [];
-        
+
         // Handle multiple files
         if (req.files && req.files.length > 0) {
             const uploadPromises = req.files.map(file => {
@@ -17,7 +17,7 @@ exports.addFest = async (req, res) => {
                 const dataURI = 'data:' + file.mimetype + ';base64,' + b64;
                 return cloudinary.uploader.upload(dataURI, { folder: 'dce_fest' });
             });
-            
+
             const results = await Promise.all(uploadPromises);
             uploadedImages = results.map(result => ({
                 imageUrl: result.secure_url,
@@ -54,7 +54,7 @@ exports.deleteFest = async (req, res) => {
         if (fest) {
             // Delete all associated images from Cloudinary
             if (fest.images && fest.images.length > 0) {
-                const deletePromises = fest.images.map(img => 
+                const deletePromises = fest.images.map(img =>
                     cloudinary.uploader.destroy(img.publicId)
                 );
                 await Promise.all(deletePromises);
@@ -72,10 +72,45 @@ exports.deleteFest = async (req, res) => {
 // --- SOCIETIES ---
 exports.addSociety = async (req, res) => {
     try {
-        const { name, description, iconName } = req.body;
-        const society = await Society.create({ name, description, iconName });
+        const { name, description, longDescription, iconName } = req.body;
+
+        let heroImageData = { imageUrl: '', publicId: '' };
+        let galleryData = [];
+
+        // Handle Hero Image
+        if (req.files && req.files.heroImage && req.files.heroImage.length > 0) {
+            const file = req.files.heroImage[0];
+            const b64 = Buffer.from(file.buffer).toString('base64');
+            const dataURI = 'data:' + file.mimetype + ';base64,' + b64;
+            const result = await cloudinary.uploader.upload(dataURI, { folder: 'dce_societies/hero' });
+            heroImageData = { imageUrl: result.secure_url, publicId: result.public_id };
+        }
+
+        // Handle Gallery Images
+        if (req.files && req.files.gallery && req.files.gallery.length > 0) {
+            const uploadPromises = req.files.gallery.map(file => {
+                const b64 = Buffer.from(file.buffer).toString('base64');
+                const dataURI = 'data:' + file.mimetype + ';base64,' + b64;
+                return cloudinary.uploader.upload(dataURI, { folder: 'dce_societies/gallery' });
+            });
+            const results = await Promise.all(uploadPromises);
+            galleryData = results.map(result => ({
+                imageUrl: result.secure_url,
+                publicId: result.public_id
+            }));
+        }
+
+        const society = await Society.create({
+            name,
+            description,
+            longDescription: longDescription || '',
+            iconName: iconName || 'Users',
+            heroImage: heroImageData,
+            gallery: galleryData
+        });
         res.status(201).json(society);
     } catch (error) {
+        console.error("Society upload error:", error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -89,10 +124,72 @@ exports.getSocieties = async (req, res) => {
     }
 };
 
+exports.updateSociety = async (req, res) => {
+    try {
+        const { name, description, longDescription, iconName } = req.body;
+        const society = await Society.findById(req.params.id);
+
+        if (!society) {
+            return res.status(404).json({ message: 'Society not found' });
+        }
+
+        // Handle Hero Image update
+        if (req.files && req.files.heroImage && req.files.heroImage.length > 0) {
+            // Delete old hero image if exists
+            if (society.heroImage && society.heroImage.publicId) {
+                await cloudinary.uploader.destroy(society.heroImage.publicId);
+            }
+            const file = req.files.heroImage[0];
+            const b64 = Buffer.from(file.buffer).toString('base64');
+            const dataURI = 'data:' + file.mimetype + ';base64,' + b64;
+            const result = await cloudinary.uploader.upload(dataURI, { folder: 'dce_societies/hero' });
+            society.heroImage = { imageUrl: result.secure_url, publicId: result.public_id };
+        }
+
+        // Handle Gallery Appending
+        if (req.files && req.files.gallery && req.files.gallery.length > 0) {
+            const uploadPromises = req.files.gallery.map(file => {
+                const b64 = Buffer.from(file.buffer).toString('base64');
+                const dataURI = 'data:' + file.mimetype + ';base64,' + b64;
+                return cloudinary.uploader.upload(dataURI, { folder: 'dce_societies/gallery' });
+            });
+            const results = await Promise.all(uploadPromises);
+            const newGalleryItems = results.map(result => ({
+                imageUrl: result.secure_url,
+                publicId: result.public_id
+            }));
+            society.gallery = [...society.gallery, ...newGalleryItems];
+        }
+
+        // Update other fields
+        society.name = name || society.name;
+        society.description = description || society.description;
+        society.longDescription = longDescription || society.longDescription;
+        society.iconName = iconName || society.iconName;
+
+        await society.save();
+        res.json(society);
+    } catch (error) {
+        console.error("Society update error:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.deleteSociety = async (req, res) => {
     try {
         const society = await Society.findById(req.params.id);
         if (society) {
+            // Delete hero image from Cloudinary
+            if (society.heroImage && society.heroImage.publicId) {
+                await cloudinary.uploader.destroy(society.heroImage.publicId);
+            }
+            // Delete gallery from Cloudinary
+            if (society.gallery && society.gallery.length > 0) {
+                const deletePromises = society.gallery.map(img =>
+                    cloudinary.uploader.destroy(img.publicId)
+                );
+                await Promise.all(deletePromises);
+            }
             await society.deleteOne();
             res.json({ message: 'Society removed' });
         } else {
@@ -107,7 +204,7 @@ exports.deleteSociety = async (req, res) => {
 exports.addTestimonial = async (req, res) => {
     try {
         const { name, batch, branch, company, text } = req.body;
-        
+
         if (!req.file) {
             return res.status(400).json({ message: 'No image provided for testimonial' });
         }

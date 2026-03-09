@@ -4,7 +4,7 @@ const multer = require('multer');
 
 const {
     addFest, getFests, deleteFest,
-    addSociety, getSocieties, deleteSociety,
+    addSociety, updateSociety, getSocieties, deleteSociety,
     addTestimonial, getApprovedTestimonials, getAllTestimonialsAdmin, approveTestimonial, deleteTestimonial
 } = require('../controllers/studentLifeController');
 
@@ -21,9 +21,16 @@ router.route('/fests/:id')
 
 // Societies
 router.route('/societies')
-    .post(protect, coordinatorOrAdmin, addSociety)
+    .post(protect, coordinatorOrAdmin, upload.fields([
+        { name: 'heroImage', maxCount: 1 },
+        { name: 'gallery', maxCount: 10 }
+    ]), addSociety)
     .get(getSocieties); // Public read
 router.route('/societies/:id')
+    .put(protect, coordinatorOrAdmin, upload.fields([
+        { name: 'heroImage', maxCount: 1 },
+        { name: 'gallery', maxCount: 10 }
+    ]), updateSociety)
     .delete(protect, coordinatorOrAdmin, deleteSociety);
 
 // Testimonials
@@ -36,7 +43,7 @@ router.route('/testimonials')
 // Admin Testimonial Management
 router.route('/testimonials/admin')
     .get(protect, admin, getAllTestimonialsAdmin);
-    
+
 router.route('/testimonials/:id/approve')
     .patch(protect, admin, approveTestimonial);
 

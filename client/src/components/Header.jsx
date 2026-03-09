@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { fetchNavigation } from '../services/api';
 import { Menu, X, ChevronDown } from 'lucide-react';
@@ -126,6 +127,45 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
+    const fetchDynamicSocieties = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:5000/api/student-life/societies');
+        if (data && data.length > 0) {
+          const dynamicSocieties = data.map(soc => ({
+            label: soc.name,
+            path: `/student-society/${soc._id}`
+          }));
+
+          setNavItems(prev => prev.map(item => {
+            if (item.label === "Student Life") {
+              return {
+                ...item,
+                children: item.children.map(child => {
+                  if (child.label === "Student Society") {
+                    // Filter out existing dynamic paths to avoid duplicates
+                    const existingPaths = child.children.map(c => c.path);
+                    const uniqueNewSocieties = dynamicSocieties.filter(ns => !existingPaths.includes(ns.path));
+                    return {
+                      ...child,
+                      children: [
+                        ...child.children,
+                        ...uniqueNewSocieties
+                      ]
+                    };
+                  }
+                  return child;
+                })
+              };
+            }
+            return item;
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching dynamic societies for header:", err);
+      }
+    };
+
+    fetchDynamicSocieties();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

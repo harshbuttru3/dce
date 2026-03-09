@@ -70,7 +70,7 @@ const Footer = () => {
                 <div className="w-full h-full mb-16 grow rounded-xl overflow-hidden border border-white/10 shadow-2xl relative min-h-[250px] md:min-h-0 bg-white/5">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14352.09349603565!2d85.8858544!3d26.1555543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39edc5c0d2e8e7a5%3A0x7d6b38c31a7f6f14!2sDarbhanga%20College%20of%20Engineering%2C%20Darbhanga!5e0!3m2!1sen!2sin!4v1709140001011!5m2!1sen!2sin"
-                        className="absolute inset-0 w-full h-full border-0 grayscale invert-[0.9] contrast-[1.1] opacity-80 hover:opacity-100 hover:grayscale-0 hover:invert-0 transition-all duration-700 ease-in-out"
+                        className="absolute inset-0 w-full h-full border-0 transition-opacity duration-700 ease-in-out opacity-90 hover:opacity-100"
                         allowFullScreen=""
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"

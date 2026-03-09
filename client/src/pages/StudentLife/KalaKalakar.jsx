@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Palette, Music4, Theater, Mic2, Users, Image as ImageIcon, Sparkles, Heart } from 'lucide-react';
 import * as Icons from 'lucide-react';
@@ -105,13 +106,13 @@ const KalaKalakar = () => {
                                 Stay tuned for upcoming societies!
                             </div>
                         ) : activities.map((act, i) => (
-                            <div key={i} className="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 hover:bg-white/10 transition-all text-center group">
+                            <Link to={`/student-society/${act._id}`} key={i} className="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 hover:bg-white/10 transition-all text-center group">
                                 <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-[#c6b677] mx-auto mb-8 group-hover:rotate-6 transition-transform">
                                     {getIcon(act.iconName)}
                                 </div>
                                 <h4 className="text-xl font-bold mb-4 text-[#c6b677]">{act.name}</h4>
                                 <p className="text-white/50 text-sm leading-relaxed font-light">{act.description}</p>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
