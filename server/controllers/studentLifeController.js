@@ -54,9 +54,9 @@ exports.deleteFest = async (req, res) => {
         if (fest) {
             // Delete all associated images from Cloudinary
             if (fest.images && fest.images.length > 0) {
-                const deletePromises = fest.images.map(img =>
-                    cloudinary.uploader.destroy(img.publicId)
-                );
+                const deletePromises = fest.images
+                    .filter(img => img.publicId)
+                    .map(img => cloudinary.uploader.destroy(img.publicId));
                 await Promise.all(deletePromises);
             }
             await fest.deleteOne();
@@ -185,9 +185,9 @@ exports.deleteSociety = async (req, res) => {
             }
             // Delete gallery from Cloudinary
             if (society.gallery && society.gallery.length > 0) {
-                const deletePromises = society.gallery.map(img =>
-                    cloudinary.uploader.destroy(img.publicId)
-                );
+                const deletePromises = society.gallery
+                    .filter(img => img.publicId)
+                    .map(img => cloudinary.uploader.destroy(img.publicId));
                 await Promise.all(deletePromises);
             }
             await society.deleteOne();
@@ -267,13 +267,16 @@ exports.deleteTestimonial = async (req, res) => {
     try {
         const testimonial = await Testimonial.findById(req.params.id);
         if (testimonial) {
-            await cloudinary.uploader.destroy(testimonial.publicId);
+            if (testimonial.publicId) {
+                await cloudinary.uploader.destroy(testimonial.publicId);
+            }
             await testimonial.deleteOne();
             res.json({ message: 'Testimonial removed' });
         } else {
             res.status(404).json({ message: 'Testimonial not found' });
         }
     } catch (error) {
+        console.error("Testimonial deletion error:", error);
         res.status(500).json({ message: error.message });
     }
 };
