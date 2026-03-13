@@ -6,7 +6,11 @@ const { cloudinary } = require('../config/cloudinary');
 // @access  Public
 exports.getImages = async (req, res) => {
     try {
-        const images = await Image.find().sort({ createdAt: -1 });
+        const query = {};
+        if (req.query.category) {
+            query.category = req.query.category;
+        }
+        const images = await Image.find(query).sort({ createdAt: -1 });
         res.json(images);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -18,7 +22,7 @@ exports.getImages = async (req, res) => {
 // @access  Private (Admin)
 exports.uploadImage = async (req, res) => {
     try {
-        const { title } = req.body;
+        const { title, category } = req.body;
 
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -27,6 +31,7 @@ exports.uploadImage = async (req, res) => {
         // Cloudinary storage middleware already handles the upload
         const newImage = new Image({
             title,
+            category: category || 'general',
             imageUrl: req.file.path,
             publicId: req.file.filename
         });

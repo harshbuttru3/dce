@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
-import { Trash2, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X } from "lucide-react";
+import { Trash2, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X, BookOpen, Layers, FileCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ManageDepartments from "../components/ManageDepartments";
 
@@ -13,6 +13,17 @@ const Admin = () => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(""); // Added date state
   const [file, setFile] = useState(null);
+
+  // New features State
+  const [magazines, setMagazines] = useState([]);
+  const [carousels, setCarousels] = useState([]);
+  const [documents, setDocuments] = useState([]);
+
+  const [newItemTitle, setNewItemTitle] = useState("");
+  const [newItemSubtitle, setNewItemSubtitle] = useState("");
+  const [newItemFile, setNewItemFile] = useState(null);
+  const [newItemCover, setNewItemCover] = useState(null);
+  const [documentCategory, setDocumentCategory] = useState("holiday_calendar");
 
   // Image Gallery State
   const [images, setImages] = useState([]);
@@ -34,6 +45,9 @@ const Admin = () => {
   const LINK_API_URL = "/important-links";
   const MESSAGE_API_URL = "/messages";
   const TESTIMONIAL_API_URL = "/student-life/testimonials";
+  const MAGAZINE_API_URL = "/magazines";
+  const CAROUSEL_API_URL = "/carousel";
+  const DOCUMENT_API_URL = "/documents";
 
   // Important Links State
   const [links, setLinks] = useState([]);
@@ -80,7 +94,31 @@ const Admin = () => {
     if (activeTab === "testimonials") {
       fetchTestimonials();
     }
+    if (activeTab === "magazines") fetchMagazines();
+    if (activeTab === "carousel") fetchCarousels();
+    if (activeTab === "documents") fetchDocuments();
   }, [activeTab, navigate, userInfo]); // Added userInfo to dependency array
+
+  const fetchMagazines = async () => {
+    try {
+      const response = await api.get(`${MAGAZINE_API_URL}?all=true`, { headers: { Authorization: `Bearer ${token}` } });
+      setMagazines(response.data);
+    } catch (error) { console.error("Error fetching magazines:", error); }
+  };
+
+  const fetchCarousels = async () => {
+    try {
+      const response = await api.get(`${CAROUSEL_API_URL}?all=true`, { headers: { Authorization: `Bearer ${token}` } });
+      setCarousels(response.data);
+    } catch (error) { console.error("Error fetching carousels:", error); }
+  };
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await api.get(DOCUMENT_API_URL);
+      setDocuments(response.data);
+    } catch (error) { console.error("Error fetching documents:", error); }
+  };
 
   const fetchMessages = async () => {
     try {
@@ -236,6 +274,7 @@ const Admin = () => {
 
     const formData = new FormData();
     formData.append("title", imageTitle);
+    formData.append("category", "social_wall");
     formData.append("file", imageFile);
 
     setLoading(true);
@@ -366,6 +405,94 @@ const Admin = () => {
     }
   };
 
+  const handleGeneralUpload = async (type, e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      if (type === 'magazine') {
+        if (!newItemTitle || !newItemFile || !newItemCover) throw new Error("Missing fields for magazine");
+        // We'd typically use Cloudinary for PDF and Image. Assuming API expects URL string for this basic scaffold:
+        // Here we rely on the existing /images upload endpoint first to get the URLs, then post to our specific models.
+
+        // 1. Upload PDF
+        const pdfData = new FormData();
+        pdfData.append('file', newItemFile);
+        const pRes = await api.post(IMAGE_API_URL, pdfData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+        // 2. Upload Cover Image
+        const coverData = new FormData();
+        coverData.append('file', newItemCover);
+        const cRes = await api.post(IMAGE_API_URL, coverData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+        await api.post(MAGAZINE_API_URL, {
+          title: newItemTitle,
+          pdfUrl: pRes.data.imageUrl, // We will use the returned Cloudinary URL
+          coverImage: cRes.data.imageUrl
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        fetchMagazines();
+      } else if (type === 'carousel') {
+        if (!newItemTitle || !newItemSubtitle || !newItemFile) throw new Error("Missing fields for carousel");
+
+        const imgData = new FormData();
+        imgData.append('file', newItemFile);
+        const iRes = await api.post(IMAGE_API_URL, imgData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+        await api.post(CAROUSEL_API_URL, {
+          title: newItemTitle,
+          subtitle: newItemSubtitle,
+          imageUrl: iRes.data.imageUrl
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        fetchCarousels();
+      } else if (type === 'document') {
+        if (!newItemTitle || !documentCategory || !newItemFile) throw new Error("Missing fields for document");
+
+        const fileData = new FormData();
+        fileData.append('file', newItemFile);
+        const fRes = await api.post(IMAGE_API_URL, fileData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+        await api.post(DOCUMENT_API_URL, {
+          title: newItemTitle,
+          category: documentCategory,
+          fileUrl: fRes.data.imageUrl
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        fetchDocuments();
+      }
+
+      setMessage(`${type} uploaded successfully!`);
+      setNewItemTitle(""); setNewItemSubtitle(""); setNewItemFile(null); setNewItemCover(null);
+    } catch (error) {
+      console.error(`Error uploading ${type}:`, error);
+      setMessage(`Failed to upload ${type}. ` + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleApprove = async (type, id, currentStatus) => {
+    try {
+      const URL = type === 'magazine' ? MAGAZINE_API_URL : CAROUSEL_API_URL;
+      await api.put(`${URL}/${id}/approve`, { isApproved: !currentStatus }, { headers: { Authorization: `Bearer ${token}` } });
+      type === 'magazine' ? fetchMagazines() : fetchCarousels();
+    } catch (error) {
+      console.error("Error approving:", error);
+      alert("Failed to toggle approval. Ensure you are an Admin.");
+    }
+  };
+
+  const handleGenericDelete = async (type, id) => {
+    if (!window.confirm(`Delete this ${type}?`)) return;
+    try {
+      const URL = type === 'magazine' ? MAGAZINE_API_URL : (type === 'carousel' ? CAROUSEL_API_URL : DOCUMENT_API_URL);
+      await api.delete(`${URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      type === 'magazine' ? fetchMagazines() : (type === 'carousel' ? fetchCarousels() : fetchDocuments());
+    } catch (error) {
+      console.error("Error deleting:", error);
+      alert(error.response?.data?.message || "Failed to delete.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-[#f8fafc] font-sans">
       {/* Sidebar */}
@@ -385,6 +512,9 @@ const Admin = () => {
             {[
               { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
               { id: 'notices', label: 'Notices & News', icon: <Bell size={20} /> },
+              { id: 'carousel', label: 'Hero Carousel', icon: <Layers size={20} /> },
+              { id: 'magazines', label: 'Magazines', icon: <BookOpen size={20} /> },
+              { id: 'documents', label: 'Documents', icon: <FileCode size={20} /> },
               { id: 'images', label: 'Gallery Assets', icon: <ImageIcon size={20} /> },
               { id: 'links', label: 'Quick Links', icon: <LinkIcon size={20} /> },
               { id: 'messages', label: 'Inquiries', icon: <Mail size={20} /> },

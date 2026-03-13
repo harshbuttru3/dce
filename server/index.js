@@ -65,6 +65,9 @@ app.use('/api/messages', require('./routes/messageRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/student-life', require('./routes/studentLifeRoutes'));
 app.use('/api/departments', require('./routes/departmentRoutes'));
+app.use('/api/magazines', require('./routes/magazineRoutes'));
+app.use('/api/carousel', require('./routes/carouselRoutes'));
+app.use('/api/documents', require('./routes/documentRoutes'));
 
 app.get('/', (req, res) => {
   res.send('DCE Darbhanga Clone API is running');

@@ -13,7 +13,7 @@ const SocialWall = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await api.get('/images');
+                const response = await api.get('/images?category=social_wall');
                 // Map the api data to the shape expected by the component
                 const formattedImages = response.data.map((img) => ({
                     id: img._id,

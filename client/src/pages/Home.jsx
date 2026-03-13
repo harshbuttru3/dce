@@ -6,7 +6,6 @@ import { FaUniversity, FaQuoteLeft } from "react-icons/fa";
 import CampusLife from '../components/CampusLife';
 import SocialWall from '../components/SocialWall';
 import CampusPlacements from '../components/CampusPlacements';
-import AcademicSlider from './Slider/AcedmicSlider';
 
 const Home = () => {
   const [galleryImages, setGalleryImages] = useState([]);
@@ -48,10 +47,7 @@ const Home = () => {
       {/*Slider image  */}
       <div><HeroSlider /></div>
       <div className='parent-container '>
-        <div className="relative grid md:grid-cols-3 gap-6 px-6 py-12">
-
-          {/* ================= ACADEMIC NOTICES (SLIDER) ================= */}
-          <AcademicSlider />
+        <div className="relative grid md:grid-cols-2 gap-6 px-6 py-12">
 
           {/* ================= EVENTS (SLIDER) ================= */}
           <NoticeBoard />
