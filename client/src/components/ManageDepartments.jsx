@@ -120,11 +120,15 @@ const ManageDepartments = () => {
             seatCapacity: 60,
             heroImage: "",
             backgroundImage: "",
+            syllabusPdf: "",
             description: [""],
             hod: { name: "", designation: "", qualification: "", image: "", message: "", email: "" },
             programs: [],
             faculty: [],
-            labs: []
+            labs: [],
+            placements: { highestPackage: "", averagePackage: "", link: "" },
+            activities: [],
+            achievements: []
         });
     };
 
@@ -186,6 +190,44 @@ const ManageDepartments = () => {
     const removeLab = (index) => {
         const newLabs = (formData.labs || []).filter((_, i) => i !== index);
         updateFormData('labs', newLabs);
+    };
+
+    // Placements functionality
+    const updatePlacements = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            placements: { ...(prev.placements || {}), [field]: value }
+        }));
+    };
+
+    // Activities (Innovation & Research)
+    const updateActivity = (index, field, value) => {
+        const newActivities = [...(formData.activities || [])];
+        if (!newActivities[index]) newActivities[index] = {};
+        newActivities[index][field] = value;
+        updateFormData('activities', newActivities);
+    };
+    const addActivity = () => {
+        updateFormData('activities', [...(formData.activities || []), { title: "", description: "", icon: "FaFlask" }]);
+    };
+    const removeActivity = (index) => {
+        const newActivities = (formData.activities || []).filter((_, i) => i !== index);
+        updateFormData('activities', newActivities);
+    };
+
+    // Achievements (Student Pride)
+    const updateAchievement = (index, field, value) => {
+        const newAchievements = [...(formData.achievements || [])];
+        if (!newAchievements[index]) newAchievements[index] = {};
+        newAchievements[index][field] = value;
+        updateFormData('achievements', newAchievements);
+    };
+    const addAchievement = () => {
+        updateFormData('achievements', [...(formData.achievements || []), { title: "", student: "", year: new Date().getFullYear().toString() }]);
+    };
+    const removeAchievement = (index) => {
+        const newAchievements = (formData.achievements || []).filter((_, i) => i !== index);
+        updateFormData('achievements', newAchievements);
     };
 
 
@@ -251,6 +293,34 @@ const ManageDepartments = () => {
                                         disabled={uploadingImage}
                                     />
                                 </div>
+                            </div>
+
+                            <div className="space-y-2 md:col-span-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase flex justify-between">
+                                    Syllabus PDF Link
+                                    {uploadingImage && <span className="text-blue-500 text-xs animate-pulse">Uploading...</span>}
+                                </label>
+                                <div className="flex gap-4 items-center">
+                                    <input type="text" value={formData.syllabusPdf || ""} onChange={e => updateFormData('syllabusPdf', e.target.value)} placeholder="PDF URL" className="flex-1 p-3 border rounded-xl" />
+                                    <input
+                                        type="file"
+                                        accept="application/pdf"
+                                        onChange={(e) => handleImageUpload(e, (url) => updateFormData('syllabusPdf', url))}
+                                        className="w-48 p-2 border rounded-xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                                        disabled={uploadingImage}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 md:col-span-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase">About the Department (Description)</label>
+                                <textarea
+                                    value={(formData.description || []).join('\n\n')}
+                                    onChange={e => updateFormData('description', e.target.value.split('\n\n'))}
+                                    className="w-full p-3 border rounded-xl"
+                                    rows="5"
+                                    placeholder="Enter multiple paragraphs separated by a double newline..."
+                                ></textarea>
                             </div>
                         </div>
 
@@ -340,6 +410,56 @@ const ManageDepartments = () => {
                                             </div>
                                         </div>
                                         <button onClick={() => removeFaculty(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Placements */}
+                        <div className="mt-8">
+                            <h4 className="font-bold text-lg text-[#133b5c] mb-4">Placements</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <input type="text" placeholder="Highest Package (e.g. 10 LPA)" value={formData.placements?.highestPackage || ""} onChange={e => updatePlacements('highestPackage', e.target.value)} className="w-full p-3 border rounded-xl" />
+                                <input type="text" placeholder="Average Package (e.g. 4 LPA)" value={formData.placements?.averagePackage || ""} onChange={e => updatePlacements('averagePackage', e.target.value)} className="w-full p-3 border rounded-xl" />
+                                <input type="text" placeholder="Placement Record Link" value={formData.placements?.link || ""} onChange={e => updatePlacements('link', e.target.value)} className="w-full p-3 border rounded-xl" />
+                            </div>
+                        </div>
+
+                        {/* Innovation & Research (Activities) */}
+                        <div className="mt-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h4 className="font-bold text-lg text-[#133b5c]">Innovation & Research (Activities)</h4>
+                                <button onClick={addActivity} className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center gap-1"><Plus size={14} /> Add Activity</button>
+                            </div>
+                            <div className="space-y-4">
+                                {(formData.activities || []).map((act, idx) => (
+                                    <div key={idx} className="flex gap-4 items-center bg-white p-4 border rounded-xl shadow-sm">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                                            <input type="text" placeholder="Activity Title" value={act.title || ""} onChange={e => updateActivity(idx, 'title', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Icon Name (e.g. FaFlask)" value={act.icon || ""} onChange={e => updateActivity(idx, 'icon', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <textarea placeholder="Activity Description" value={act.description || ""} onChange={e => updateActivity(idx, 'description', e.target.value)} className="w-full p-2 border rounded-lg text-sm md:col-span-2" rows="2"></textarea>
+                                        </div>
+                                        <button onClick={() => removeActivity(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg h-full"><Trash2 size={18} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Student Pride (Achievements) */}
+                        <div className="mt-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h4 className="font-bold text-lg text-[#133b5c]">Student Pride (Achievements)</h4>
+                                <button onClick={addAchievement} className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center gap-1"><Plus size={14} /> Add Achievement</button>
+                            </div>
+                            <div className="space-y-4">
+                                {(formData.achievements || []).map((ach, idx) => (
+                                    <div key={idx} className="flex gap-4 items-center bg-white p-4 border rounded-xl shadow-sm">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                                            <input type="text" placeholder="Award / Achievement Title" value={ach.title || ""} onChange={e => updateAchievement(idx, 'title', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Student Name" value={ach.student || ""} onChange={e => updateAchievement(idx, 'student', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Year" value={ach.year || ""} onChange={e => updateAchievement(idx, 'year', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                        </div>
+                                        <button onClick={() => removeAchievement(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg h-full"><Trash2 size={18} /></button>
                                     </div>
                                 ))}
                             </div>

@@ -39,11 +39,6 @@ const achievementSchema = new mongoose.Schema({
     year: { type: String }
 });
 
-const faqSchema = new mongoose.Schema({
-    question: { type: String, required: true },
-    answer: { type: String, required: true }
-});
-
 const activitySchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
@@ -58,6 +53,7 @@ const departmentSchema = new mongoose.Schema({
     seatCapacity: { type: Number },
     heroImage: { type: String },
     backgroundImage: { type: String },
+    syllabusPdf: { type: String },
     description: [{ type: String }],
     highlights: [highlightSchema],
     programs: [programSchema],
@@ -73,11 +69,11 @@ const departmentSchema = new mongoose.Schema({
     labs: [labSchema],
     placements: {
         highestPackage: { type: String },
-        averagePackage: { type: String }
+        averagePackage: { type: String },
+        link: { type: String }
     },
     recruiters: [recruiterSchema],
     achievements: [achievementSchema],
-    faqs: [faqSchema],
     activities: [activitySchema]
 }, { timestamps: true });
 

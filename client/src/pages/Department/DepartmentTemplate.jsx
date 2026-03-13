@@ -68,9 +68,15 @@ const DepartmentTemplate = ({ data }) => {
                             "{data.tagline}"
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
-                            <button className="bg-[#c6b677] text-[#133b5c] px-8 py-3 rounded-sm font-bold shadow-xl hover:bg-white transition-all flex items-center gap-2 group">
-                                <FaDownload className="group-hover:translate-y-1 transition-transform" /> Syllabus
-                            </button>
+                            {data.syllabusPdf ? (
+                                <a href={data.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bg-[#c6b677] text-[#133b5c] px-8 py-3 rounded-sm font-bold shadow-xl hover:bg-white transition-all flex items-center gap-2 group inline-block">
+                                    <FaDownload className="group-hover:translate-y-1 transition-transform inline" /> Syllabus
+                                </a>
+                            ) : (
+                                <button disabled className="bg-[#c6b677] text-[#133b5c] px-8 py-3 rounded-sm font-bold shadow-xl opacity-50 cursor-not-allowed flex items-center gap-2 group">
+                                    <FaDownload className="inline" /> Syllabus (N/A)
+                                </button>
+                            )}
                             <button className="border border-white/30 text-white backdrop-blur-md px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all">
                                 View Faculty
                             </button>
@@ -327,7 +333,11 @@ const DepartmentTemplate = ({ data }) => {
                                 </div>
                             </div>
                         )}
-                        <button className="bg-[#133b5c] text-white px-10 py-4 rounded-sm font-bold shadow-xl flex items-center gap-3 hover:translate-x-2 transition-all">View Placement Record <FaChartLine /></button>
+                        {data.placements?.link ? (
+                            <a href={data.placements.link} target="_blank" rel="noopener noreferrer" className="bg-[#133b5c] text-white px-10 py-4 rounded-sm font-bold shadow-xl flex items-center justify-center gap-3 hover:translate-x-2 transition-all inline-flex w-fit">View Placement Record <FaChartLine /></a>
+                        ) : (
+                            <button disabled className="bg-[#133b5c] text-white px-10 py-4 rounded-sm font-bold shadow-xl flex items-center justify-center gap-3 opacity-50 cursor-not-allowed inline-flex w-fit">View Placement Record <FaChartLine /></button>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-3 gap-6 bg-[#f8f9fa] p-10 rounded-3xl group">
@@ -356,35 +366,6 @@ const DepartmentTemplate = ({ data }) => {
                                 <h4 className="text-xl font-bold text-[#133b5c] mb-3">{ach.title}</h4>
                                 <p className="text-gray-500 text-sm leading-relaxed mb-4">{ach.student}</p>
                                 <div className="text-[10px] font-bold text-white bg-[#133b5c] px-3 py-1 rounded inline-block uppercase">{ach.year}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 12. FAQ Section */}
-            <section className="py-24 px-8 md:px-16 container mx-auto reveal mb-16">
-                <div className="max-w-3xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#133b5c] mb-4">Common Questions</h2>
-                        <p className="text-gray-400">Everything you need to know about the department and career scope.</p>
-                    </div>
-
-                    <div className="space-y-4">
-                        {data.faqs && data.faqs.map((faq, i) => (
-                            <div key={i} className="border-b border-gray-100">
-                                <button
-                                    onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-                                    className="w-full py-6 flex justify-between items-center text-left hover:text-[#c6b677] transition-all"
-                                >
-                                    <span className="font-bold text-[#133b5c] pr-6">{faq.question}</span>
-                                    <FaQuestionCircle className={`text-[#c6b677] transition-transform ${activeFaq === i ? 'rotate-180 opacity-100' : 'opacity-30'}`} />
-                                </button>
-                                {activeFaq === i && (
-                                    <div className="pb-8 text-gray-500 text-lg font-light leading-relaxed animate-fade-in">
-                                        {faq.answer}
-                                    </div>
-                                )}
                             </div>
                         ))}
                     </div>
