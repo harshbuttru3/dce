@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreditCard, Download, Receipt, Info, ShieldCheck, Wallet } from 'lucide-react';
+import api from '../../services/api';
 
 const btechFees = [
     { category: "Admission Fee (One Time)", ge_bc_ebc: "₹10", sc_st_girls: "₹10" },
@@ -20,8 +21,12 @@ const mtechFees = [
 ];
 
 const FeeStructure = () => {
+    const [feeChart, setFeeChart] = useState(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchFeeChart();
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -33,6 +38,15 @@ const FeeStructure = () => {
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         return () => observer.disconnect();
     }, []);
+
+    const fetchFeeChart = async () => {
+        try {
+            const { data } = await api.get('/document?category=fee_chart');
+            if (data && data.length > 0) setFeeChart(data[0]);
+        } catch (error) {
+            console.error("Error fetching fee chart:", error);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 pt-32 pb-20">
@@ -47,9 +61,16 @@ const FeeStructure = () => {
                             Detailed breakdown of academic and residential fees for undergraduate and postgraduate programs. DCE Darbhanga maintains a low-cost, high-quality education policy as per state government norms.
                         </p>
                     </div>
-                    <button className="bg-[#133b5c] text-white px-8 py-4 rounded-sm font-bold shadow-xl flex items-center gap-3 hover:translate-y-[-4px] transition-all group">
-                        Download Fee Chart <Download className="group-hover:translate-y-1 transition-transform" />
-                    </button>
+                    {feeChart && (
+                        <a
+                            href={feeChart.fileUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="bg-[#133b5c] text-white px-8 py-4 rounded-sm font-bold shadow-xl flex items-center gap-3 hover:translate-y-[-4px] transition-all group"
+                        >
+                            Download Fee Chart <Download className="group-hover:translate-y-1 transition-transform" />
+                        </a>
+                    )}
                 </div>
 
                 {/* B.Tech Fee Table */}

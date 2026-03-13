@@ -419,11 +419,13 @@ const Admin = () => {
         // 1. Upload PDF
         const pdfData = new FormData();
         pdfData.append('file', newItemFile);
+        pdfData.append('category', 'system');
         const pRes = await api.post(IMAGE_API_URL, pdfData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
 
         // 2. Upload Cover Image
         const coverData = new FormData();
         coverData.append('file', newItemCover);
+        coverData.append('category', 'system');
         const cRes = await api.post(IMAGE_API_URL, coverData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
 
         await api.post(MAGAZINE_API_URL, {
@@ -437,6 +439,7 @@ const Admin = () => {
 
         const imgData = new FormData();
         imgData.append('file', newItemFile);
+        imgData.append('category', 'system');
         const iRes = await api.post(IMAGE_API_URL, imgData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
 
         await api.post(CAROUSEL_API_URL, {
@@ -450,6 +453,7 @@ const Admin = () => {
 
         const fileData = new FormData();
         fileData.append('file', newItemFile);
+        fileData.append('category', 'system');
         const fRes = await api.post(IMAGE_API_URL, fileData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
 
         await api.post(DOCUMENT_API_URL, {
@@ -1223,6 +1227,225 @@ const Admin = () => {
                   />
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === "magazines" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Publications & Magazines</h2>
+                    <p className="text-gray-400 text-sm mt-1">Approve coordinator submissions or upload official editions</p>
+                  </div>
+                  <div className="p-3 bg-blue-50 rounded-2xl text-blue-600">
+                    <BookOpen size={24} />
+                  </div>
+                </div>
+
+                <form onSubmit={(e) => handleGeneralUpload('magazine', e)} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-gray-200">
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Magazine Title</label>
+                    <input type="text" required value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#c6b677]/30" placeholder="e.g. Annual Magazine - Special Edition 2024" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">PDF Document</label>
+                    <input type="file" required accept=".pdf" onChange={e => setNewItemFile(e.target.files[0])} className="w-full p-2 mt-2 text-xs" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Cover Image</label>
+                    <input type="file" required accept="image/*" onChange={e => setNewItemCover(e.target.files[0])} className="w-full p-2 mt-2 text-xs" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <button type="submit" disabled={loading} className="w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-[#1a4b73] transition-all">
+                      {loading ? "Publishing..." : "Upload & Publish New Edition"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <h3 className="text-xl font-bold text-[#133b5c] mb-6">Archive & Moderation</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {magazines.map(mag => (
+                    <div key={mag._id} className="relative group bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:bg-white hover:shadow-xl transition-all duration-300">
+                      <div className="flex gap-4">
+                        <img src={mag.coverImage} alt="cover" className="w-20 h-28 object-cover rounded-lg shadow-md grayscale group-hover:grayscale-0 transition-all" />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-[#133b5c] truncate">{mag.title}</h4>
+                          <p className={`text-[10px] font-bold uppercase mt-2 mb-4 tracking-widest ${mag.isApproved ? 'text-emerald-500' : 'text-amber-500'}`}>
+                            {mag.isApproved ? 'Live & Public' : 'Pending Approval'}
+                          </p>
+                          <div className="flex gap-2">
+                            {!mag.isApproved && (
+                              <button onClick={() => handleToggleApprove('magazine', mag._id, mag.isApproved)} className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-500 hover:text-white transition-all">
+                                <CheckCircle2 size={16} />
+                              </button>
+                            )}
+                            <button onClick={() => handleGenericDelete('magazine', mag._id)} className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all">
+                              <Trash2 size={16} />
+                            </button>
+                            <a href={mag.pdfUrl} target="_blank" rel="noreferrer" className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-[#133b5c] hover:text-white transition-all">
+                              <ExternalLink size={16} />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "carousel" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Hero Carousel Management</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage the high-impact banners on the home page</p>
+                  </div>
+                  <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
+                    <Layers size={24} />
+                  </div>
+                </div>
+
+                <form onSubmit={(e) => handleGeneralUpload('carousel', e)} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-gray-200">
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Main Title</label>
+                    <input type="text" required value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Subtitle / Slogan</label>
+                    <input type="text" required value={newItemSubtitle} onChange={e => setNewItemSubtitle(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Banner Image (16:9 recommended)</label>
+                    <input type="file" required accept="image/*" onChange={e => setNewItemFile(e.target.files[0])} className="w-full p-2 mt-2 text-xs" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <button type="submit" disabled={loading} className="w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-[#1a4b73] transition-all">
+                      {loading ? "Uploading..." : "Add to Live Carousel"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                <h3 className="text-xl font-bold text-[#133b5c] mb-6">Carousel Sequence</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {carousels.map((car, idx) => (
+                    <div key={car._id} className="relative bg-gray-50 rounded-3xl border border-gray-100 p-2 overflow-hidden group">
+                      <img src={car.imageUrl} alt="preview" className="w-full aspect-video object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700" />
+                      <div className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-bold text-[#133b5c] text-lg">{car.title}</h4>
+                            <p className="text-sm text-gray-400">{car.subtitle}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            {!car.isApproved && (
+                              <button onClick={() => handleToggleApprove('carousel', car._id, car.isApproved)} className="p-3 bg-emerald-100 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                                <CheckCircle2 size={20} />
+                              </button>
+                            )}
+                            <button onClick={() => handleGenericDelete('carousel', car._id)} className="p-3 bg-red-100 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm">
+                              <Trash2 size={20} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${car.isApproved ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                            {car.isApproved ? 'Visible to Public' : 'Draft / Restricted'}
+                          </span>
+                          <span className="text-[10px] text-gray-300 font-bold uppercase">Priority #{idx + 1}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "documents" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Document Central</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage institutional certificates, charts, and rules</p>
+                  </div>
+                  <div className="p-3 bg-purple-50 rounded-2xl text-purple-600">
+                    <FileCode size={24} />
+                  </div>
+                </div>
+
+                <form onSubmit={(e) => handleGeneralUpload('document', e)} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-3xl border border-gray-200">
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Document Category</label>
+                    <select value={documentCategory} onChange={e => setDocumentCategory(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#c6b677]/30 text-sm font-bold text-[#133b5c]">
+                      <option value="holiday_calendar">Holiday Calendar</option>
+                      <option value="anti_ragging">Anti-Ragging Policy</option>
+                      <option value="fee_chart">Admission Fee Chart</option>
+                      <option value="aicte">AICTE Certificates</option>
+                      <option value="nirf">NIRF Ranking Data</option>
+                      <option value="beu">BEU Affiliation</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Display Title</label>
+                    <input type="text" required value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none" placeholder="e.g. Holiday Calendar 2024-25" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 block mb-2">Upload File (PDF only)</label>
+                    <div className="relative border-2 border-dashed border-gray-200 rounded-2xl hover:border-[#c6b677] transition-all p-10 flex flex-col items-center justify-center bg-white group">
+                      <input type="file" required accept=".pdf" onChange={e => setNewItemFile(e.target.files[0])} className="absolute inset-0 opacity-0 cursor-pointer" />
+                      <Upload size={32} className="text-gray-300 group-hover:text-[#c6b677] mb-3 transition-colors" />
+                      <p className="text-sm font-bold text-gray-400 group-hover:text-[#133b5c]">
+                        {newItemFile ? newItemFile.name : "Choose PDF from local machine"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="md:col-span-2">
+                    <button type="submit" disabled={loading} className="w-full bg-[#133b5c] text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-[#1a4b73] transition-all flex items-center justify-center gap-3">
+                      {loading ? "Processing..." : <><Plus size={20} className="text-[#c6b677]" /> Sync to Cloud & Website</>}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <h3 className="text-xl font-bold text-[#133b5c] mb-6">Categorized Repository</h3>
+                <div className="space-y-6">
+                  {['holiday_calendar', 'anti_ragging', 'fee_chart', 'aicte', 'nirf', 'beu'].map(cat => {
+                    const catDocs = documents.filter(d => d.category === cat);
+                    if (catDocs.length === 0) return null;
+                    return (
+                      <div key={cat} className="space-y-3">
+                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 border-b border-gray-50 pb-2">{cat.replace('_', ' ')}</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {catDocs.map(doc => (
+                            <div key={doc._id} className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white transition-all shadow-sm group">
+                              <div className="flex items-center gap-3 min-w-0 pr-4">
+                                <div className="shrink-0 p-2 bg-red-100 text-red-600 rounded-lg">
+                                  <FileText size={18} />
+                                </div>
+                                <p className="text-sm font-bold text-[#133b5c] truncate">{doc.title}</p>
+                              </div>
+                              <div className="flex gap-1 shrink-0">
+                                <a href={doc.fileUrl} target="_blank" rel="noreferrer" className="p-2 text-gray-400 hover:text-[#133b5c] hover:bg-gray-100 rounded-lg transition-all"><ExternalLink size={16} /></a>
+                                <button onClick={() => handleGenericDelete('document', doc._id)} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"><Trash2 size={16} /></button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           )}
 

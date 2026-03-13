@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import api from '../services/api';
 
-const slides = [
+const defaultSlides = [
     {
         id: 1,
         image: 'https://www.dce-darbhanga.org/wp-content/uploads/2022/11/ScreenshotX2024-05-17X205451.png',
@@ -24,13 +25,33 @@ const slides = [
 
 const HeroSlider = () => {
     const [current, setCurrent] = useState(0);
+    const [slides, setSlides] = useState(defaultSlides);
+
+    useEffect(() => {
+        const fetchCarousel = async () => {
+            try {
+                const { data } = await api.get('/carousel');
+                if (data && data.length > 0) {
+                    setSlides(data.map((item, index) => ({
+                        id: item._id || index,
+                        image: item.imageUrl,
+                        title: item.title,
+                        subtitle: item.subtitle
+                    })));
+                }
+            } catch (error) {
+                console.error("Error fetching carousel:", error);
+            }
+        };
+        fetchCarousel();
+    }, []);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length);
         }, 5000);
         return () => clearInterval(timer);
-    }, []);
+    }, [slides.length]);
 
     const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
     const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
@@ -50,7 +71,10 @@ const HeroSlider = () => {
                     />
                     <div className="absolute inset-0 flex flex-col items-start justify-end text-left text-white px-8 pb-32 md:px-16 md:pb-40 w-full md:w-2/3">
                         <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-4 transform transition-transform duration-700 translate-y-0 leading-tight uppercase tracking-wider">{slide.title}</h2>
-                        <p className="text-xl md:text-2xl lg:text-3xl font-bold"><span className="text-yellow-400">{slide.subtitle.split('–')[0]}</span> {slide.subtitle.includes('–') ? `– ${slide.subtitle.split('–')[1]}` : ''}</p>
+                        <p className="text-xl md:text-2xl lg:text-3xl font-bold">
+                            <span className="text-yellow-400">{slide.subtitle ? slide.subtitle.split('–')[0] : ''}</span>
+                            {slide.subtitle && slide.subtitle.includes('–') ? `– ${slide.subtitle.split('–')[1]}` : ''}
+                        </p>
                     </div>
                 </div>
             ))}
@@ -64,8 +88,8 @@ const HeroSlider = () => {
                         key={index}
                         onClick={() => setCurrent(index)}
                         className={`transition-all duration-300 flex items-center justify-center font-bold text-xs ${index === current
-                                ? 'w-6 h-6 bg-transparent text-white border border-gray-400 rounded-full'
-                                : 'w-2 h-2 bg-gray-400 rounded-full hover:bg-gray-300'
+                            ? 'w-6 h-6 bg-transparent text-white border border-gray-400 rounded-full'
+                            : 'w-2 h-2 bg-gray-400 rounded-full hover:bg-gray-300'
                             }`}
                     >
                         {index === current ? index + 1 : ''}

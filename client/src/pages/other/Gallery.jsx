@@ -10,7 +10,7 @@ const Gallery = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await api.get('/images');
+                const response = await api.get('/images?category=social_wall');
                 setImages(response.data);
             } catch (error) {
                 console.error("Error fetching images:", error);

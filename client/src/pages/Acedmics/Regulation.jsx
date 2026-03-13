@@ -1,9 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShieldAlert, Scale, FileText, Download, CheckCircle, Info, Gavel, ChevronRight } from 'lucide-react';
+import api from '../../services/api';
 
 const Regulation = () => {
+  const [antiRaggingDoc, setAntiRaggingDoc] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    const fetchDoc = async () => {
+      try {
+        const { data } = await api.get('/document?category=anti_ragging');
+        if (data && data.length > 0) setAntiRaggingDoc(data[0]);
+      } catch (error) {
+        console.error("Error fetching anti-ragging doc:", error);
+      }
+    };
+    fetchDoc();
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -77,9 +90,14 @@ const Regulation = () => {
                     <span className="font-mono text-red-600">1800-180-5522</span>
                   </div>
                 </div>
-                <button className="mt-8 w-full bg-red-600 text-white py-4 rounded-sm font-bold flex items-center justify-center gap-2 hover:bg-black transition-all">
+                <a
+                  href={antiRaggingDoc?.fileUrl || "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`mt-8 w-full bg-red-600 text-white py-4 rounded-sm font-bold flex items-center justify-center gap-2 hover:bg-black transition-all ${!antiRaggingDoc ? 'opacity-50 pointer-events-none' : ''}`}
+                >
                   Download Anti-Ragging Affidavit
-                </button>
+                </a>
               </div>
             </div>
           </div>

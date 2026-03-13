@@ -1,8 +1,21 @@
-import React, { useEffect } from 'react';
-import { FaGraduationCap, FaLink, FaUniversity, FaStamp, FaHandshake, FaGlobe } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaGraduationCap, FaLink, FaUniversity, FaStamp, FaHandshake, FaGlobe, FaDownload } from 'react-icons/fa';
+import api from '../../services/api';
 
 const BeuApproval = () => {
+    const [beuDoc, setBeuDoc] = useState(null);
+
     useEffect(() => {
+        const fetchDoc = async () => {
+            try {
+                const { data } = await api.get('/document?category=beu');
+                if (data && data.length > 0) setBeuDoc(data[0]);
+            } catch (error) {
+                console.error("Error fetching BEU doc:", error);
+            }
+        };
+        fetchDoc();
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -49,15 +62,25 @@ const BeuApproval = () => {
                                 Darbhanga College of Engineering is proudly affiliated with Bihar Engineering University, Patna. This affiliation ensures that our curriculum, examination patterns, and academic standards are in perfect sync with the regional and national requirements for engineering professionals.
                             </p>
                         </div>
-                        <div className="mt-10">
+                        <div className="mt-10 flex flex-wrap gap-4">
                             <a
                                 href="https://beu-bih.ac.in/BEUP/Vision.aspx"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-3 bg-[#133b5c] text-white px-10 py-4 rounded-sm font-bold shadow-xl hover:bg-[#c6b677] hover:text-[#133b5c] transition-all transform hover:-translate-y-1"
                             >
-                                <FaGlobe /> Visit Official BEU Website <FaLink className="text-[10px]" />
+                                <FaGlobe /> Visit BEU Website
                             </a>
+                            {beuDoc && (
+                                <a
+                                    href={beuDoc.fileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-3 border-2 border-[#133b5c] text-[#133b5c] px-10 py-4 rounded-sm font-bold hover:bg-[#133b5c] hover:text-white transition-all transform hover:-translate-y-1"
+                                >
+                                    <FaDownload /> Download Certificate
+                                </a>
+                            )}
                         </div>
                     </div>
                     <div className="md:w-1/2 grid grid-cols-2 gap-4">

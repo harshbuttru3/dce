@@ -1,25 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import api from "../../../services/api";
 
 const Aicte = () => {
-  const academicYears = [
-    { id: 9, year: "2025–2026", file: "/pdfs/2025-2026.pdf" },
-    { id: 8, year: "2024–2025", file: "/pdfs/2024-2025.pdf" },
-    { id: 7, year: "2023–2024", file: "/pdfs/2023-2024.pdf" },
-    { id: 6, year: "2022–2023", file: "/pdfs/2022-2023.pdf" },
-    { id: 5, year: "2021–2022", file: "/pdfs/2021-2022.pdf" },
-    { id: 4, year: "2020–2021", file: "/pdfs/2020-2021.pdf" },
-    { id: 3, year: "2019–2020", file: "/pdfs/2019-2020.pdf" },
-    { id: 2, year: "2018–2019", file: "/pdfs/2018-2019.pdf" },
-    { id: 1, year: "2017–2018", file: "/pdfs/2017-2018.pdf" },
-  ];
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const { data } = await api.get('/document?category=aicte');
+        setDocuments(data);
+      } catch (error) {
+        console.error("Error fetching AICTE documents:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDocuments();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
 
         {/* 🔹 Title */}
-        <h1 className="text-2xl font-semibold mb-6">
-          AICTE Banner
+        <h1 className="text-2xl font-bold font-serif text-[#133b5c] mb-6">
+          AICTE Extension of Approvals (EoA)
         </h1>
 
         {/* 🔹 Table */}
@@ -28,38 +34,48 @@ const Aicte = () => {
 
             {/* Table Header */}
             <thead>
-              <tr className="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-left">
-                <th className="py-3 px-4">SL#</th>
-                <th className="py-3 px-4">
-                  ACADEMIC YEAR (CLICK TO DOWNLOAD)
+              <tr className="bg-[#133b5c] text-white text-left">
+                <th className="py-4 px-6 uppercase tracking-widest text-xs font-bold font-serif">SL#</th>
+                <th className="py-4 px-6 uppercase tracking-widest text-xs font-bold font-serif">
+                  ACADEMIC YEAR / DOCUMENT TITLE
+                </th>
+                <th className="py-4 px-6 uppercase tracking-widest text-xs font-bold font-serif text-center">
+                  ACTION
                 </th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody>
-              {academicYears.map((item, index) => (
-                <tr
-                  key={item.id}
-                  className={`${
-                    index % 2 === 0
-                      ? "bg-gray-200"
-                      : "bg-gray-100"
-                  }`}
-                >
-                  <td className="py-3 px-4">{item.id}</td>
-                  <td className="py-3 px-4">
-                    <a
-                      href={item.file}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline font-medium"
-                    >
-                      {item.year}
-                    </a>
-                  </td>
-                </tr>
-              ))}
+            <tbody className="divide-y divide-gray-100">
+              {loading ? (
+                <tr><td colSpan="3" className="py-20 text-center text-gray-400 italic">Retrieving official records...</td></tr>
+              ) : documents.length === 0 ? (
+                <tr><td colSpan="3" className="py-20 text-center text-gray-400 italic">No AICTE documents found in the archive.</td></tr>
+              ) : (
+                documents.map((item, index) => (
+                  <tr
+                    key={item._id}
+                    className="hover:bg-gray-50 transition-colors group"
+                  >
+                    <td className="py-4 px-6 text-gray-400 font-mono text-sm">{(index + 1).toString().padStart(2, '0')}</td>
+                    <td className="py-4 px-6">
+                      <span className="font-bold text-[#133b5c] group-hover:text-blue-600 transition-colors">
+                        {item.title}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <a
+                        href={item.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                      >
+                        Download PDF
+                      </a>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
 
           </table>

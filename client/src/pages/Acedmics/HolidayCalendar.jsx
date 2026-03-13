@@ -1,48 +1,31 @@
-import React, { useEffect } from 'react';
-import { Calendar, Download, Info } from 'lucide-react';
-
-const holidays = [
-    { date: "01 Jan 2026", occasion: "New Year's Day", day: "Thursday" },
-    { date: "14 Jan 2026", occasion: "Makar Sankranti", day: "Wednesday" },
-    { date: "26 Jan 2026", occasion: "Republic Day", day: "Monday" },
-    { date: "05 Feb 2026", occasion: "Basant Panchami", day: "Thursday" },
-    { date: "26 Feb 2026", occasion: "Maha Shivaratri", day: "Thursday" },
-    { date: "13 Mar 2026", occasion: "Holi", day: "Friday" },
-    { date: "14 Mar 2026", occasion: "Holi", day: "Saturday" },
-    { date: "27 Mar 2026", occasion: "Ram Navami", day: "Friday" },
-    { date: "31 Mar 2026", occasion: "Eid-ul-Fitr*", day: "Tuesday" },
-    { date: "10 Apr 2026", occasion: "Good Friday", day: "Friday" },
-    { date: "14 Apr 2026", occasion: "Ambedkar Jayanti", day: "Tuesday" },
-    { date: "01 May 2026", occasion: "May Day", day: "Friday" },
-    { date: "07 Jun 2026", occasion: "Eid-ul-Zuha*", day: "Sunday" },
-    { date: "07 Jul 2026", occasion: "Muharram*", day: "Tuesday" },
-    { date: "15 Aug 2026", occasion: "Independence Day", day: "Saturday" },
-    { date: "28 Aug 2026", occasion: "Janamashtami", day: "Friday" },
-    { date: "05 Sep 2026", occasion: "Eid-e-Milad*", day: "Saturday" },
-    { date: "02 Oct 2026", occasion: "Gandhi Jayanti", day: "Friday" },
-    { date: "19 Oct 2026", occasion: "Maha Ashtami", day: "Monday" },
-    { date: "20 Oct 2026", occasion: "Maha Navami", day: "Tuesday" },
-    { date: "21 Oct 2026", occasion: "Vijaya Dashami", day: "Wednesday" },
-    { date: "31 Oct 2026", occasion: "Deepawali", day: "Saturday" },
-    { date: "15 Nov 2026", occasion: "Chhath Puja", day: "Sunday" },
-    { date: "16 Nov 2026", occasion: "Chhath Puja", day: "Monday" },
-    { date: "25 Dec 2026", occasion: "Christmas Day", day: "Friday" },
-];
+import React, { useEffect, useState } from 'react';
+import { Calendar, Download, Info, History, FileText } from 'lucide-react';
+import api from '../../services/api';
 
 const HolidayCalendar = () => {
+    const [documents, setDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         window.scrollTo(0, 0);
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        return () => observer.disconnect();
+        fetchDocuments();
     }, []);
+
+    const fetchDocuments = async () => {
+        try {
+            const { data } = await api.get('/document?category=holiday_calendar');
+            setDocuments(data);
+        } catch (error) {
+            console.error("Error fetching holiday calendars:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const latestDoc = documents[0];
+    const archivedDocs = documents.slice(1);
+
+    if (loading) return <div className="min-h-screen bg-gray-50 pt-32 text-center text-gray-500">Loading academic schedules...</div>;
 
     return (
         <div className="min-h-screen bg-gray-50 pt-32 pb-20">
@@ -58,51 +41,61 @@ const HolidayCalendar = () => {
                             </div>
                             <span className="text-[#c6b677] font-bold uppercase tracking-[0.3em] text-xs">Administrative</span>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 italic text-white">Holiday List 2026</h1>
+                        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 italic text-white">
+                            {latestDoc ? latestDoc.title : "Holiday Calendar"}
+                        </h1>
                         <p className="text-white/70 max-w-2xl text-lg font-light leading-relaxed">
-                            Institutional holiday schedule for the academic year 2026. Please note that dates marked with (*) are subject to the appearance of the moon.
+                            Official institutional holiday schedule. Please refer to the downloaded PDF for official signatures and detailed academic instructions.
                         </p>
-                        <button className="mt-10 bg-[#c6b677] text-[#133b5c] px-8 py-3 rounded-sm font-bold shadow-xl hover:bg-white transition-all flex items-center gap-2 group">
-                            <Download size={20} className="group-hover:translate-y-1 transition-transform" /> Download PDF
-                        </button>
+                        {latestDoc && (
+                            <a
+                                href={latestDoc.fileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-10 bg-[#c6b677] text-[#133b5c] px-8 py-3 rounded-sm font-bold shadow-xl hover:bg-white transition-all inline-flex items-center gap-2 group w-fit"
+                            >
+                                <Download size={20} className="group-hover:translate-y-1 transition-transform" /> Download Latest PDF
+                            </a>
+                        )}
                     </div>
                 </div>
 
-                {/* Table Section */}
-                <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="bg-[#133b5c] text-white">
-                                    <th className="px-8 py-6 uppercase tracking-widest text-xs font-bold font-serif">SL No.</th>
-                                    <th className="px-8 py-6 uppercase tracking-widest text-xs font-bold font-serif">Occasion / Festival</th>
-                                    <th className="px-8 py-6 uppercase tracking-widest text-xs font-bold font-serif">Date</th>
-                                    <th className="px-8 py-6 uppercase tracking-widest text-xs font-bold font-serif">Day</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {holidays.map((holiday, index) => (
-                                    <tr key={index} className="hover:bg-gray-50 transition-colors group">
-                                        <td className="px-8 py-5 text-gray-400 font-mono text-sm">{(index + 1).toString().padStart(2, '0')}</td>
-                                        <td className="px-8 py-5">
-                                            <span className="font-bold text-[#133b5c] group-hover:text-[#c6b677] transition-colors">{holiday.occasion}</span>
-                                        </td>
-                                        <td className="px-8 py-5">
-                                            <div className="flex flex-col">
-                                                <span className="text-gray-600 font-medium">{holiday.date}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-5">
-                                            <span className={`text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider ${holiday.day === 'Sunday' ? 'bg-red-50 text-red-500' : 'bg-gray-100 text-gray-500'}`}>
-                                                {holiday.day}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                {/* Primary Content Placeholder / Instructions */}
+                {!latestDoc && (
+                    <div className="bg-white rounded-3xl p-20 text-center border border-dashed border-gray-200 mb-12">
+                        <Info className="mx-auto text-gray-300 mb-4" size={48} />
+                        <p className="text-gray-400 font-medium font-serif italic">No active holiday calendar has been uploaded for the current session.</p>
                     </div>
-                </div>
+                )}
+
+                {/* Archived Calendars */}
+                {archivedDocs.length > 0 && (
+                    <div className="mt-20">
+                        <div className="flex items-center gap-3 mb-8 border-b border-gray-100 pb-4">
+                            <History className="text-[#c6b677]" size={24} />
+                            <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Historic Holiday Archives</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {archivedDocs.map((doc) => (
+                                <a
+                                    key={doc._id}
+                                    href={doc.fileUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="bg-white p-6 rounded-2xl border border-gray-100 hover:border-[#c6b677] hover:shadow-xl transition-all group flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 bg-gray-50 rounded-xl text-[#133b5c] group-hover:bg-[#133b5c] group-hover:text-white transition-colors">
+                                            <FileText size={20} />
+                                        </div>
+                                        <span className="font-bold text-[#133b5c]">{doc.title}</span>
+                                    </div>
+                                    <Download size={18} className="text-gray-300 group-hover:text-[#c6b677]" />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Note Section */}
                 <div className="mt-12 bg-white p-8 rounded-3xl border border-dashed border-gray-200 flex gap-6 items-start shadow-sm">

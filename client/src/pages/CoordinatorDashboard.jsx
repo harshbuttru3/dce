@@ -33,6 +33,18 @@ const CoordinatorDashboard = () => {
   const [message, setMessage] = useState("");
   const [stats, setStats] = useState({ fests: 0, societies: 0 });
 
+  // Magazine State
+  const [magazines, setMagazines] = useState([]);
+  const [magTitle, setMagTitle] = useState("");
+  const [magPdf, setMagPdf] = useState(null);
+  const [magCover, setMagCover] = useState(null);
+
+  // Carousel State
+  const [carousels, setCarousels] = useState([]);
+  const [carTitle, setCarTitle] = useState("");
+  const [carSubtitle, setCarSubtitle] = useState("");
+  const [carImage, setCarImage] = useState(null);
+
 
 
   // Get token from localStorage
@@ -50,6 +62,8 @@ const CoordinatorDashboard = () => {
     }
     if (activeTab === "fest") fetchFests();
     if (activeTab === "societies") fetchSocieties();
+    if (activeTab === "magazines") fetchMagazines();
+    if (activeTab === "carousel") fetchCarousels();
   }, [activeTab, navigate, coordinatorInfo]);
 
   // Fetchers
@@ -65,6 +79,20 @@ const CoordinatorDashboard = () => {
       const { data } = await api.get(`/student-life/societies`);
       setSocieties(data);
       setStats(prev => ({ ...prev, societies: data.length }));
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchMagazines = async () => {
+    try {
+      const { data } = await api.get(`/magazines?all=true`);
+      setMagazines(data);
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchCarousels = async () => {
+    try {
+      const { data } = await api.get(`/carousel?all=true`);
+      setCarousels(data);
     } catch (err) { console.error(err); }
   };
 
@@ -161,12 +189,73 @@ const CoordinatorDashboard = () => {
     setActiveTab("societies");
     window.scrollTo(0, 0);
   };
+
   const handleDeleteSociety = async (id) => {
     if (!window.confirm("Delete this society?")) return;
     try {
       await api.delete(`/student-life/societies/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchSocieties();
     } catch (err) { console.error(err); }
+  };
+
+  // Handlers - Magazines
+  const handleMagazineUpload = async (e) => {
+    e.preventDefault();
+    if (!magTitle || !magPdf || !magCover) return setMessage("Please fill all fields for magazine");
+    setLoading(true); setMessage("");
+    try {
+      // 1. Upload PDF & Cover via generic image endpoint
+      const pData = new FormData(); pData.append("file", magPdf);
+      pData.append("category", "system");
+      const pRes = await api.post("/images", pData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+      const cData = new FormData(); cData.append("file", magCover);
+      cData.append("category", "system");
+      const cRes = await api.post("/images", cData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+      await api.post("/magazines", {
+        title: magTitle,
+        pdfUrl: pRes.data.imageUrl,
+        coverImage: cRes.data.imageUrl
+      }, { headers: { Authorization: `Bearer ${token}` } });
+
+      setMessage("Magazine submitted for Admin approval!");
+      setMagTitle(""); setMagPdf(null); setMagCover(null);
+      fetchMagazines();
+    } catch (err) { setMessage("Failed to submit magazine"); }
+    finally { setLoading(false); }
+  };
+
+  // Handlers - Carousel
+  const handleCarouselUpload = async (e) => {
+    e.preventDefault();
+    if (!carTitle || !carSubtitle || !carImage) return setMessage("Please fill all fields for carousel");
+    setLoading(true); setMessage("");
+    try {
+      const iData = new FormData(); iData.append("file", carImage);
+      iData.append("category", "system");
+      const iRes = await api.post("/images", iData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` } });
+
+      await api.post("/carousel", {
+        title: carTitle,
+        subtitle: carSubtitle,
+        imageUrl: iRes.data.imageUrl
+      }, { headers: { Authorization: `Bearer ${token}` } });
+
+      setMessage("Carousel banner submitted for Admin approval!");
+      setCarTitle(""); setCarSubtitle(""); setCarImage(null);
+      fetchCarousels();
+    } catch (err) { setMessage("Failed to submit carousel item"); }
+    finally { setLoading(false); }
+  };
+
+  const handleDeleteItem = async (type, id) => {
+    if (!window.confirm(`Delete this ${type}?`)) return;
+    try {
+      const url = type === 'magazine' ? `/magazines/${id}` : `/carousel/${id}`;
+      await api.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+      type === 'magazine' ? fetchMagazines() : fetchCarousels();
+    } catch (err) { alert(err.response?.data?.message || "Failed to delete"); }
   };
 
   return (
@@ -187,6 +276,8 @@ const CoordinatorDashboard = () => {
           <ul className="space-y-2">
             {[
               { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
+              { id: 'magazines', label: 'Magazines', icon: <Upload size={20} /> },
+              { id: 'carousel', label: 'Home Carousel', icon: <ImageIcon size={20} /> },
               { id: 'fest', label: 'Fests & Events', icon: <Film size={20} /> },
               { id: 'societies', label: 'Student Societies', icon: <Users size={20} /> },
             ].map((item) => (
@@ -388,6 +479,90 @@ const CoordinatorDashboard = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "magazines" && (
+            <div className="space-y-8 animate-fade-in">
+              <form onSubmit={handleMagazineUpload} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Magazine Title</label>
+                  <input type="text" required value={magTitle} onChange={e => setMagTitle(e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl" placeholder="e.g. DCE Annual Magazine 2024" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">Magazine PDF</label>
+                  <input type="file" accept=".pdf" required onChange={e => setMagPdf(e.target.files[0])} className="w-full text-xs p-1" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">Cover Image (Thumbnail)</label>
+                  <input type="file" accept="image/*" required onChange={e => setMagCover(e.target.files[0])} className="w-full text-xs p-1" />
+                </div>
+                <div className="md:col-span-2">
+                  <button type="submit" disabled={loading} className="w-full bg-[#133b5c] text-white py-3 rounded-xl font-bold hover:bg-[#1a4b73] transition-all">
+                    {loading ? "Uploading..." : "Submit Magazine for Approval"}
+                  </button>
+                </div>
+              </form>
+
+              <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h3 className="text-xl font-bold text-[#133b5c] mb-6">Your Recent Submissions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {magazines.map(mag => (
+                    <div key={mag._id} className="border border-gray-100 rounded-2xl p-4 flex gap-4">
+                      <img src={mag.coverImage} alt="cover" className="w-16 h-20 object-cover rounded-lg" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-[#133b5c] truncate">{mag.title}</p>
+                        <p className={`text-[10px] font-bold uppercase mt-1 ${mag.isApproved ? 'text-emerald-500' : 'text-amber-500'}`}>
+                          {mag.isApproved ? 'Approved & Live' : 'Pending Approval'}
+                        </p>
+                        <button onClick={() => handleDeleteItem('magazine', mag._id)} className="mt-2 text-red-500 hover:text-red-700"><Trash2 size={16} /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "carousel" && (
+            <div className="space-y-8 animate-fade-in">
+              <form onSubmit={handleCarouselUpload} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Slide Title</label>
+                  <input type="text" required value={carTitle} onChange={e => setCarTitle(e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Slide Subtitle</label>
+                  <input type="text" required value={carSubtitle} onChange={e => setCarSubtitle(e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">Slide Image (1920x1080 recommended)</label>
+                  <input type="file" accept="image/*" required onChange={e => setCarImage(e.target.files[0])} className="w-full text-xs p-1" />
+                </div>
+                <div className="md:col-span-2">
+                  <button type="submit" disabled={loading} className="w-full bg-[#133b5c] text-white py-3 rounded-xl font-bold hover:bg-[#1a4b73] transition-all">
+                    {loading ? "Uploading..." : "Submit Slide for Approval"}
+                  </button>
+                </div>
+              </form>
+
+              <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h3 className="text-xl font-bold text-[#133b5c] mb-6">Slides Status</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {carousels.map(car => (
+                    <div key={car._id} className="border border-gray-100 rounded-2xl p-4 flex gap-4">
+                      <img src={car.imageUrl} alt="slide" className="w-32 h-16 object-cover rounded-lg" />
+                      <div className="flex-1">
+                        <p className="font-bold text-[#133b5c] truncate">{car.title}</p>
+                        <p className={`text-[10px] font-bold uppercase ${car.isApproved ? 'text-emerald-500' : 'text-amber-500'}`}>
+                          {car.isApproved ? 'Approved' : 'Pending'}
+                        </p>
+                        <button onClick={() => handleDeleteItem('carousel', car._id)} className="mt-1 text-red-500 hover:text-red-700"><Trash2 size={16} /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
