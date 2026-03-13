@@ -10,6 +10,7 @@ const ManageDepartments = () => {
     const [formData, setFormData] = useState(null);
 
     const [expandedDept, setExpandedDept] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const token = userInfo?.token;
@@ -84,6 +85,31 @@ const ManageDepartments = () => {
         }
     };
 
+    const handleImageUpload = async (e, callback) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        uploadData.append("title", `dept_asset_${Date.now()}`);
+
+        setUploadingImage(true);
+        try {
+            const res = await api.post('/images', uploadData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            callback(res.data.imageUrl);
+        } catch (err) {
+            console.error("Error uploading image:", err);
+            alert("Failed to upload image.");
+        } finally {
+            setUploadingImage(false);
+        }
+    };
+
     const handleAddNew = () => {
         setEditingId("new");
         setFormData({
@@ -91,9 +117,12 @@ const ManageDepartments = () => {
             slug: "",
             tagline: "",
             intake: 60,
+            seatCapacity: 60,
             heroImage: "",
+            backgroundImage: "",
             description: [""],
             hod: { name: "", designation: "", qualification: "", image: "", message: "", email: "" },
+            programs: [],
             faculty: [],
             labs: []
         });
@@ -123,6 +152,40 @@ const ManageDepartments = () => {
     const removeFaculty = (index) => {
         const newFaculty = formData.faculty.filter((_, i) => i !== index);
         updateFormData('faculty', newFaculty);
+    };
+
+    // Programs functionality
+    const updateProgram = (index, field, value) => {
+        const newPrograms = [...(formData.programs || [])];
+        if (!newPrograms[index]) newPrograms[index] = {};
+        newPrograms[index][field] = value;
+        updateFormData('programs', newPrograms);
+    };
+
+    const addProgram = () => {
+        updateFormData('programs', [...(formData.programs || []), { name: "", intake: 60, duration: "4 Years", eligibility: "", image: "" }]);
+    };
+
+    const removeProgram = (index) => {
+        const newPrograms = (formData.programs || []).filter((_, i) => i !== index);
+        updateFormData('programs', newPrograms);
+    };
+
+    // Labs functionality
+    const updateLab = (index, field, value) => {
+        const newLabs = [...(formData.labs || [])];
+        if (!newLabs[index]) newLabs[index] = {};
+        newLabs[index][field] = value;
+        updateFormData('labs', newLabs);
+    };
+
+    const addLab = () => {
+        updateFormData('labs', [...(formData.labs || []), { name: "", description: "", icon: "", image: "", tools: [] }]);
+    };
+
+    const removeLab = (index) => {
+        const newLabs = (formData.labs || []).filter((_, i) => i !== index);
+        updateFormData('labs', newLabs);
     };
 
 
@@ -162,9 +225,32 @@ const ManageDepartments = () => {
                                 <label className="text-xs font-bold text-gray-500 uppercase">Slug (URL Path)</label>
                                 <input type="text" value={formData.slug || ""} onChange={e => updateFormData('slug', e.target.value)} className="w-full p-3 border rounded-xl" disabled={editingId !== "new"} />
                             </div>
-                            <div className="space-y-2 md:col-span-2">
+                            <div className="space-y-2">
                                 <label className="text-xs font-bold text-gray-500 uppercase">Tagline</label>
                                 <input type="text" value={formData.tagline || ""} onChange={e => updateFormData('tagline', e.target.value)} className="w-full p-3 border rounded-xl" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase">Seat Capacity</label>
+                                <input type="number" value={formData.seatCapacity || formData.intake || 60} onChange={e => { updateFormData('seatCapacity', parseInt(e.target.value)); updateFormData('intake', parseInt(e.target.value)); }} className="w-full p-3 border rounded-xl" />
+                            </div>
+
+                            <div className="space-y-2 md:col-span-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase flex justify-between">
+                                    Background Image
+                                    {uploadingImage && <span className="text-blue-500 text-xs animate-pulse">Uploading...</span>}
+                                </label>
+                                <div className="flex gap-4 items-center">
+                                    {formData.backgroundImage && (
+                                        <img src={formData.backgroundImage} alt="bg preview" className="h-12 w-20 object-cover rounded shadow" />
+                                    )}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, (url) => updateFormData('backgroundImage', url))}
+                                        className="w-full p-2 border rounded-xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        disabled={uploadingImage}
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -175,8 +261,63 @@ const ManageDepartments = () => {
                                 <input type="text" placeholder="HOD Name" value={formData.hod?.name || ""} onChange={e => updateHod('name', e.target.value)} className="w-full p-3 border rounded-xl" />
                                 <input type="text" placeholder="Designation" value={formData.hod?.designation || ""} onChange={e => updateHod('designation', e.target.value)} className="w-full p-3 border rounded-xl" />
                                 <input type="text" placeholder="Email" value={formData.hod?.email || ""} onChange={e => updateHod('email', e.target.value)} className="w-full p-3 border rounded-xl" />
-                                <input type="text" placeholder="Image URL" value={formData.hod?.image || ""} onChange={e => updateHod('image', e.target.value)} className="w-full p-3 border rounded-xl" />
+
+                                <div className="border rounded-xl p-2 flex items-center justify-between bg-white text-sm">
+                                    <span className="text-gray-500 truncate mr-2">{formData.hod?.image ? 'HOD Image Uploaded' : 'No Image'}</span>
+                                    <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-100 transition shrink-0">
+                                        {uploadingImage ? '...' : 'Upload Image'}
+                                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, (url) => updateHod('image', url))} disabled={uploadingImage} />
+                                    </label>
+                                </div>
                                 <textarea placeholder="HOD Message" value={formData.hod?.message || ""} onChange={e => updateHod('message', e.target.value)} className="w-full p-3 border rounded-xl md:col-span-2" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        {/* Academic Programs */}
+                        <div className="mt-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h4 className="font-bold text-lg text-[#133b5c]">Academic Programs</h4>
+                                <button onClick={addProgram} className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center gap-1"><Plus size={14} /> Add Program</button>
+                            </div>
+                            <div className="space-y-4">
+                                {(formData.programs || []).map((prog, idx) => (
+                                    <div key={idx} className="flex gap-4 items-center bg-white p-4 border rounded-xl shadow-sm">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
+                                            <input type="text" placeholder="Degree Name" value={prog.name || ""} onChange={e => updateProgram(idx, 'name', e.target.value)} className="w-full p-2 border rounded-lg text-sm lg:col-span-2" />
+                                            <input type="number" placeholder="Intake" value={prog.intake || ""} onChange={e => updateProgram(idx, 'intake', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Duration (e.g. 4 Years)" value={prog.duration || ""} onChange={e => updateProgram(idx, 'duration', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <div className="border rounded-lg p-2 flex items-center justify-between text-xs bg-gray-50">
+                                                <span className="truncate mr-2 text-gray-400">{prog.image ? 'Img Uploaded' : 'Program Image'}</span>
+                                                <label className="cursor-pointer text-blue-600 font-bold hover:underline shrink-0">Upload<input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, (url) => updateProgram(idx, 'image', url))} disabled={uploadingImage} /></label>
+                                            </div>
+                                            <input type="text" placeholder="Eligibility (e.g. 10+2 PCM)" value={prog.eligibility || ""} onChange={e => updateProgram(idx, 'eligibility', e.target.value)} className="w-full p-2 border rounded-lg text-sm md:col-span-2 lg:col-span-5" />
+                                        </div>
+                                        <button onClick={() => removeProgram(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Dedicated Laboratories */}
+                        <div className="mt-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h4 className="font-bold text-lg text-[#133b5c]">Dedicated Laboratories</h4>
+                                <button onClick={addLab} className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center gap-1"><Plus size={14} /> Add Lab</button>
+                            </div>
+                            <div className="space-y-4">
+                                {(formData.labs || []).map((lab, idx) => (
+                                    <div key={idx} className="flex gap-4 items-center bg-white p-4 border rounded-xl shadow-sm">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                                            <input type="text" placeholder="Lab Name" value={lab.name || ""} onChange={e => updateLab(idx, 'name', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <div className="border rounded-lg p-2 flex items-center justify-between text-sm bg-gray-50">
+                                                <span className="truncate mr-2 text-gray-500">{lab.image ? 'Lab Photo Uploaded' : 'Upload Lab Photo'}</span>
+                                                <label className="cursor-pointer bg-white border px-2 py-0.5 rounded text-xs text-blue-600 shadow-sm hover:bg-gray-50 shrink-0">Browse<input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, (url) => updateLab(idx, 'image', url))} disabled={uploadingImage} /></label>
+                                            </div>
+                                            <textarea placeholder="Lab Description" value={lab.description || ""} onChange={e => updateLab(idx, 'description', e.target.value)} className="w-full p-2 border rounded-lg text-sm md:col-span-2" rows="2"></textarea>
+                                        </div>
+                                        <button onClick={() => removeLab(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg h-full"><Trash2 size={18} /></button>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
@@ -187,13 +328,16 @@ const ManageDepartments = () => {
                                 <button onClick={addFaculty} className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg flex items-center gap-1"><Plus size={14} /> Add Faculty</button>
                             </div>
                             <div className="space-y-4">
-                                {formData.faculty?.map((fac, idx) => (
+                                {(formData.faculty || []).map((fac, idx) => (
                                     <div key={idx} className="flex gap-4 items-center bg-white p-4 border rounded-xl shadow-sm">
                                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
-                                            <input type="text" placeholder="Name" value={fac.name} onChange={e => updateFaculty(idx, 'name', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                                            <input type="text" placeholder="Designation" value={fac.designation} onChange={e => updateFaculty(idx, 'designation', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                                            <input type="text" placeholder="Specialization" value={fac.specialization} onChange={e => updateFaculty(idx, 'specialization', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                                            <input type="text" placeholder="Image URL" value={fac.image || ""} onChange={e => updateFaculty(idx, 'image', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Name" value={fac.name || ""} onChange={e => updateFaculty(idx, 'name', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Designation" value={fac.designation || ""} onChange={e => updateFaculty(idx, 'designation', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <input type="text" placeholder="Specialization" value={fac.specialization || ""} onChange={e => updateFaculty(idx, 'specialization', e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
+                                            <div className="border rounded-lg p-2 flex items-center justify-between text-xs bg-gray-50">
+                                                <span className="truncate mr-2 text-gray-400">{fac.image ? 'Img Uploaded' : 'Faculty Photo'}</span>
+                                                <label className="cursor-pointer text-blue-600 font-bold hover:underline shrink-0">Upload<input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, (url) => updateFaculty(idx, 'image', url))} disabled={uploadingImage} /></label>
+                                            </div>
                                         </div>
                                         <button onClick={() => removeFaculty(idx)} className="text-red-500 p-2 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
                                     </div>

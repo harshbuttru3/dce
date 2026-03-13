@@ -124,6 +124,7 @@ const DepartmentTemplate = ({ data }) => {
                                     <th className="p-6">Intake</th>
                                     <th className="p-6">Duration</th>
                                     <th className="p-6">Eligibility</th>
+                                    <th className="p-6">Image</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
@@ -133,6 +134,9 @@ const DepartmentTemplate = ({ data }) => {
                                         <td className="p-6">{prog.intake}</td>
                                         <td className="p-6">{prog.duration}</td>
                                         <td className="p-6 text-white/70 text-sm italic">{prog.eligibility}</td>
+                                        <td className="p-6">
+                                            {prog.image ? <img src={prog.image} alt="Program" className="w-16 h-10 object-cover rounded" /> : <span className="text-white/30 text-xs">None</span>}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -224,43 +228,47 @@ const DepartmentTemplate = ({ data }) => {
                 </div>
             </section>
 
-            {/* 8. Curriculum & Syllabus (Accordion) */}
-            <section className="py-24 px-8 md:px-16 container mx-auto reveal">
-                <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="bg-[#133b5c] text-[#c6b677] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-4 inline-block">Study Plan</span>
-                        <h2 className="text-4xl font-serif font-bold text-[#133b5c]">Curriculum & Syllabus</h2>
-                    </div>
+            {/* 8. Curriculum & Syllabus (Programs) */}
+            {data.programs && data.programs.length > 0 && (
+                <section className="py-24 px-8 md:px-16 container mx-auto reveal">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="text-center mb-16">
+                            <span className="bg-[#133b5c] text-[#c6b677] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-4 inline-block">Study Plan</span>
+                            <h2 className="text-4xl font-serif font-bold text-[#133b5c]">Academic Programs ({data.programs.length})</h2>
+                        </div>
 
-                    <div className="space-y-4">
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                            <div key={sem} className="border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                                <button
-                                    onClick={() => setActiveSyllabus(activeSyllabus === sem ? 0 : sem)}
-                                    className="w-full p-6 flex justify-between items-center bg-white hover:bg-gray-50 transition-colors"
-                                >
-                                    <span className="font-bold text-[#133b5c] flex items-center gap-4">
-                                        <span className="w-8 h-8 rounded-full bg-[#c6b677] text-white flex items-center justify-center text-xs">{sem}</span>
-                                        Semester {sem} Curriculum
-                                    </span>
-                                    <FaChevronDown className={`text-[#c6b677] transition-transform ${activeSyllabus === sem ? 'rotate-180' : ''}`} />
-                                </button>
-                                {activeSyllabus === sem && (
-                                    <div className="p-8 bg-gray-50 animate-fade-in divide-y divide-gray-200">
-                                        <div className="py-4 flex justify-between items-center group">
-                                            <div>
-                                                <h5 className="font-bold text-[#133b5c] mb-1">Detailed Syllabus - Sem {sem}</h5>
-                                                <p className="text-xs text-gray-400">PDF File | 2.4 MB | Last updated Oct 2025</p>
-                                            </div>
-                                            <button className="bg-[#133b5c] text-white p-3 rounded-full hover:bg-[#c6b677] transition-all shadow-lg active:scale-90"><FaDownload /></button>
+                        <div className="space-y-6">
+                            {data.programs.map((prog, idx) => (
+                                <div key={idx} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all bg-white flex flex-col md:flex-row group">
+                                    {prog.image ? (
+                                        <div className="md:w-1/3 h-48 md:h-auto overflow-hidden">
+                                            <img src={prog.image} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt={prog.name} />
+                                        </div>
+                                    ) : (
+                                        <div className="md:w-1/4 bg-[#133b5c] p-6 flex flex-col justify-center items-center text-center">
+                                            <FaGraduationCap className="text-[#c6b677] text-4xl mb-2" />
+                                            <span className="text-white font-bold">{prog.duration}</span>
+                                        </div>
+                                    )}
+                                    <div className="p-8 flex-1 flex flex-col justify-center">
+                                        <h3 className="text-2xl font-bold text-[#133b5c] mb-2">{prog.name}</h3>
+                                        {prog.eligibility && (
+                                            <p className="text-gray-500 text-sm mb-4"><strong>Eligibility:</strong> {prog.eligibility}</p>
+                                        )}
+                                        <div className="flex gap-4">
+                                            <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Intake: {prog.intake}</span>
+                                            <span className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Duration: {prog.duration}</span>
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                        ))}
+                                    <div className="p-8 bg-gray-50 border-l border-gray-100 flex items-center justify-center shrink-0">
+                                        <button className="bg-[#133b5c] text-white p-4 rounded-full hover:bg-[#c6b677] transition-all shadow active:scale-95"><FaDownload /></button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* 9. Research & Activities */}
             <section className="py-24 bg-[#133b5c] text-white relative overflow-hidden">

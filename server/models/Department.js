@@ -10,7 +10,8 @@ const programSchema = new mongoose.Schema({
     name: { type: String, required: true },
     intake: { type: Number, required: true },
     duration: { type: String, required: true },
-    eligibility: { type: String, required: true }
+    eligibility: { type: String, required: true },
+    image: { type: String }
 }, { _id: false });
 
 const facultySchema = new mongoose.Schema({
@@ -24,6 +25,7 @@ const labSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
     icon: { type: String },
+    image: { type: String },
     tools: [{ type: String }]
 });
 
@@ -53,7 +55,9 @@ const departmentSchema = new mongoose.Schema({
     slug: { type: String, required: true, unique: true },
     tagline: { type: String },
     intake: { type: Number },
+    seatCapacity: { type: Number },
     heroImage: { type: String },
+    backgroundImage: { type: String },
     description: [{ type: String }],
     highlights: [highlightSchema],
     programs: [programSchema],
