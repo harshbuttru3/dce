@@ -1388,6 +1388,7 @@ const Admin = () => {
                     <select value={documentCategory} onChange={e => setDocumentCategory(e.target.value)} className="w-full p-4 mt-2 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#c6b677]/30 text-sm font-bold text-[#133b5c]">
                       <option value="holiday_calendar">Holiday Calendar</option>
                       <option value="anti_ragging">Anti-Ragging Policy</option>
+                      <option value="discipline_manual">Discipline Manual</option>
                       <option value="fee_chart">Admission Fee Chart</option>
                       <option value="aicte">AICTE Certificates</option>
                       <option value="nirf">NIRF Ranking Data</option>

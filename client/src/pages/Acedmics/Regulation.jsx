@@ -4,6 +4,7 @@ import api from '../../services/api';
 
 const Regulation = () => {
   const [antiRaggingDoc, setAntiRaggingDoc] = useState(null);
+  const [disciplineDoc, setDisciplineDoc] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -13,6 +14,12 @@ const Regulation = () => {
         if (data && data.length > 0) setAntiRaggingDoc(data[0]);
       } catch (error) {
         console.error("Error fetching anti-ragging doc:", error);
+      }
+      try {
+        const { data } = await api.get('/documents?category=discipline_manual');
+        if (data && data.length > 0) setDisciplineDoc(data[0]);
+      } catch (error) {
+        console.error("Error fetching discipline manual:", error);
       }
     };
     fetchDoc();
@@ -53,9 +60,14 @@ const Regulation = () => {
               The following guidelines serve to maintain a disciplined and conducive environment for academic excellence and professional growth at Darbhanga College of Engineering.
             </p>
           </div>
-          <button className="bg-[#133b5c] text-white px-8 py-4 rounded-sm font-bold shadow-xl flex items-center gap-3 hover:translate-x-2 transition-all">
+          <a
+            href={disciplineDoc?.fileUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`bg-[#133b5c] text-white px-8 py-4 rounded-sm font-bold shadow-xl flex items-center gap-3 hover:translate-x-2 transition-all ${!disciplineDoc ? 'opacity-50 pointer-events-none' : ''}`}
+          >
             Full Discipline Manual <Download size={20} />
-          </button>
+          </a>
         </div>
 
         {/* Anti-Ragging Section - HIGH PRIORITY */}
