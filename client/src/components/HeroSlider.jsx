@@ -70,7 +70,7 @@ const HeroSlider = () => {
                         className="w-full h-full object-cover opacity-60"
                     />
                     <div className="absolute inset-0 flex flex-col items-start justify-end text-left text-white px-8 pb-32 md:px-16 md:pb-40 w-full md:w-2/3">
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-4 transform transition-transform duration-700 translate-y-0 leading-tight uppercase tracking-wider">{slide.title}</h2>
+                        <h2 className="text-white/90 text-3xl md:text-5xl lg:text-6xl font-serif mb-4 transform transition-transform duration-700 translate-y-0 leading-tight uppercase tracking-wider">{slide.title}</h2>
                         <p className="text-xl md:text-2xl lg:text-3xl font-bold">
                             <span className="text-yellow-400">{slide.subtitle ? slide.subtitle.split('–')[0] : ''}</span>
                             {slide.subtitle && slide.subtitle.includes('–') ? `– ${slide.subtitle.split('–')[1]}` : ''}
