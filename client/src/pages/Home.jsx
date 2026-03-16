@@ -41,6 +41,39 @@ const Home = () => {
     setSelectedImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
   };
 
+  const importantResources = [
+    {
+      title: 'Centres of Excellence',
+      description: 'Advanced labs and innovation hubs for practical learning and research excellence.',
+      image: 'https://www.dce-darbhanga.org/wp-content/uploads/2025/03/1674801903636.png',
+      url: '/programmes/c-dac',
+    },
+    {
+      title: 'NPTEL',
+      description: 'Access certification courses from IITs and IISc to strengthen technical skills.',
+      image: 'https://bcebakhtiyarpur.ac.in/wp-content/uploads/2026/01/nptel-1024x199-2.png',
+      url: 'https://nptel.ac.in/localchapter/statistics/3410',
+    },
+    {
+      title: 'AICTE Internship',
+      description: 'Explore verified internships and industry opportunities through AICTE portal.',
+      image: 'https://www.dce-darbhanga.org/wp-content/uploads/2023/05/internship-concept-chart-keywords-icons-260nw-253848799.webp',
+      url: 'https://internship.aicte-india.org/',
+    },
+    {
+      title: 'NIRF',
+      description: 'National Institutional Ranking Framework Ministry of Education Government of India.',
+      image: 'https://www.dce-darbhanga.org/wp-content/uploads/2023/02/nirf-full.png',
+      url: 'https://www.dce-darbhanga.org/nirf/about-nirf/',
+    },
+    {
+      title: 'Grievance Redressal System',
+      description: 'Grievance Redress And Monitoring System is an online web-enabled system over internet.',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQYYsL2aqAvN1UeKlrsQiLF7EvHbh6THuYkg&s',
+      url: '#',
+    },
+  ];
+
 
   return (
     <div className="bg-gray-100 flex flex-col ">
@@ -180,7 +213,47 @@ const Home = () => {
       <SocialWall />
 
       {/* ================= CAMPUS PLACEMENTS SECTION ================= */}
-      <CampusPlacements />
+      {/* <CampusPlacements /> */}
+
+      {/* ================= IMPORTANT RESOURCES SECTION ================= */}
+      <section className="py-14">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-end justify-between mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#133b5c]">Important Resources</h2>
+            <span className="text-[#c6b677] text-sm tracking-wider uppercase">Quick Access</span>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 auto-rows-fr">
+            {importantResources.map((item) => (
+              <a
+                key={item.title}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 group min-h-[180px]"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full absolute inset-0 object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+                <div className="absolute p-5 flex items-center justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 group-hover:backdrop-blur-[2px] group-hover:bg-black/45 transition-all duration-300">
+                  <p className="text-white text-sm leading-relaxed text-center rounded-md px-3 max-w-[90%]">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 bg-[#133b5c]/85 border-t border-[#c6b677]/50 px-4 py-3 flex items-center justify-between">
+                  <p className="text-white text-sm font-medium leading-tight">{item.title}</p>
+                  <span className="text-[#c6b677] text-lg">›</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
     </div>
   );
