@@ -41,7 +41,7 @@ const Placements = () => {
         : recruiters.filter(r => r.category === recruiterFilter);
 
     return (
-        <div className="w-full flex flex-col font-sans bg-white overflow-x-hidden">
+        <div className="pt-23 w-full flex flex-col font-sans bg-white overflow-hidden">
 
             {/* 1. Hero Section */}
             <div className="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
