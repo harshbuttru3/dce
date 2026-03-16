@@ -195,37 +195,65 @@ const Header = () => {
       ></div>
 
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled || !isHomePage ? 'bg-[#133b5c]/85 backdrop-blur-md shadow-lg border-b border-white/10' : 'bg-transparent'}`}>
-        <div className={`w-full px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${isScrolled || !isHomePage ? 'py-4' : 'pt-6 pb-2'}`}>
-          <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0 animate-slide-in-down">
-            <div className="bg-transparent flex items-center justify-center">
-              <img src="/dce_logo.png" alt="DceLogo" className='w-12 h-12 md:w-16 md:h-16' />
+        <div>
+        <div className={`w-full px-4 md:px-8 flex items-center gap-3 transition-all duration-300 ${isScrolled || !isHomePage ? 'py-3' : 'pt-5 pb-2'}`}>
+          {/* Desktop Navigation - Left */}
+
+          <div className="hidden lg:flex flex-1 justify-start text-left leading-tight">
+            <div className='animate-slide-in-left'>
+              <h1 className="items-center inline-flex text-[18px] xl:text-[21px] font-bold uppercase tracking-wide transition-colors duration-300 text-white whitespace-nowrap">Darbhanga College of Engineering
+              <span className="ml-5 text-[15px] transition-colors duration-300 text-[#c6b677] whitespace-nowrap">
+              Estd. 2008 
+              </span>
+              </h1>
+              {/* <p className="text-[12px] xl:text-[13px] transition-colors duration-300 text-[#c6b677] whitespace-nowrap">Estd. 2008 &bull; Govt. of Bihar</p> */}
             </div>
-            <div>
+          </div>
+
+          <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0 animate-slide-in-down lg:mx-4">
+            <div className="bg-transparent flex items-center justify-center">
+              <img src="/dce_logo.png" alt="DceLogo" className='w-12 h-12 md:w-16 md:h-16 bg-white rounded-full pt-1 pl-1 pr-1' />
+            </div>
+            <div className="lg:hidden">
               <h1 className="text-[12px] sm:text-[14px] md:text-xl font-bold uppercase tracking-wide transition-colors duration-300 text-white">Darbhanga College of Engineering</h1>
               <p className="text-[10px] sm:text-xs transition-colors duration-300 text-[#c6b677]">Estd. 2008 &bull; Govt. of Bihar</p>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:block ml-auto animate-slide-in-right">
-            <ul className="flex items-center justify-end gap-6 xl:gap-8 text-sm font-semibold">
+          <div className="hidden lg:flex flex-1 justify-center text-left leading-tight">
+            <div className='animate-slide-in-right'>
+              <h1 className="items-center inline-flex text-[18px] xl:text-[21px] font-bold uppercase tracking-wide transition-colors duration-300 text-white whitespace-nowrap">दरभंगा कॉलेज ऑफ इंजीनियरिंग
+              <span className="ml-5 text-[15px] transition-colors duration-300 text-[#c6b677] whitespace-nowrap">    
+              स्थापना: 2008
+              </span>
+              </h1>
+              {/* <p className="text-[12px] xl:text-[13px] transition-colors duration-300 text-[#c6b677] whitespace-nowrap">Estd. 2008 &bull; Govt. of Bihar</p> */}
+            </div>
+          </div>
+          {/* Mobile Menu Button */}
+          <button className={`lg:hidden p-2 ml-auto transition-colors duration-300 text-white`} onClick={() => setMobileMenuOpen((prev) => !prev)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+         <nav className="hidden lg:flex flex-1 justify-center animate-fade-in-up">
+            <ul className="flex items-center justify-start gap-4 xl:gap-6 text-sm font-semibold">
               {navItems.map((item) => (
                 <li
                   key={item.label}
-                  className="group py-4 relative"
+                  className="group py-3 relative"
                   onMouseEnter={() => setHoveredNav(item.label)}
                   onMouseLeave={() => setHoveredNav(null)}
                 >
                   <button
-                    className={`transition-colors text-[14px] xl:text-[16px] uppercase tracking-wider whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
+                    className={`transition-colors text-[13px] xl:text-[14px] uppercase tracking-wide whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
                   >
                     {item.label}
-                    <ChevronDown size={16} className="transition-transform duration-300 group-hover:rotate-180" />
+                    <ChevronDown size={15} className="transition-transform duration-300 group-hover:rotate-180" />
                   </button>
-                  <span className="absolute bottom-4 left-0 w-0 h-0.5 bg-[#c6b677] transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-3 left-0 w-0 h-0.5 bg-[#c6b677] transition-all duration-300 group-hover:w-full"></span>
 
                   {/* Dropdown Menu - Mega Menu Style */}
-                  <div className="absolute top-full right-0 bg-[#133b5c]/95 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[280px] p-6 border-t-4 border-yellow-500">
+                  <div className="absolute top-full left-0 bg-[#133b5c]/95 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[280px] p-6 border-t-4 border-yellow-500">
                     <h3 className="text-white font-bold mb-4 uppercase tracking-wider border-b border-white/20 pb-2">{item.label}</h3>
                     <ul className="flex flex-col gap-3">
                       {item.children.map((child) => (
@@ -234,9 +262,9 @@ const Header = () => {
                             <div className="relative group/sub">
                               <span className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] py-1 px-2 -mx-2 rounded cursor-pointer flex items-center justify-between font-medium">
                                 {child.label}
-                                <ChevronDown size={14} className="rotate-90" />
+                                <ChevronDown size={14} className="rotate-[-90deg]" />
                               </span>
-                              <ul className="absolute top-0 right-full mr-4 bg-[#133b5c]/95 backdrop-blur-lg shadow-xl rounded-sm opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[300px] p-4 border-r-4 border-yellow-500 z-50">
+                              <ul className="absolute top-0 left-full ml-4 bg-[#133b5c]/95 backdrop-blur-lg shadow-xl rounded-sm opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[300px] p-4 border-l-4 border-yellow-500 z-50">
                                 {child.children.map(subChild => (
                                   <li key={subChild.label}>
                                     {subChild.path.startsWith('http') ? (
@@ -287,20 +315,14 @@ const Header = () => {
               ))}
             </ul>
           </nav>
-
-          {/* Mobile Menu Button */}
-          <button className={`lg:hidden p-2 ml-auto transition-colors duration-300 text-white`} onClick={() => setMobileMenuOpen((prev) => !prev)}>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
+</div>
 
         {/* Mobile Navigation Dropdown */}
         <nav
           className={`
           ${mobileMenuOpen ? 'flex' : 'hidden'}
           lg:hidden
-          absolute top-full left-0 w-full bg-black/95 flex-col max-h-[70vh] overflow-y-auto
+          absolute top-full left-0 w-full bg-[#133b5c]/95 flex-col max-h-[70vh] overflow-y-auto
         `}
         >
           <div className="container py-4">
