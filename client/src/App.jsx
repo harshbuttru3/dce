@@ -34,11 +34,12 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const noLayoutPaths = ['/login', '/Admin', '/coordinator-login', '/coordinator/dashboard']; // Hide layout for coordinator dashboard
   const hideLayout = noLayoutPaths.includes(location.pathname);
+  const isHomePage = location.pathname === '/';
 
   return (
     <div className="flex flex-col min-h-screen">
       {!hideLayout && <Header />}
-      <main className="grow pt-10">{children}</main>
+      <main className={`grow ${isHomePage ? '' : 'pt-10'}`}>{children}</main>
       {!hideLayout && <Footer />}
     </div>
   );
