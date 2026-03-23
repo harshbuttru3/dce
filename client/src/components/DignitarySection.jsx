@@ -6,21 +6,21 @@ const DignitarySection = () => {
             name: "Shri Nitish Kumar",
             title: "Hon'ble Chief Minister, Bihar - cum - Hon'ble Chancellor",
             subtitle: "Bihar Engineering University, Patna",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_xM7uK-pY-yX6S_96c2-y2o6l_9o0c-w-2A&s",
+            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Nitish_Kumar_working_crop.jpg/330px-Nitish_Kumar_working_crop.jpg",
             message: "Our vision is to transform Bihar into a hub of technical excellence and innovation. By strengthening our engineering institutions, we are empowering the youth to lead the state's progress and contribute to the nation's development."
         },
         {
             name: "Shri Sunil Kumar",
             title: "Hon'ble Minister",
             subtitle: "Dept. of Science, Technology and Technical Education, Govt. of Bihar",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR61fIq2W_x_Z2hN_C9qU_E8c0O-C_y-kK_6A&s",
+            image: "https://dst.bihar.gov.in/images/minister.jpg",
             message: "We are committed to providing state-of-the-art infrastructure and a research-oriented environment in our technical colleges. Our goal is to ensure that every student is equipped with the skills needed for the global industry."
         },
         {
             name: "Prof. Suresh Kant Verma",
             title: "Vice Chancellor",
             subtitle: "Bihar Engineering University, Patna",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVv6f9h4g9C9P6z_v8x0I_C0V7F_C_u_v-kA&s",
+            image: "https://beupatna.ac.in/Static/Images/vc.jpg",
             message: "As the Chancellor of Bihar Engineering University, I am focused on academic excellence, interdisciplinary research, and fostering a culture of continuous learning across all our affiliated colleges."
         }
     ];

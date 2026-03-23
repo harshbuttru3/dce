@@ -9,7 +9,6 @@ const BonafideForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         fatherName: '',
-        regNo: '',
         rollNo: '',
         session: '',
         semester: '',
@@ -87,11 +86,7 @@ const BonafideForm = () => {
                                     <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} className={inputClasses} />
                                 </div>
                                 <div>
-                                    <label className={labelClasses}>Registration No.</label>
-                                    <input type="text" name="regNo" value={formData.regNo} onChange={handleChange} className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>University Roll No.</label>
+                                    <label className={labelClasses}>University Roll No. / Reg No.</label>
                                     <div className="relative">
                                         <FaIdCard className="absolute left-4 top-4 text-gray-400" />
                                         <input type="text" name="rollNo" value={formData.rollNo} onChange={handleChange} className={`${inputClasses} pl-12`} />
@@ -147,7 +142,11 @@ const BonafideForm = () => {
                                     <div 
                                         ref={certificateRef}
                                         className="min-w-[700px] w-full bg-white border-[10px] border-double border-[#133b5c] p-16 relative"
-                                        style={{ fontFamily: 'Georgia, serif' }}
+                                        style={{ 
+                                            fontFamily: 'Georgia, serif',
+                                            color: '#000000',      /* Explicitly use hex to avoid oklch issues */
+                                            backgroundColor: '#ffffff'
+                                        }}
                                     >
                                         {/* Watermark Background Optional */}
                                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
@@ -156,13 +155,13 @@ const BonafideForm = () => {
 
                                         <div className="relative z-10">
                                             {/* College Header */}
-                                            <div className="text-center mb-10 border-b-2 border-[#133b5c] pb-8">
+                                            <div className="text-center mb-10 border-b-2 border-slate-900 pb-8">
                                                 <div className="flex items-center justify-center gap-6 mb-4">
                                                     <img src="/dce_logo.png" alt="DCE Logo" className="w-24 h-24" />
                                                     <div>
-                                                        <h1 className="text-3xl font-bold text-[#133b5c] uppercase leading-tight">Darbhanga College of Engineering</h1>
-                                                        <p className="text-sm font-semibold text-gray-700 tracking-wider">A Government Engineering College under DST, Govt. of Bihar</p>
-                                                        <p className="text-xs text-gray-600 mt-1">Lal Sahpur, Mabbi Belauna, Darbhanga - 846005</p>
+                                                        <h1 className="text-3xl font-bold uppercase leading-tight" style={{ color: '#133b5c' }}>Darbhanga College of Engineering</h1>
+                                                        <p className="text-sm font-semibold tracking-wider" style={{ color: '#334155' }}>A Government Engineering College under DST, Govt. of Bihar</p>
+                                                        <p className="text-xs mt-1" style={{ color: '#475569' }}>Lal Sahpur, Mabbi Belauna, Darbhanga - 846005</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,12 +172,11 @@ const BonafideForm = () => {
                                             </div>
 
                                             {/* Body Text */}
-                                            <div className="text-xl leading-[2.2] text-justify text-gray-800 mb-20 px-4">
+                                            <div className="text-xl leading-[2.2] text-justify mb-20 px-4" style={{ color: '#1e293b' }}>
                                                 <p>
                                                     This is to certify that Mr./Ms. <span className="font-bold border-b border-dotted border-black px-2">{formData.name || '____________'}</span>, 
                                                     Son/Daughter of <span className="font-bold border-b border-dotted border-black px-2">{formData.fatherName || '____________'}</span>, 
-                                                    bearing Registration No. <span className="font-bold border-b border-dotted border-black px-2">{formData.regNo || '____________'}</span> 
-                                                    and University Roll No. <span className="font-bold border-b border-dotted border-black px-2">{formData.rollNo || '____________'}</span> 
+                                                    bearing University Roll No. <span className="font-bold border-b border-dotted border-black px-2">{formData.rollNo || '____________'}</span> 
                                                     is a bonafide student of <span className="font-bold border-b border-dotted border-black px-2">{formData.department || '____________________'}</span> 
                                                     department of this college during the academic session <span className="font-bold border-b border-dotted border-black px-2">{formData.session || '____________'}</span>.
                                                     He/She is presently studying in <span className="font-bold border-b border-dotted border-black px-2">{formData.semester || '______'}</span> semester.
