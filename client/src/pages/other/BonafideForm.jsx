@@ -9,6 +9,7 @@ const BonafideForm = () => {
         name: '',
         fatherName: '',
         rollNo: '',
+        regNo: '', // Added back
         session: '',
         semester: '',
         department: '',
@@ -22,82 +23,115 @@ const BonafideForm = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleNext = () => setStep(2);
-    const handlePrev = () => setStep(1);
+    const getYearFromSemester = (sem) => {
+        const s = parseInt(sem);
+        if (isNaN(s)) return '______';
+        if (s <= 2) return '1st';
+        if (s <= 4) return '2nd';
+        if (s <= 6) return '3rd';
+        if (s <= 8) return '4th';
+        return '______';
+    };
 
     const downloadPDF = () => {
         const doc = new jsPDF('p', 'mm', 'a4');
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
 
-        // 1. Remove Borders (User requested to remove boundary)
-        // No doc.rect calls here anymore
+        // 1. Header - Centered, Bold, Underlined
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('times', 'bold');
+        
+        doc.setFontSize(22);
+        const header1 = "Darbhanga College Of Engineering, Darbhanga";
+        const w1 = doc.getTextWidth(header1);
+        doc.text(header1, (pageWidth - w1) / 2, 20);
+        doc.line((pageWidth - w1) / 2, 21, (pageWidth + w1) / 2, 21);
 
-        // 2. Add Logo (Black & White preferred if possible, otherwise normal)
+        doc.setFontSize(16);
+        const header2 = "Mabbi, Darbhanga – 846005";
+        const w2 = doc.getTextWidth(header2);
+        doc.text(header2, (pageWidth - w2) / 2, 28);
+        doc.line((pageWidth - w2) / 2, 29, (pageWidth + w2) / 2, 29);
+
+        // 2. Letter No and Date
+        doc.setFontSize(12);
+        doc.setFont('times', 'normal');
+        doc.text("Letter No. .................", 20, 40);
+        doc.text(`Date ${new Date().toLocaleDateString()}`, pageWidth - 50, 40);
+
+        // 3. Centered Logo
         try {
             const logoImg = "/dce_logo.png";
-            doc.addImage(logoImg, 'PNG', 15, 15, 22, 22);
+            doc.addImage(logoImg, 'PNG', (pageWidth - 25) / 2, 45, 25, 25);
         } catch (e) {
             console.error("Logo addition failed", e);
         }
 
-        // 3. College Header (Black & White)
-        doc.setTextColor(0, 0, 0); // Pure Black
-        doc.setFont('times', 'bold');
-        doc.setFontSize(22); // Reduced slightly to avoid clipping
-        doc.text("DARBHANGA COLLEGE OF ENGINEERING", 42, 22);
-        
-        doc.setFontSize(10);
-        doc.setFont('times', 'bold');
-        doc.text("A Government Engineering College under DST, Govt. of Bihar", 42, 28);
-        doc.setFont('times', 'normal');
-        doc.text("Lal Sahpur, Mabbi Belauna, Darbhanga - 846005", 42, 33);
-
-        // 4. Header Line (Black)
-        doc.setDrawColor(0, 0, 0);
-        doc.setLineWidth(0.5);
-        doc.line(15, 40, pageWidth - 15, 40);
-
-        // 5. Document Title
+        // 4. Document Title - Centered, Bold, Underlined
         doc.setFontSize(18);
         doc.setFont('times', 'bold');
         const title = "BONAFIDE CERTIFICATE";
         const titleWidth = doc.getTextWidth(title);
-        doc.text(title, (pageWidth - titleWidth) / 2, 55);
-        doc.line((pageWidth - titleWidth) / 2, 57, (pageWidth + titleWidth) / 2, 57);
+        doc.text(title, (pageWidth - titleWidth) / 2, 85);
+        doc.line((pageWidth - titleWidth) / 2, 87, (pageWidth + titleWidth) / 2, 87);
 
-        // 6. Body Text
+        // 5. Body Text - Dynamic Bold Inputs
         doc.setFontSize(13);
-        doc.setFont('times', 'normal');
-        doc.setTextColor(0, 0, 0);
-
         const margin = 20;
         const textWidth = pageWidth - (margin * 2);
-        const startY = 80;
+        let currentX = margin;
+        let currentY = 105;
+        const lineHeight = 8;
 
-        const bodyContent = `This is to certify that Mr./Ms. ${formData.name || '____________'}, Son/Daughter of ${formData.fatherName || '____________'}, bearing University Roll No. / Reg No. ${formData.rollNo || '____________'} is a bonafide student of ${formData.department || '____________________'} department of this college during the academic session ${formData.session || '____________'}. He/She is presently studying in ${formData.semester || '______'} semester.`;
+        const year = getYearFromSemester(formData.semester);
+        const namePrefix = formData.gender === 'Female' ? 'Miss' : 'Mr.';
 
-        const purposeText = `This certificate is issued for the purpose of ${formData.purpose || '_________________________'}.`;
+        // Define segments: [text, isBold]
+        const segments = [
+            ["This is to certify that ", false],
+            [`${namePrefix} ${formData.name || '____________'}`, true],
+            [", So/Do:- ", false],
+            [`${formData.fatherName || '____________'}`, true],
+            [", Roll No.- ", false],
+            [`${formData.rollNo || '____________'}`, true],
+            [", Registration No. - ", false],
+            [`${formData.regNo || '____________'}`, true],
+            [", Session - ", false],
+            [`${formData.session || '____________'}`, true],
+            [", Branch - ", false],
+            [`${formData.department || '____________________'}`, true],
+            [", is studying in this college in B.Tech. ", false],
+            [`${formData.semester || '______'}`, true],
+            [" Sem. (", false],
+            [`${year}`, true],
+            [" Year).", false]
+        ];
 
-        const splitBody = doc.splitTextToSize(bodyContent, textWidth);
-        doc.text(splitBody, margin, startY, { lineHeightFactor: 1.8 });
+        segments.forEach(([text, isBold]) => {
+            doc.setFont('times', isBold ? 'bold' : 'normal');
+            const words = text.split(' ');
+            
+            words.forEach((word, index) => {
+                const spacing = index === words.length - 1 ? "" : " ";
+                const wordWithSpace = word + spacing;
+                const wordWidth = doc.getTextWidth(wordWithSpace);
 
-        const nextY = startY + (splitBody.length * 10) + 10;
-        doc.text(purposeText, margin, nextY);
+                if (currentX + wordWidth > pageWidth - margin) {
+                    currentX = margin;
+                    currentY += lineHeight;
+                }
 
-        // 7. Signatures and Date
-        const footerY = pageHeight - 50;
-        
-        doc.setFontSize(12);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, margin, footerY);
-        doc.text(`Place: Darbhanga`, margin, footerY + 6);
+                doc.text(wordWithSpace, currentX, currentY);
+                currentX += wordWidth;
+            });
+        });
 
-        const sigX = pageWidth - 65;
-        doc.line(sigX, footerY, pageWidth - 15, footerY);
+        // 6. Signature Area - On the right
+        const footerY = pageHeight - 60;
         doc.setFont('times', 'bold');
-        doc.text("Principal / Registrar", sigX + 5, footerY + 6);
-        doc.setFont('times', 'normal');
-        doc.text("DCE Darbhanga", sigX + 11, footerY + 12);
+        doc.text("Assistant Registrar/ Registrar", pageWidth - 75, footerY);
+        doc.text("DCE, Darbhanga", pageWidth - 55, footerY + 6);
 
         doc.save(`Bonafide_${formData.rollNo}.pdf`);
     };
@@ -150,16 +184,30 @@ const BonafideForm = () => {
                                     <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} className={inputClasses} />
                                 </div>
                                 <div>
-                                    <label className={labelClasses}>University Roll No. / Reg No.</label>
+                                    <label className={labelClasses}>Gender</label>
+                                    <select name="gender" value={formData.gender} onChange={handleChange} className={inputClasses}>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className={labelClasses}>University Roll No.</label>
                                     <div className="relative">
                                         <FaIdCard className="absolute left-4 top-4 text-gray-400" />
                                         <input type="text" name="rollNo" value={formData.rollNo} onChange={handleChange} className={`${inputClasses} pl-12`} />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className={labelClasses}>Department</label>
+                                    <label className={labelClasses}>Registration No.</label>
+                                    <div className="relative">
+                                        <FaIdCard className="absolute left-4 top-4 text-gray-400" />
+                                        <input type="text" name="regNo" value={formData.regNo} onChange={handleChange} className={`${inputClasses} pl-12`} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className={labelClasses}>Department / Branch</label>
                                     <select name="department" value={formData.department} onChange={handleChange} className={inputClasses}>
-                                        <option value="">Select Department</option>
+                                        <option value="">Select Branch</option>
                                         <option value="Computer Science and Engineering">CSE</option>
                                         <option value="Civil Engineering">Civil</option>
                                         <option value="Mechanical Engineering">Mechanical</option>
@@ -172,16 +220,16 @@ const BonafideForm = () => {
                                     <label className={labelClasses}>Academic Session</label>
                                     <div className="relative">
                                         <FaHistory className="absolute left-4 top-4 text-gray-400" />
-                                        <input type="text" name="session" value={formData.session} onChange={handleChange} placeholder="e.g. 2021-25" className={`${inputClasses} pl-12`} />
+                                        <input type="text" name="session" value={formData.session} onChange={handleChange} placeholder="e.g. 2023-27" className={`${inputClasses} pl-12`} />
                                     </div>
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Current Semester</label>
-                                    <input type="text" name="semester" value={formData.semester} onChange={handleChange} placeholder="e.g. 6th" className={inputClasses} />
+                                    <input type="text" name="semester" value={formData.semester} onChange={handleChange} placeholder="e.g. 5" className={inputClasses} />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Purpose of Certificate</label>
-                                    <input type="text" name="purpose" value={formData.purpose} onChange={handleChange} placeholder="e.g. Internship, Bank Loan" className={inputClasses} />
+                                    <input type="text" name="purpose" value={formData.purpose} onChange={handleChange} placeholder="e.g. Internship" className={inputClasses} />
                                 </div>
                             </div>
                             <div className="mt-12 flex justify-end">
@@ -201,131 +249,59 @@ const BonafideForm = () => {
                             exit={{ opacity: 0, x: -20 }}
                         >
                             <div className="flex flex-col gap-8">
-                                {/* Certificate Preview Container (What gets turned into PDF) */}
+                                {/* Certificate Preview Container */}
                                 <div className="bg-white shadow-2xl p-1 md:p-8 rounded-3xl overflow-x-auto">
                                     <div 
                                         ref={certificateRef}
                                         style={{ 
-                                            minWidth: '700px',
-                                            width: '100%',
+                                            minWidth: '800px',
+                                            padding: '40px',
                                             backgroundColor: '#ffffff',
-                                            border: '10px double #133b5c',
-                                            padding: '64px',
-                                            position: 'relative',
-                                            fontFamily: 'Georgia, serif',
-                                            color: '#000000'
+                                            fontFamily: 'times, serif',
+                                            color: '#000000',
+                                            textAlign: 'center'
                                         }}
                                     >
-                                        {/* Watermark Background */}
-                                        <div style={{
-                                            position: 'absolute',
-                                            inset: 0,
-                                            opacity: 0.03,
-                                            pointerEvents: 'none',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            zIndex: 0
-                                        }}>
-                                            <img src="/dce_logo.png" alt="watermark" style={{ width: '400px' }} />
+                                        {/* Header */}
+                                        <div style={{ marginBottom: '30px' }}>
+                                            <h1 style={{ fontSize: '24px', fontWeight: 'bold', textDecoration: 'underline', margin: '0' }}>Darbhanga College Of Engineering, Darbhanga</h1>
+                                            <h2 style={{ fontSize: '18px', fontWeight: 'bold', textDecoration: 'underline', marginTop: '5px' }}>Mabbi, Darbhanga – 846005</h2>
                                         </div>
 
-                                        <div style={{ position: 'relative', zIndex: 10 }}>
-                                            {/* College Header */}
-                                            <div style={{
-                                                textAlign: 'center',
-                                                marginBottom: '40px',
-                                                borderBottom: '2px solid #0f172a',
-                                                paddingBottom: '32px'
-                                            }}>
-                                                <div style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '24px',
-                                                    marginBottom: '16px'
-                                                }}>
-                                                    <img src="/dce_logo.png" alt="DCE Logo" style={{ width: '96px', height: '96px' }} />
-                                                    <div style={{ textAlign: 'left' }}>
-                                                        <h1 style={{
-                                                            fontSize: '30px',
-                                                            fontWeight: 'bold',
-                                                            color: '#133b5c',
-                                                            textTransform: 'uppercase',
-                                                            lineHeight: '1.2',
-                                                            margin: 0
-                                                        }}>Darbhanga College of Engineering</h1>
-                                                        <p style={{
-                                                            fontSize: '14px',
-                                                            fontWeight: '600',
-                                                            color: '#334155',
-                                                            letterSpacing: '0.05em',
-                                                            margin: '4px 0 0 0'
-                                                        }}>A Government Engineering College under DST, Govt. of Bihar</p>
-                                                        <p style={{
-                                                            fontSize: '12px',
-                                                            color: '#475569',
-                                                            marginTop: '4px',
-                                                            margin: '4px 0 0 0'
-                                                        }}>Lal Sahpur, Mabbi Belauna, Darbhanga - 846005</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        {/* Info Row */}
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', padding: '0 20px' }}>
+                                            <span>Letter No. .................</span>
+                                            <span>Date: {new Date().toLocaleDateString()}</span>
+                                        </div>
 
-                                            {/* Document Title */}
-                                            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-                                                <h2 style={{
-                                                    fontSize: '30px',
-                                                    fontWeight: 'bold',
-                                                    textDecoration: 'underline',
-                                                    textDecorationThickness: '2px',
-                                                    textUnderlineOffset: '8px',
-                                                    color: '#000000',
-                                                    margin: 0
-                                                }}>BONAFIDE CERTIFICATE</h2>
-                                            </div>
+                                        {/* Logo */}
+                                        <div style={{ margin: '20px 0' }}>
+                                            <img src="/dce_logo.png" alt="DCE Logo" style={{ width: '80px', margin: '0 auto' }} />
+                                        </div>
 
-                                            {/* Body Text */}
-                                            <div style={{
-                                                fontSize: '20px',
-                                                lineHeight: '2.2',
-                                                textAlign: 'justify',
-                                                marginBottom: '80px',
-                                                padding: '0 16px',
-                                                color: '#1e293b'
-                                            }}>
-                                                <p style={{ margin: 0 }}>
-                                                    This is to certify that Mr./Ms. <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.name || '____________'}</span>, 
-                                                    Son/Daughter of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.fatherName || '____________'}</span>, 
-                                                    bearing University Roll No. <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.rollNo || '____________'}</span> 
-                                                    is a bonafide student of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.department || '____________________'}</span> 
-                                                    department of this college during the academic session <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.session || '____________'}</span>.
-                                                    He/She is presently studying in <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.semester || '______'}</span> semester.
-                                                </p>
-                                                <p style={{ marginTop: '32px', margin: '32px 0 0 0' }}>
-                                                    This certificate is issued for the purpose of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.purpose || '_________________________'}</span>.
-                                                </p>
-                                            </div>
+                                        {/* Title */}
+                                        <div style={{ marginBottom: '40px' }}>
+                                            <h2 style={{ fontSize: '20px', fontWeight: 'bold', textDecoration: 'underline' }}>BONAFIDE CERTIFICATE</h2>
+                                        </div>
 
-                                            {/* Signatures */}
-                                            <div style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'flex-end',
-                                                marginTop: '96px',
-                                                padding: '0 16px',
-                                                fontWeight: 'bold',
-                                                color: '#000000'
-                                            }}>
-                                                <div style={{ textAlign: 'left' }}>
-                                                    <p style={{ margin: 0 }}>Date: {new Date().toLocaleDateString()}</p>
-                                                    <p style={{ margin: 0 }}>Place: Darbhanga</p>
-                                                </div>
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <div style={{ width: '160px', height: '40px', marginBottom: '8px' }}></div>
-                                                    <p style={{ borderTop: '1px solid #000', paddingTop: '8px', margin: 0 }}>Principal / Registrar</p>
-                                                    <p style={{ fontSize: '14px', margin: 0 }}>DCE Darbhanga</p>
-                                                </div>
+                                        {/* Body */}
+                                        <div style={{ fontSize: '16px', lineHeight: '2', textAlign: 'justify', padding: '0 40px', marginBottom: '60px' }}>
+                                            <p>
+                                                This is to certify that {formData.gender === 'Female' ? 'Miss' : 'Mr.'} <strong>{formData.name || '____________'}</strong>, 
+                                                So/Do:- <strong>{formData.fatherName || '____________'}</strong>, 
+                                                Roll No.- <strong>{formData.rollNo || '____________'}</strong>, 
+                                                Registration No. – <strong>{formData.regNo || '____________'}</strong>, 
+                                                Session – <strong>{formData.session || '____________'}</strong>, 
+                                                Branch – <strong>{formData.department || '____________________'}</strong>, 
+                                                is studying in this college in B.Tech. <strong>{formData.semester || '______'}</strong> Sem. (<strong>{getYearFromSemester(formData.semester)}</strong> Year).
+                                            </p>
+                                        </div>
+
+                                        {/* Footer */}
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 40px' }}>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Assistant Registrar/ Registrar</p>
+                                                <p style={{ fontWeight: 'bold' }}>DCE, Darbhanga</p>
                                             </div>
                                         </div>
                                     </div>
