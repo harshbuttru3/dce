@@ -224,7 +224,7 @@ const Header = () => {
             </div>
           </Link>
 
-          <div className="hidden lg:flex flex-1 justify-center text-left leading-tight">
+          <div className="hidden lg:flex flex-1 justify-end text-right leading-tight">
             <div className='animate-slide-in-right'>
               <h1 className="items-center inline-flex text-[18px] xl:text-[21px] font-bold uppercase tracking-wide transition-colors duration-300 text-white whitespace-nowrap">दरभंगा कॉलेज ऑफ इंजीनियरिंग
               <span className="ml-5 text-[15px] transition-colors duration-300 text-[#c6b677] whitespace-nowrap">    

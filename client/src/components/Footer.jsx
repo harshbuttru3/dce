@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebookF, FaYoutube, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaYoutube, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6"; // Using FaXTwitter for modern X logo
 
 const Footer = () => {
@@ -31,11 +31,11 @@ const Footer = () => {
                         </p>
 
                         <p className="py-4 border-b border-white/30 hover:text-yellow-300 transition-colors">
-                            +91-XXXXX-XXXXX
+                            06272-255255
                         </p>
 
                         <p className="py-4 border-b border-white/30 hover:text-yellow-300 transition-colors">
-                            info@dcedarbhanga.org
+                            dcedbg@rediffmail.com
                         </p>
 
                     </div>
@@ -45,17 +45,20 @@ const Footer = () => {
                 <div className="mt-16 text-white drop-shadow-md">
                     <h4 className="text-sm font-bold tracking-wide mb-4 text-yellow-400">Follow Us</h4>
                     <div className="flex gap-3">
-                        <a href="#" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                        <a href="https://www.facebook.com/officialdce?mibextid=qi2Omg&rdid=9YGVHyiqiCYTRcak&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fb5ZJjSzFMFFKhaEW%2F%3Fmibextid%3Dqi2Omg#" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
                             <FaFacebookF size={14} />
                         </a>
-                        <a href="#" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                        <a href="https://x.com/DCE_Darbhanga?t=FZ5Za2ebNI80KpKGh_g5JA&s=09" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
                             <FaXTwitter size={14} />
                         </a>
-                        <a href="#" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                        <a href="https://www.youtube.com/@dcedarbhanga/featured" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
                             <FaYoutube size={14} />
                         </a>
-                        <a href="#" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                        <a href="https://www.linkedin.com/company/darbhanga-college-of-engineering-darbhanga/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
                             <FaLinkedinIn size={14} />
+                        </a>
+                        <a href="https://www.instagram.com/dce_darbhanga_07?igsh=cXd5eWV5MW91Mmhp" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white text-[#133b5c] flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                            <FaInstagram size={14} />
                         </a>
                     </div>
                 </div>
