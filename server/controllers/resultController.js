@@ -15,21 +15,26 @@ exports.uploadResults = async (req, res) => {
         fs.createReadStream(filePath)
             .pipe(csv())
             .on('data', (data) => {
+                console.log("Parsed row:", data);
                 // Map CSV columns to model fields
                 // Expected CSV Header: registrationNo, rollNo, name, semester, branch, sgpa, cgpa, status
                 results.push({
-                    registrationNo: data.registrationNo?.trim(),
-                    rollNo: data.rollNo?.trim(),
-                    name: data.name?.trim(),
-                    semester: data.semester?.trim(),
-                    branch: data.branch?.trim(),
-                    sgpa: parseFloat(data.sgpa) || 0,
-                    cgpa: parseFloat(data.cgpa) || 0,
-                    status: data.status?.trim() || 'Pass'
+                    registrationNo: (data.registrationNo || data.RegistrationNo || data["Registration No"])?.trim(),
+                    rollNo: (data.rollNo || data.RollNo || data["Roll No"])?.trim(),
+                    name: (data.name || data.Name)?.trim(),
+                    semester: (data.semester || data.Semester)?.trim(),
+                    branch: (data.branch || data.Branch)?.trim(),
+                    sgpa: parseFloat(data.sgpa || data.SGPA) || 0,
+                    cgpa: parseFloat(data.cgpa || data.CGPA) || 0,
+                    status: (data.status || data.Status)?.trim() || 'Pass'
                 });
             })
             .on('end', async () => {
+                console.log(`Finished parsing CSV. Total rows: ${results.length}`);
                 try {
+                    if (results.length === 0) {
+                        return res.status(400).json({ message: "CSV file is empty or formatted incorrectly." });
+                    }
                     // Bulk upsert logic to avoid duplicates
                     const ops = results.map(result => ({
                         updateOne: {
