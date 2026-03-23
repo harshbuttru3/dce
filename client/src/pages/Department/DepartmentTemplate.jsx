@@ -29,6 +29,22 @@ const DepartmentTemplate = ({ data }) => {
     const [activeFaq, setActiveFaq] = useState(null);
     const [activeSyllabus, setActiveSyllabus] = useState(0);
 
+    const scrollToSection = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            const offset = 80; // Account for fixed header
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -77,10 +93,14 @@ const DepartmentTemplate = ({ data }) => {
                                     <FaDownload className="inline" /> Syllabus (N/A)
                                 </button>
                             )}
-                            <button className="border border-white/30 text-white backdrop-blur-md px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all">
+                            <button 
+                                onClick={() => scrollToSection('faculty-section')}
+                                className="border border-white/30 text-white backdrop-blur-md px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all">
                                 View Faculty
                             </button>
-                            <button className="border border-white/30 text-white backdrop-blur-md px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all">
+                            <button 
+                                onClick={() => scrollToSection('labs-section')}
+                                className="border border-white/30 text-white backdrop-blur-md px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all">
                                 Visit Labs
                             </button>
                         </div>
@@ -178,7 +198,7 @@ const DepartmentTemplate = ({ data }) => {
             </section>
 
             {/* 6. Faculty Section */}
-            <section className="py-24 px-8 md:px-16 bg-white">
+            <section id="faculty-section" className="py-24 px-8 md:px-16 bg-white">
                 <div className="container mx-auto reveal">
                     <div className="flex justify-between items-end mb-16">
                         <div>
@@ -208,7 +228,7 @@ const DepartmentTemplate = ({ data }) => {
             </section>
 
             {/* 7. Laboratories & Infrastructure */}
-            <section className="py-24 bg-[#f8f9fa] overflow-hidden">
+            <section id="labs-section" className="py-24 bg-[#f8f9fa] overflow-hidden">
                 <div className="container mx-auto px-8 md:px-16 reveal">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-serif font-bold text-[#133b5c] mb-4">Dedicated Laboratories</h2>
@@ -234,47 +254,7 @@ const DepartmentTemplate = ({ data }) => {
                 </div>
             </section>
 
-            {/* 8. Curriculum & Syllabus (Programs) */}
-            {data.programs && data.programs.length > 0 && (
-                <section className="py-24 px-8 md:px-16 container mx-auto reveal">
-                    <div className="max-w-5xl mx-auto">
-                        <div className="text-center mb-16">
-                            <span className="bg-[#133b5c] text-[#c6b677] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-4 inline-block">Study Plan</span>
-                            <h2 className="text-4xl font-serif font-bold text-[#133b5c]">Academic Programs ({data.programs.length})</h2>
-                        </div>
 
-                        <div className="space-y-6">
-                            {data.programs.map((prog, idx) => (
-                                <div key={idx} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all bg-white flex flex-col md:flex-row group">
-                                    {prog.image ? (
-                                        <div className="md:w-1/3 h-48 md:h-auto overflow-hidden">
-                                            <img src={prog.image} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt={prog.name} />
-                                        </div>
-                                    ) : (
-                                        <div className="md:w-1/4 bg-[#133b5c] p-6 flex flex-col justify-center items-center text-center">
-                                            <FaGraduationCap className="text-[#c6b677] text-4xl mb-2" />
-                                            <span className="text-white font-bold">{prog.duration}</span>
-                                        </div>
-                                    )}
-                                    <div className="p-8 flex-1 flex flex-col justify-center">
-                                        <h3 className="text-2xl font-bold text-[#133b5c] mb-2">{prog.name}</h3>
-                                        {prog.eligibility && (
-                                            <p className="text-gray-500 text-sm mb-4"><strong>Eligibility:</strong> {prog.eligibility}</p>
-                                        )}
-                                        <div className="flex gap-4">
-                                            <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Intake: {prog.intake}</span>
-                                            <span className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Duration: {prog.duration}</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-8 bg-gray-50 border-l border-gray-100 flex items-center justify-center shrink-0">
-                                        <button className="bg-[#133b5c] text-white p-4 rounded-full hover:bg-[#c6b677] transition-all shadow active:scale-95"><FaDownload /></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
 
             {/* 9. Research & Activities */}
             <section className="py-24 bg-[#133b5c] text-white relative overflow-hidden">

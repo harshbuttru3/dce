@@ -103,6 +103,16 @@ const Header = () => {
       ]
     },
     {
+      label: "Attendance",
+      path: "/attendance"
+    },
+    {
+      label: "Important Link",
+      children: [
+        { label: "Bonafide", path: "/important-link/bonafide" },
+      ]
+    },
+    {
       label: "Login",
       children: [
         { label: "Admin", path: "/login" },
