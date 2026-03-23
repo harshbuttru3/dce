@@ -26,6 +26,7 @@ const Admin = () => {
   const [newItemCover, setNewItemCover] = useState(null);
   const [documentCategory, setDocumentCategory] = useState("holiday_calendar");
   const [userInfo, setuserInfo] = useState(null);
+  const [resultFile, setResultFile] = useState(null); // Added for Results
 
   // Image Gallery State
   const [images, setImages] = useState([]);
@@ -50,6 +51,7 @@ const Admin = () => {
   const MAGAZINE_API_URL = "/magazine";
   const CAROUSEL_API_URL = "/carousel";
   const DOCUMENT_API_URL = "/documents";
+  const RESULT_API_URL = "/results"; // Added for Results
 
   // Important Links State
   const [links, setLinks] = useState([]);
@@ -494,6 +496,36 @@ const Admin = () => {
     }
   };
 
+  const handleResultUpload = async (e) => {
+    e.preventDefault();
+    if (!resultFile) {
+      setMessage("Please select a CSV file.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", resultFile);
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await api.post(`${RESULT_API_URL}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`
+        },
+      });
+      setMessage(response.data.message || "Results uploaded Successfully!");
+      setResultFile(null);
+    } catch (error) {
+      console.error("Error uploading results:", error);
+      setMessage("Failed to upload results. " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleToggleApprove = async (type, id, currentStatus) => {
     try {
       const URL = type === 'magazine' ? MAGAZINE_API_URL : CAROUSEL_API_URL;
@@ -545,6 +577,7 @@ const Admin = () => {
               { id: 'testimonials', label: 'Testimonials', icon: <MessageSquare size={20} /> },
               { id: 'departments', label: 'Departments', icon: <LayoutDashboard size={20} /> },
               { id: 'coordinators', label: 'Coordinators', icon: <User size={20} /> },
+              { id: 'results', label: 'Exam Results', icon: <FileText size={20} /> },
             ].map((item) => (
               <li
                 key={item.id}
@@ -1545,6 +1578,50 @@ const Admin = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "results" && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm text-center">
+                <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Upload size={32} />
+                </div>
+                <h2 className="text-2xl font-serif font-bold text-[#133b5c] mb-2">Upload Exam Results</h2>
+                <p className="text-gray-400 max-w-md mx-auto mb-8 font-medium">Please upload a CSV file containing student results. The system will automatically process and update the database.</p>
+
+                {message && (
+                  <div className={`mb-8 p-4 rounded-2xl flex items-center justify-center gap-3 animate-slide-in-right ${message.includes("Success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+                    <CheckCircle2 size={18} />
+                    <span className="text-sm font-bold">{message}</span>
+                  </div>
+                )}
+
+                <div className="max-w-xl mx-auto p-10 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50/50 hover:bg-white hover:border-blue-500 transition-all group relative">
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={(e) => setResultFile(e.target.files[0])}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  />
+                  <div className="flex flex-col items-center">
+                    <FileText size={48} className="text-gray-300 group-hover:text-blue-500 mb-4 transition-colors" />
+                    <p className="text-sm font-bold text-gray-500">{resultFile ? resultFile.name : "Select Result CSV File"}</p>
+                    <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest font-bold">Files supported: .CSV (Max 10MB)</p>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <button
+                    onClick={handleResultUpload}
+                    disabled={loading || !resultFile}
+                    className={`bg-[#133b5c] text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 mx-auto ${loading || !resultFile ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+                  >
+                    {loading ? "Processing CSV..." : "Bulk Upload Results"}
+                  </button>
+                  <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">Standard format: registrationNo, rollNo, name, semester, branch, sgpa, cgpa, status</p>
                 </div>
               </div>
             </div>

@@ -28,6 +28,7 @@ import KalaKalakar from './pages/StudentLife/KalaKalakar';
 import Testimonials from './pages/StudentLife/Testimonials';
 import SocietyPage from './pages/StudentLife/SocietyPage';
 import BonafideForm from './pages/other/BonafideForm';
+import ResultSearch from './pages/other/ResultSearch';
 
 import DepartmentPage from './pages/Department/DepartmentPage';
 
@@ -77,6 +78,7 @@ function App() {
           <Route path="/student-society/:id" element={<SocietyPage />} />
           <Route path="/testimonial" element={<Testimonials />} />
           <Route path="/important-link/bonafide" element={<BonafideForm />} />
+          <Route path="/important-link/result" element={<ResultSearch />} />
 
           {/* nested path for about  */}
           <Route path="/about" element={<About />}>

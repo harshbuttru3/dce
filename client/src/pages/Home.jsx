@@ -73,6 +73,12 @@ const Home = () => {
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQYYsL2aqAvN1UeKlrsQiLF7EvHbh6THuYkg&s',
       url: '#',
     },
+    {
+      title: 'Exam Results',
+      description: 'Access and download your semester-wise academic results and marksheets.',
+      image: 'https://images.unsplash.com/photo-1454165833767-1330084bc6f9?q=80&w=2000&auto=format&fit=crop',
+      url: '/important-link/result',
+    },
   ];
 
 
