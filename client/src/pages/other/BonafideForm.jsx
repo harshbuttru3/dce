@@ -17,11 +17,12 @@ const BonafideForm = () => {
         gender: 'Male'
     });
 
-    const certificateRef = useRef(null);
-
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const handleNext = () => setStep(2);
+    const handlePrev = () => setStep(1);
 
     const getYearFromSemester = (sem) => {
         const s = parseInt(sem);
