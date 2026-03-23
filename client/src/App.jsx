@@ -26,7 +26,7 @@ import CDac from './pages/Programmes/CDac';
 import StudentFest from './pages/StudentLife/StudentFest';
 import KalaKalakar from './pages/StudentLife/KalaKalakar';
 import Testimonials from './pages/StudentLife/Testimonials';
-import StudentLife from './pages/StudentLife/StudentFest'; // Assuming this is correct based on original
+import SocietyPage from './pages/StudentLife/SocietyPage';
 import BonafideForm from './pages/other/BonafideForm';
 
 import DepartmentPage from './pages/Department/DepartmentPage';
