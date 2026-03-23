@@ -41,6 +41,10 @@ const Header = () => {
 
   const StaticNavItems = [
     {
+      label: "Home",
+      path: "/"
+    },
+    {
       label: "Institute",
       children: [
         {
@@ -244,73 +248,84 @@ const Header = () => {
                   onMouseEnter={() => setHoveredNav(item.label)}
                   onMouseLeave={() => setHoveredNav(null)}
                 >
-                  <button
-                    className={`transition-colors text-[13px] xl:text-[14px] uppercase tracking-wide whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
-                  >
-                    {item.label}
-                    <ChevronDown size={15} className="transition-transform duration-300 group-hover:rotate-180" />
-                  </button>
+                  {item.path ? (
+                    <Link
+                      to={item.path}
+                      className={`transition-colors text-[13px] xl:text-[14px] uppercase tracking-wide whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      className={`transition-colors text-[13px] xl:text-[14px] uppercase tracking-wide whitespace-nowrap flex items-center gap-1 text-white hover:text-[#c6b677]`}
+                    >
+                      {item.label}
+                      <ChevronDown size={15} className="transition-transform duration-300 group-hover:rotate-180" />
+                    </button>
+                  )}
                   <span className="absolute bottom-3 left-0 w-0 h-0.5 bg-[#c6b677] transition-all duration-300 group-hover:w-full"></span>
 
                   {/* Dropdown Menu - Mega Menu Style */}
-                  <div className="absolute top-full left-0 bg-[#133b5c]/95 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[280px] p-6 border-t-4 border-yellow-500">
-                    <h3 className="text-white font-bold mb-4 uppercase tracking-wider border-b border-white/20 pb-2">{item.label}</h3>
-                    <ul className="flex flex-col gap-3">
-                      {item.children.map((child) => (
-                        <li key={child.label}>
-                          {child.children ? (
-                            <div className="relative group/sub">
-                              <span className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] py-1 px-2 -mx-2 rounded cursor-pointer flex items-center justify-between font-medium">
-                                {child.label}
-                                <ChevronDown size={14} className="rotate-[-90deg]" />
-                              </span>
-                              <ul className="absolute top-0 left-full ml-4 bg-[#133b5c]/95 backdrop-blur-lg shadow-xl rounded-sm opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[300px] p-4 border-l-4 border-yellow-500 z-50">
-                                {child.children.map(subChild => (
-                                  <li key={subChild.label}>
-                                    {subChild.path.startsWith('http') ? (
-                                      <a
-                                        href={subChild.path}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
-                                      >
-                                        {subChild.label}
-                                      </a>
-                                    ) : (
-                                      <Link
-                                        to={subChild.path}
-                                        className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
-                                      >
-                                        {subChild.label}
-                                      </Link>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : (
-                            child.path.startsWith('http') ? (
-                              <a
-                                href={child.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
-                              >
-                                {child.label}
-                              </a>
+                  {item.children && (
+                    <div className="absolute top-full left-0 bg-[#133b5c]/95 backdrop-blur-lg shadow-2xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 z-50 min-w-[280px] p-6 border-t-4 border-yellow-500">
+                      <h3 className="text-white font-bold mb-4 uppercase tracking-wider border-b border-white/20 pb-2">{item.label}</h3>
+                      <ul className="flex flex-col gap-3">
+                        {item.children.map((child) => (
+                          <li key={child.label}>
+                            {child.children ? (
+                              <div className="relative group/sub">
+                                <span className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] py-1 px-2 -mx-2 rounded cursor-pointer flex items-center justify-between font-medium">
+                                  {child.label}
+                                  <ChevronDown size={14} className="rotate-[-90deg]" />
+                                </span>
+                                <ul className="absolute top-0 left-full ml-4 bg-[#133b5c]/95 backdrop-blur-lg shadow-xl rounded-sm opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[300px] p-4 border-l-4 border-yellow-500 z-50">
+                                  {child.children.map(subChild => (
+                                    <li key={subChild.label}>
+                                      {subChild.path.startsWith('http') ? (
+                                        <a
+                                          href={subChild.path}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                                        >
+                                          {subChild.label}
+                                        </a>
+                                      ) : (
+                                        <Link
+                                          to={subChild.path}
+                                          className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                                        >
+                                          {subChild.label}
+                                        </Link>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
                             ) : (
-                              <Link
-                                to={child.path}
-                                className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
-                              >
-                                {child.label}
-                              </Link>
-                            )
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                              child.path.startsWith('http') ? (
+                                <a
+                                  href={child.path}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                                >
+                                  {child.label}
+                                </a>
+                              ) : (
+                                <Link
+                                  to={child.path}
+                                  className="text-white hover:text-yellow-400 hover:bg-white/10 transition-colors text-[14px] block py-1 px-2 -mx-2 rounded font-medium"
+                                >
+                                  {child.label}
+                                </Link>
+                              )
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -329,75 +344,87 @@ const Header = () => {
             <ul className="flex flex-col text-sm font-semibold">
               {navItems.map((item) => (
                 <li key={item.label} className="border-b border-gray-700 last:border-0 relative">
-                  <button
-                    onClick={() => toggleDropdown(item.label)}
-                    className="text-white hover:text-[#c6b677] text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
-                  >
-                    {item.label}
-                    <ChevronDown size={18} className={`transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
-                  </button>
+                  {item.path ? (
+                    <Link
+                      to={item.path}
+                      className="text-white hover:text-[#c6b677] text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => toggleDropdown(item.label)}
+                      className="text-white hover:text-[#c6b677] text-[16px] uppercase tracking-wider py-4 w-full flex justify-between items-center"
+                    >
+                      {item.label}
+                      <ChevronDown size={18} className={`transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
+                    </button>
+                  )}
 
                   {/* Mobile Submenu */}
-                  <ul className={`
-                    ${activeDropdown === item.label ? 'block' : 'hidden'}
-                    pl-4 pb-4 space-y-3
-                `}>
-                    {item.children.map((child) => (
-                      <li key={child.label}>
-                        {child.children ? (
-                          <div>
-                            <span className="text-gray-400 text-[15px] block py-1 font-bold">{child.label}</span>
-                            <ul className="pl-4 space-y-2 mt-2 border-l border-gray-600">
-                              {child.children.map(subChild => (
-                                <li key={subChild.label}>
-                                  {subChild.path.startsWith('http') ? (
-                                    <a
-                                      href={subChild.path}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-gray-300 hover:text-white text-[13px] block py-1"
-                                      onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                      {subChild.label}
-                                    </a>
-                                  ) : (
-                                    <Link
-                                      to={subChild.path}
-                                      className="text-gray-300 hover:text-white text-[13px] block py-1"
-                                      onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                      {subChild.label}
-                                    </Link>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : (
-                          child.path.startsWith('http') ? (
-                            <a
-                              href={child.path}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-gray-300 hover:text-white text-[14px] block py-1"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {child.label}
-                            </a>
+                  {item.children && (
+                    <ul className={`
+                      ${activeDropdown === item.label ? 'block' : 'hidden'}
+                      pl-4 pb-4 space-y-3
+                    `}>
+                      {item.children.map((child) => (
+                        <li key={child.label}>
+                          {child.children ? (
+                            <div>
+                              <span className="text-gray-400 text-[15px] block py-1 font-bold">{child.label}</span>
+                              <ul className="pl-4 space-y-2 mt-2 border-l border-gray-600">
+                                {child.children.map(subChild => (
+                                  <li key={subChild.label}>
+                                    {subChild.path.startsWith('http') ? (
+                                      <a
+                                        href={subChild.path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-300 hover:text-white text-[13px] block py-1"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                      >
+                                        {subChild.label}
+                                      </a>
+                                    ) : (
+                                      <Link
+                                        to={subChild.path}
+                                        className="text-gray-300 hover:text-white text-[13px] block py-1"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                      >
+                                        {subChild.label}
+                                      </Link>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           ) : (
-                            <Link
-                              to={child.path}
-                              className="text-gray-300 hover:text-white text-[14px] block py-1"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {child.label}
-                            </Link>
-                          )
-                        )}
+                            child.path.startsWith('http') ? (
+                              <a
+                                href={child.path}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-gray-300 hover:text-white text-[14px] block py-1"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                {child.label}
+                              </a>
+                            ) : (
+                              <Link
+                                to={child.path}
+                                className="text-gray-300 hover:text-white text-[14px] block py-1"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                {child.label}
+                              </Link>
+                            )
+                          )}
 
-                      </li>
-                    ))}
-                  </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>

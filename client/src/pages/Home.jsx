@@ -6,6 +6,7 @@ import { FaUniversity, FaQuoteLeft } from "react-icons/fa";
 import CampusLife from '../components/CampusLife';
 import SocialWall from '../components/SocialWall';
 import CampusPlacements from '../components/CampusPlacements';
+import DignitarySection from '../components/DignitarySection';
 
 const Home = () => {
   const [galleryImages, setGalleryImages] = useState([]);
@@ -79,6 +80,9 @@ const Home = () => {
     <div className="bg-gray-100 flex flex-col ">
       {/*Slider image  */}
       <div><HeroSlider /></div>
+
+      {/* ================= DIGNITARIES SECTION ================= */}
+      <DignitarySection />
 
 
          {/* ================= SECRETARY MESSAGE SECTION ================= */}
