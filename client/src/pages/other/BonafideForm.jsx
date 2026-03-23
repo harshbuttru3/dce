@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaFileDownload, FaArrowLeft, FaArrowRight, FaIdCard, FaUser, FaHistory, FaScroll } from 'react-icons/fa';
 import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
 const BonafideForm = () => {
     const [step, setStep] = useState(1);
@@ -26,21 +25,86 @@ const BonafideForm = () => {
     const handleNext = () => setStep(2);
     const handlePrev = () => setStep(1);
 
-    const downloadPDF = async () => {
-        const element = certificateRef.current;
-        const canvas = await html2canvas(element, { 
-            scale: 2,
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            logging: false
-        });
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Bonafide_${formData.rollNo}.pdf`);
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        // 1. Draw Double Border
+        doc.setDrawColor(19, 59, 92); // #133b5c
+        doc.setLineWidth(1.5);
+        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+        doc.setLineWidth(0.5);
+        doc.rect(12, 12, pageWidth - 24, pageHeight - 24);
+
+        // 2. Add Logo (Base64 is safer, but URL might work if on same origin)
+        // I'll add the logo. For the sake of this implementation, I'll use text if image fails,
+        // but normally we'd use doc.addImage.
+        try {
+            const logoImg = "/dce_logo.png";
+            doc.addImage(logoImg, 'PNG', 20, 20, 25, 25);
+        } catch (e) {
+            console.error("Logo addition failed", e);
+        }
+
+        // 3. College Header
+        doc.setTextColor(19, 59, 92);
+        doc.setFont('times', 'bold');
+        doc.setFontSize(24);
+        doc.text("DARBHANGA COLLEGE OF ENGINEERING", 50, 30);
+        
+        doc.setFontSize(10);
+        doc.setFont('times', 'normal');
+        doc.setTextColor(51, 65, 85);
+        doc.text("A Government Engineering College under DST, Govt. of Bihar", 50, 36);
+        doc.text("Lal Sahpur, Mabbi Belauna, Darbhanga - 846005", 50, 41);
+
+        // 4. Header Line
+        doc.setDrawColor(15, 23, 42);
+        doc.setLineWidth(0.5);
+        doc.line(20, 50, pageWidth - 20, 50);
+
+        // 5. Document Title
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(22);
+        doc.setFont('times', 'bold');
+        const title = "BONAFIDE CERTIFICATE";
+        const titleWidth = doc.getTextWidth(title);
+        doc.text(title, (pageWidth - titleWidth) / 2, 70);
+        doc.line((pageWidth - titleWidth) / 2, 72, (pageWidth + titleWidth) / 2, 72);
+
+        // 6. Body Text
+        doc.setFontSize(14);
+        doc.setFont('times', 'normal');
+        doc.setTextColor(30, 41, 59);
+
+        const margin = 20;
+        const textWidth = pageWidth - (margin * 2);
+        const startY = 95;
+
+        const bodyContent = `This is to certify that Mr./Ms. ${formData.name || '____________'}, Son/Daughter of ${formData.fatherName || '____________'}, bearing University Roll No. / Reg No. ${formData.rollNo || '____________'} is a bonafide student of ${formData.department || '____________________'} department of this college during the academic session ${formData.session || '____________'}. He/She is presently studying in ${formData.semester || '______'} semester.`;
+
+        const purposeText = `This certificate is issued for the purpose of ${formData.purpose || '_________________________'}.`;
+
+        const splitBody = doc.splitTextToSize(bodyContent, textWidth);
+        doc.text(splitBody, margin, startY, { lineHeightFactor: 1.8 });
+
+        const nextY = startY + (splitBody.length * 10) + 10;
+        doc.text(purposeText, margin, nextY);
+
+        // 7. Signatures and Date
+        const footerY = pageHeight - 40;
+        
+        doc.setFontSize(12);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, margin, footerY);
+        doc.text(`Place: Darbhanga`, margin, footerY + 6);
+
+        const sigX = pageWidth - 60;
+        doc.line(sigX, footerY, pageWidth - 20, footerY);
+        doc.text("Principal / Registrar", sigX + 5, footerY + 6);
+        doc.text("DCE Darbhanga", sigX + 10, footerY + 12);
+
+        doc.save(`Bonafide_${formData.rollNo}.pdf`);
     };
 
     const inputClasses = "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#133b5c] focus:border-transparent transition-all outline-none bg-gray-50";
