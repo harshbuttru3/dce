@@ -30,57 +30,50 @@ const BonafideForm = () => {
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
 
-        // 1. Draw Double Border
-        doc.setDrawColor(19, 59, 92); // #133b5c
-        doc.setLineWidth(1.5);
-        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
-        doc.setLineWidth(0.5);
-        doc.rect(12, 12, pageWidth - 24, pageHeight - 24);
+        // 1. Remove Borders (User requested to remove boundary)
+        // No doc.rect calls here anymore
 
-        // 2. Add Logo (Base64 is safer, but URL might work if on same origin)
-        // I'll add the logo. For the sake of this implementation, I'll use text if image fails,
-        // but normally we'd use doc.addImage.
+        // 2. Add Logo (Black & White preferred if possible, otherwise normal)
         try {
             const logoImg = "/dce_logo.png";
-            doc.addImage(logoImg, 'PNG', 20, 20, 25, 25);
+            doc.addImage(logoImg, 'PNG', 15, 15, 22, 22);
         } catch (e) {
             console.error("Logo addition failed", e);
         }
 
-        // 3. College Header
-        doc.setTextColor(19, 59, 92);
+        // 3. College Header (Black & White)
+        doc.setTextColor(0, 0, 0); // Pure Black
         doc.setFont('times', 'bold');
-        doc.setFontSize(24);
-        doc.text("DARBHANGA COLLEGE OF ENGINEERING", 50, 30);
+        doc.setFontSize(22); // Reduced slightly to avoid clipping
+        doc.text("DARBHANGA COLLEGE OF ENGINEERING", 42, 22);
         
         doc.setFontSize(10);
+        doc.setFont('times', 'bold');
+        doc.text("A Government Engineering College under DST, Govt. of Bihar", 42, 28);
         doc.setFont('times', 'normal');
-        doc.setTextColor(51, 65, 85);
-        doc.text("A Government Engineering College under DST, Govt. of Bihar", 50, 36);
-        doc.text("Lal Sahpur, Mabbi Belauna, Darbhanga - 846005", 50, 41);
+        doc.text("Lal Sahpur, Mabbi Belauna, Darbhanga - 846005", 42, 33);
 
-        // 4. Header Line
-        doc.setDrawColor(15, 23, 42);
+        // 4. Header Line (Black)
+        doc.setDrawColor(0, 0, 0);
         doc.setLineWidth(0.5);
-        doc.line(20, 50, pageWidth - 20, 50);
+        doc.line(15, 40, pageWidth - 15, 40);
 
         // 5. Document Title
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(22);
+        doc.setFontSize(18);
         doc.setFont('times', 'bold');
         const title = "BONAFIDE CERTIFICATE";
         const titleWidth = doc.getTextWidth(title);
-        doc.text(title, (pageWidth - titleWidth) / 2, 70);
-        doc.line((pageWidth - titleWidth) / 2, 72, (pageWidth + titleWidth) / 2, 72);
+        doc.text(title, (pageWidth - titleWidth) / 2, 55);
+        doc.line((pageWidth - titleWidth) / 2, 57, (pageWidth + titleWidth) / 2, 57);
 
         // 6. Body Text
-        doc.setFontSize(14);
+        doc.setFontSize(13);
         doc.setFont('times', 'normal');
-        doc.setTextColor(30, 41, 59);
+        doc.setTextColor(0, 0, 0);
 
         const margin = 20;
         const textWidth = pageWidth - (margin * 2);
-        const startY = 95;
+        const startY = 80;
 
         const bodyContent = `This is to certify that Mr./Ms. ${formData.name || '____________'}, Son/Daughter of ${formData.fatherName || '____________'}, bearing University Roll No. / Reg No. ${formData.rollNo || '____________'} is a bonafide student of ${formData.department || '____________________'} department of this college during the academic session ${formData.session || '____________'}. He/She is presently studying in ${formData.semester || '______'} semester.`;
 
@@ -93,16 +86,18 @@ const BonafideForm = () => {
         doc.text(purposeText, margin, nextY);
 
         // 7. Signatures and Date
-        const footerY = pageHeight - 40;
+        const footerY = pageHeight - 50;
         
         doc.setFontSize(12);
         doc.text(`Date: ${new Date().toLocaleDateString()}`, margin, footerY);
         doc.text(`Place: Darbhanga`, margin, footerY + 6);
 
-        const sigX = pageWidth - 60;
-        doc.line(sigX, footerY, pageWidth - 20, footerY);
+        const sigX = pageWidth - 65;
+        doc.line(sigX, footerY, pageWidth - 15, footerY);
+        doc.setFont('times', 'bold');
         doc.text("Principal / Registrar", sigX + 5, footerY + 6);
-        doc.text("DCE Darbhanga", sigX + 10, footerY + 12);
+        doc.setFont('times', 'normal');
+        doc.text("DCE Darbhanga", sigX + 11, footerY + 12);
 
         doc.save(`Bonafide_${formData.rollNo}.pdf`);
     };
