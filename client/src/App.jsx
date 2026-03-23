@@ -26,7 +26,8 @@ import CDac from './pages/Programmes/CDac';
 import StudentFest from './pages/StudentLife/StudentFest';
 import KalaKalakar from './pages/StudentLife/KalaKalakar';
 import Testimonials from './pages/StudentLife/Testimonials';
-import SocietyPage from './pages/StudentLife/SocietyPage';
+import StudentLife from './pages/StudentLife/StudentFest'; // Assuming this is correct based on original
+import BonafideForm from './pages/other/BonafideForm';
 
 import DepartmentPage from './pages/Department/DepartmentPage';
 
@@ -75,6 +76,7 @@ function App() {
           <Route path="/student-society/kala-and-kalakar" element={<KalaKalakar />} />
           <Route path="/student-society/:id" element={<SocietyPage />} />
           <Route path="/testimonial" element={<Testimonials />} />
+          <Route path="/important-link/bonafide" element={<BonafideForm />} />
 
           {/* nested path for about  */}
           <Route path="/about" element={<About />}>
