@@ -128,6 +128,15 @@ const BonafideForm = () => {
             });
         });
 
+        // Add Purpose line
+        currentX = margin;
+        currentY += lineHeight + 5;
+        doc.setFont('times', 'normal');
+        doc.text("This certificate is issued for the purpose of ", currentX, currentY);
+        currentX += doc.getTextWidth("This certificate is issued for the purpose of ");
+        doc.setFont('times', 'bold');
+        doc.text(formData.purpose || '_________________________', currentX, currentY);
+
         // 6. Signature Area - On the right
         const footerY = pageHeight - 60;
         doc.setFont('times', 'bold');
