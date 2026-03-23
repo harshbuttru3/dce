@@ -28,7 +28,12 @@ const BonafideForm = () => {
 
     const downloadPDF = async () => {
         const element = certificateRef.current;
-        const canvas = await html2canvas(element, { scale: 2 });
+        const canvas = await html2canvas(element, { 
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false
+        });
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
         const imgProps = pdf.getImageProperties(imgData);
@@ -141,61 +146,126 @@ const BonafideForm = () => {
                                 <div className="bg-white shadow-2xl p-1 md:p-8 rounded-3xl overflow-x-auto">
                                     <div 
                                         ref={certificateRef}
-                                        className="min-w-[700px] w-full bg-white border-[10px] border-double border-[#133b5c] p-16 relative"
                                         style={{ 
+                                            minWidth: '700px',
+                                            width: '100%',
+                                            backgroundColor: '#ffffff',
+                                            border: '10px double #133b5c',
+                                            padding: '64px',
+                                            position: 'relative',
                                             fontFamily: 'Georgia, serif',
-                                            color: '#000000',      /* Explicitly use hex to avoid oklch issues */
-                                            backgroundColor: '#ffffff'
+                                            color: '#000000'
                                         }}
                                     >
-                                        {/* Watermark Background Optional */}
-                                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
-                                            <img src="/dce_logo.png" alt="watermark" className="w-[400px]" />
+                                        {/* Watermark Background */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            inset: 0,
+                                            opacity: 0.03,
+                                            pointerEvents: 'none',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            zIndex: 0
+                                        }}>
+                                            <img src="/dce_logo.png" alt="watermark" style={{ width: '400px' }} />
                                         </div>
 
-                                        <div className="relative z-10">
+                                        <div style={{ position: 'relative', zIndex: 10 }}>
                                             {/* College Header */}
-                                            <div className="text-center mb-10 border-b-2 border-slate-900 pb-8">
-                                                <div className="flex items-center justify-center gap-6 mb-4">
-                                                    <img src="/dce_logo.png" alt="DCE Logo" className="w-24 h-24" />
-                                                    <div>
-                                                        <h1 className="text-3xl font-bold uppercase leading-tight" style={{ color: '#133b5c' }}>Darbhanga College of Engineering</h1>
-                                                        <p className="text-sm font-semibold tracking-wider" style={{ color: '#334155' }}>A Government Engineering College under DST, Govt. of Bihar</p>
-                                                        <p className="text-xs mt-1" style={{ color: '#475569' }}>Lal Sahpur, Mabbi Belauna, Darbhanga - 846005</p>
+                                            <div style={{
+                                                textAlign: 'center',
+                                                marginBottom: '40px',
+                                                borderBottom: '2px solid #0f172a',
+                                                paddingBottom: '32px'
+                                            }}>
+                                                <div style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '24px',
+                                                    marginBottom: '16px'
+                                                }}>
+                                                    <img src="/dce_logo.png" alt="DCE Logo" style={{ width: '96px', height: '96px' }} />
+                                                    <div style={{ textAlign: 'left' }}>
+                                                        <h1 style={{
+                                                            fontSize: '30px',
+                                                            fontWeight: 'bold',
+                                                            color: '#133b5c',
+                                                            textTransform: 'uppercase',
+                                                            lineHeight: '1.2',
+                                                            margin: 0
+                                                        }}>Darbhanga College of Engineering</h1>
+                                                        <p style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: '600',
+                                                            color: '#334155',
+                                                            letterSpacing: '0.05em',
+                                                            margin: '4px 0 0 0'
+                                                        }}>A Government Engineering College under DST, Govt. of Bihar</p>
+                                                        <p style={{
+                                                            fontSize: '12px',
+                                                            color: '#475569',
+                                                            marginTop: '4px',
+                                                            margin: '4px 0 0 0'
+                                                        }}>Lal Sahpur, Mabbi Belauna, Darbhanga - 846005</p>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Document Title */}
-                                            <div className="text-center mb-12">
-                                                <h2 className="text-3xl font-bold decoration-slice underline decoration-2 underline-offset-8 text-black">BONAFIDE CERTIFICATE</h2>
+                                            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                                                <h2 style={{
+                                                    fontSize: '30px',
+                                                    fontWeight: 'bold',
+                                                    textDecoration: 'underline',
+                                                    textDecorationThickness: '2px',
+                                                    textUnderlineOffset: '8px',
+                                                    color: '#000000',
+                                                    margin: 0
+                                                }}>BONAFIDE CERTIFICATE</h2>
                                             </div>
 
                                             {/* Body Text */}
-                                            <div className="text-xl leading-[2.2] text-justify mb-20 px-4" style={{ color: '#1e293b' }}>
-                                                <p>
-                                                    This is to certify that Mr./Ms. <span className="font-bold border-b border-dotted border-black px-2">{formData.name || '____________'}</span>, 
-                                                    Son/Daughter of <span className="font-bold border-b border-dotted border-black px-2">{formData.fatherName || '____________'}</span>, 
-                                                    bearing University Roll No. <span className="font-bold border-b border-dotted border-black px-2">{formData.rollNo || '____________'}</span> 
-                                                    is a bonafide student of <span className="font-bold border-b border-dotted border-black px-2">{formData.department || '____________________'}</span> 
-                                                    department of this college during the academic session <span className="font-bold border-b border-dotted border-black px-2">{formData.session || '____________'}</span>.
-                                                    He/She is presently studying in <span className="font-bold border-b border-dotted border-black px-2">{formData.semester || '______'}</span> semester.
+                                            <div style={{
+                                                fontSize: '20px',
+                                                lineHeight: '2.2',
+                                                textAlign: 'justify',
+                                                marginBottom: '80px',
+                                                padding: '0 16px',
+                                                color: '#1e293b'
+                                            }}>
+                                                <p style={{ margin: 0 }}>
+                                                    This is to certify that Mr./Ms. <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.name || '____________'}</span>, 
+                                                    Son/Daughter of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.fatherName || '____________'}</span>, 
+                                                    bearing University Roll No. <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.rollNo || '____________'}</span> 
+                                                    is a bonafide student of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.department || '____________________'}</span> 
+                                                    department of this college during the academic session <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.session || '____________'}</span>.
+                                                    He/She is presently studying in <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.semester || '______'}</span> semester.
                                                 </p>
-                                                <p className="mt-8">
-                                                    This certificate is issued for the purpose of <span className="font-bold border-b border-dotted border-black px-2">{formData.purpose || '_________________________'}</span>.
+                                                <p style={{ marginTop: '32px', margin: '32px 0 0 0' }}>
+                                                    This certificate is issued for the purpose of <span style={{ fontWeight: 'bold', borderBottom: '1px dotted #000', padding: '0 8px' }}>{formData.purpose || '_________________________'}</span>.
                                                 </p>
                                             </div>
 
                                             {/* Signatures */}
-                                            <div className="flex justify-between items-end mt-24 px-4 font-bold">
-                                                <div className="text-left">
-                                                    <p>Date: {new Date().toLocaleDateString()}</p>
-                                                    <p>Place: Darbhanga</p>
+                                            <div style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'flex-end',
+                                                marginTop: '96px',
+                                                padding: '0 16px',
+                                                fontWeight: 'bold',
+                                                color: '#000000'
+                                            }}>
+                                                <div style={{ textAlign: 'left' }}>
+                                                    <p style={{ margin: 0 }}>Date: {new Date().toLocaleDateString()}</p>
+                                                    <p style={{ margin: 0 }}>Place: Darbhanga</p>
                                                 </div>
-                                                <div className="text-center">
-                                                    <div className="w-40 h-10 mb-2"></div> {/* Placeholder for signature space */}
-                                                    <p className="border-t border-black pt-2">Principal / Registrar</p>
-                                                    <p className="text-sm">DCE Darbhanga</p>
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <div style={{ width: '160px', height: '40px', marginBottom: '8px' }}></div>
+                                                    <p style={{ borderTop: '1px solid #000', paddingTop: '8px', margin: 0 }}>Principal / Registrar</p>
+                                                    <p style={{ fontSize: '14px', margin: 0 }}>DCE Darbhanga</p>
                                                 </div>
                                             </div>
                                         </div>
