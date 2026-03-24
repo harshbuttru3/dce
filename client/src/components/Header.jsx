@@ -104,7 +104,7 @@ const Header = () => {
     },
     {
       label: "Attendance",
-      path: "/attendance"
+      path: "https://attendance-pi-woad.vercel.app/"
     },
     {
       label: "Important Link",

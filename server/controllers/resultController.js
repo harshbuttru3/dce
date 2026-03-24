@@ -11,23 +11,33 @@ exports.uploadResults = async (req, res) => {
 
         const results = [];
         const filePath = req.file.path;
+        const { semester: bodySemester, branch: bodyBranch } = req.body;
 
         fs.createReadStream(filePath)
             .pipe(csv())
             .on('data', (data) => {
-                console.log("Parsed row:", data);
-                // Map CSV columns to model fields
-                // Expected CSV Header: registrationNo, rollNo, name, semester, branch, sgpa, cgpa, status
-                results.push({
-                    registrationNo: (data.registrationNo || data.RegistrationNo || data["Registration No"])?.trim(),
-                    rollNo: (data.rollNo || data.RollNo || data["Roll No"])?.trim(),
-                    name: (data.name || data.Name)?.trim(),
-                    semester: (data.semester || data.Semester)?.trim(),
-                    branch: (data.branch || data.Branch)?.trim(),
-                    sgpa: parseFloat(data.sgpa || data.SGPA) || 0,
-                    cgpa: parseFloat(data.cgpa || data.CGPA) || 0,
-                    status: (data.status || data.Status)?.trim() || 'Pass'
-                });
+                // Determine values based on flexible header names
+                const regNo = data.registrationNo || data.RegistrationNo || data["Registration No"] || data["REGISTRATION NO"] || data["Reg No"] || data["regNo"];
+                const roll = data.rollNo || data.RollNo || data["Roll No"] || data["ROLL NO"] || data["roll_no"];
+                const stdName = data.name || data.Name || data["NAME"] || data["Student Name"] || data["studentName"];
+                const sem = data.semester || data.Semester || data["SEMESTER"] || data["Sem"];
+                const br = data.branch || data.Branch || data["BRANCH"] || data["Department"];
+                const s = data.sgpa || data.SGPA || data["SGPA"];
+                const c = data.cgpa || data.CGPA || data["CGPA"];
+                const stat = data.status || data.Status || data["STATUS"];
+
+                if (regNo && stdName) {
+                    results.push({
+                        registrationNo: regNo.toString().trim(),
+                        rollNo: (roll || "N/A").toString().trim(),
+                        name: stdName.toString().trim(),
+                        semester: (bodySemester || sem || "1st Semester").toString().trim(),
+                        branch: (bodyBranch || br || "General").toString().trim(),
+                        sgpa: parseFloat(s) || 0,
+                        cgpa: parseFloat(c) || 0,
+                        status: (stat || 'Pass').toString().trim()
+                    });
+                }
             })
             .on('end', async () => {
                 console.log(`Finished parsing CSV. Total rows: ${results.length}`);

@@ -126,10 +126,17 @@ const ResultSearch = () => {
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#133b5c] outline-none"
                         >
                             <option value="">All Branches</option>
-                            <option value="Computer Science and Engineering">CSE</option>
-                            <option value="Civil Engineering">Civil</option>
-                            <option value="Mechanical Engineering">Mechanical</option>
-                            <option value="Electrical & Electronics Engineering">EEE</option>
+                            {[
+                                "COMPUTER SCIENCE AND ENGINEERING",
+                                "CIVIL ENGINEERING",
+                                "Computer Science and Engineering(Cyber Security)",
+                                "ELECTRICAL AND ELECTRONICS ENGINEERING",
+                                "MECHANICAL ENGINEERING",
+                                "FIRE TECHNOLOGY AND SAFETY",
+                                "Power System"
+                            ].map(b => (
+                                <option key={b} value={b}>{b}</option>
+                            ))}
                         </select>
                         <div className="md:col-span-4 flex justify-center mt-4">
                             <button

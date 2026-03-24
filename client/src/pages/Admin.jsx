@@ -31,6 +31,8 @@ const Admin = () => {
   const [editingResult, setEditingResult] = useState(null); // Added for Edit
   const [showResultForm, setShowResultForm] = useState(false); // Added for Modal
   const [resultSearchQuery, setResultSearchQuery] = useState(""); // Added for Search
+  const [uploadSemester, setUploadSemester] = useState(""); // For CSV upload override
+  const [uploadBranch, setUploadBranch] = useState(""); // For CSV upload override
 // Added for Results
 
   // Image Gallery State
@@ -511,6 +513,8 @@ const Admin = () => {
 
     const formData = new FormData();
     formData.append("file", resultFile);
+    if (uploadSemester) formData.append("semester", uploadSemester);
+    if (uploadBranch) formData.append("branch", uploadBranch);
 
     setLoading(true);
     setMessage("");
@@ -524,6 +528,9 @@ const Admin = () => {
       });
       setMessage(response.data.message || "Results uploaded Successfully!");
       setResultFile(null);
+      setUploadSemester("");
+      setUploadBranch("");
+      fetchAdminResults(); // Auto refresh
     } catch (error) {
       console.error("Error uploading results:", error);
       setMessage("Failed to upload results. " + (error.response?.data?.message || error.message));
@@ -534,7 +541,7 @@ const Admin = () => {
 
   const fetchAdminResults = async () => {
     try {
-      const url = resultSearchQuery ? `${RESULT_API_URL}?search=${resultSearchQuery}` : RESULT_API_URL;
+      const url = resultSearchQuery ? `${RESULT_API_URL}?query=${resultSearchQuery}` : RESULT_API_URL;
       const response = await api.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -1660,6 +1667,27 @@ const Admin = () => {
                   </div>
                 )}
 
+                <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-left">
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Upload Semester (Optional)</label>
+                    <select value={uploadSemester} onChange={e => setUploadSemester(e.target.value)} className="w-full p-4 mt-2 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/30 text-sm font-bold text-[#133b5c]">
+                      <option value="">Use CSV Values</option>
+                      {["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"].map(sem => (
+                        <option key={sem} value={sem}>{sem}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Upload Branch (Optional)</label>
+                    <select value={uploadBranch} onChange={e => setUploadBranch(e.target.value)} className="w-full p-4 mt-2 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/30 text-sm font-bold text-[#133b5c]">
+                      <option value="">Use CSV Values</option>
+                      {["COMPUTER SCIENCE AND ENGINEERING", "CIVIL ENGINEERING", "Computer Science and Engineering(Cyber Security)", "ELECTRICAL AND ELECTRONICS ENGINEERING", "MECHANICAL ENGINEERING", "FIRE TECHNOLOGY AND SAFETY", "Power System"].map(b => (
+                        <option key={b} value={b}>{b}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
                 <div className="max-w-xl mx-auto p-10 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50/50 hover:bg-white hover:border-blue-500 transition-all group relative">
                   <input
                     type="file"
@@ -1834,7 +1862,7 @@ const Admin = () => {
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Branch *</label>
                         <select name="branch" defaultValue={editingResult?.branch || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
                           <option value="" disabled>Select</option>
-                          {["Civil Engineering", "Mechanical Engineering", "Electrical and Electronics Engineering", "Computer Science & Engineering", "Fire Technology & Safety"].map(b => (
+                          {["COMPUTER SCIENCE AND ENGINEERING", "CIVIL ENGINEERING", "Computer Science and Engineering(Cyber Security)", "ELECTRICAL AND ELECTRONICS ENGINEERING", "MECHANICAL ENGINEERING", "FIRE TECHNOLOGY AND SAFETY", "Power System"].map(b => (
                             <option key={b} value={b}>{b}</option>
                           ))}
                         </select>
