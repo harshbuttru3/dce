@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
-import { Trash2, Search, Edit, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X, BookOpen, Layers, FileCode, Upload } from "lucide-react";
+import { Trash2, Search, Edit, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X, BookOpen, Layers, FileCode, Upload, Maximize2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ManageDepartments from "../components/ManageDepartments";
 
