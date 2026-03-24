@@ -1653,66 +1653,24 @@ const Admin = () => {
 
           {activeTab === "results" && (
             <div className="space-y-8 animate-fade-in">
-              <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm text-center">
-                <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Upload size={32} />
-                </div>
-                <h2 className="text-2xl font-serif font-bold text-[#133b5c] mb-2">Upload Exam Results</h2>
-                <p className="text-gray-400 max-w-md mx-auto mb-8 font-medium">Please upload a CSV file containing student results. The system will automatically process and update the database.</p>
-
-                {message && (
-                  <div className={`mb-8 p-4 rounded-2xl flex items-center justify-center gap-3 animate-slide-in-right ${message.includes("Success") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
-                    <CheckCircle2 size={18} />
-                    <span className="text-sm font-bold">{message}</span>
-                  </div>
-                )}
-
-                <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-left">
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Upload Semester (Optional)</label>
-                    <select value={uploadSemester} onChange={e => setUploadSemester(e.target.value)} className="w-full p-4 mt-2 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/30 text-sm font-bold text-[#133b5c]">
-                      <option value="">Use CSV Values</option>
-                      {["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"].map(sem => (
-                        <option key={sem} value={sem}>{sem}</option>
-                      ))}
-                    </select>
+              <div className="bg-white p-12 rounded-3xl border border-gray-100 shadow-sm text-center">
+                <div className="max-w-4xl mx-auto p-12 border-2 border-dashed border-[#133b5c]/20 rounded-3xl bg-blue-50/30 flex flex-col items-center gap-6 text-center group hover:bg-white hover:border-[#133b5c] transition-all">
+                  <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Maximize2 size={40} className="text-[#133b5c]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Upload Branch (Optional)</label>
-                    <select value={uploadBranch} onChange={e => setUploadBranch(e.target.value)} className="w-full p-4 mt-2 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/30 text-sm font-bold text-[#133b5c]">
-                      <option value="">Use CSV Values</option>
-                      {["COMPUTER SCIENCE AND ENGINEERING", "CIVIL ENGINEERING", "Computer Science and Engineering(Cyber Security)", "ELECTRICAL AND ELECTRONICS ENGINEERING", "MECHANICAL ENGINEERING", "FIRE TECHNOLOGY AND SAFETY", "Power System"].map(b => (
-                        <option key={b} value={b}>{b}</option>
-                      ))}
-                    </select>
+                    <h2 className="text-2xl font-serif font-bold text-[#133b5c]">Direct Spreadsheet Entry</h2>
+                    <p className="text-gray-500 mt-2 max-w-sm mx-auto font-medium">Manage student results exactly like MS Excel. Add subject marks, edit in bulk, and save directly to the database.</p>
                   </div>
-                </div>
-
-                <div className="max-w-xl mx-auto p-10 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50/50 hover:bg-white hover:border-blue-500 transition-all group relative">
-                  <input
-                    type="file"
-                    accept=".csv"
-                    onChange={(e) => setResultFile(e.target.files[0])}
-                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                  />
-                  <div className="flex flex-col items-center">
-                    <FileText size={48} className="text-gray-300 group-hover:text-blue-500 mb-4 transition-colors" />
-                    <p className="text-sm font-bold text-gray-500">{resultFile ? resultFile.name : "Select Result CSV File"}</p>
-                    <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest font-bold">Files supported: .CSV (Max 10MB)</p>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <button
-                    onClick={handleResultUpload}
-                    disabled={loading || !resultFile}
-                    className={`bg-[#133b5c] text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#1a4b73] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 mx-auto ${loading || !resultFile ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+                  <button 
+                    onClick={() => navigate('/admin/results/spreadsheet')}
+                    className="bg-[#133b5c] text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-[#c6b677] transition-all hover:translate-y-[-2px] shadow-xl"
                   >
-                    {loading ? "Processing CSV..." : "Bulk Upload Results"}
+                    Launch Spreadsheet View
                   </button>
-                  <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">Standard format: registrationNo, rollNo, name, semester, branch, sgpa, cgpa, status</p>
                 </div>
               </div>
+
 
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mt-8">
               <div className="p-8 border-b border-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">

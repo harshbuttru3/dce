@@ -23,6 +23,16 @@ const resultSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    subjects: [
+        {
+            name: { type: String, required: true },
+            internal: { type: Number, default: 0 },
+            external: { type: Number, default: 0 },
+            total: { type: Number, default: 0 },
+            grade: { type: String, default: "" },
+            credit: { type: Number, default: 0 }
+        }
+    ],
     sgpa: {
         type: Number,
         default: 0

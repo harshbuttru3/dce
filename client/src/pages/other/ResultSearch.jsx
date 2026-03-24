@@ -73,8 +73,35 @@ const ResultSearch = () => {
         drawRow("CGPA", student.cgpa.toString());
         drawRow("Status", student.status);
 
+        // Subject Table
+        if (student.subjects && student.subjects.length > 0) {
+            y += 10;
+            doc.setFont('times', 'bold');
+            doc.setFontSize(14);
+            doc.text("Subject-wise Performance", 30, y);
+            y += 8;
+
+            // Table Header
+            doc.setFontSize(11);
+            doc.setFillColor(240, 240, 240);
+            doc.rect(25, y - 5, pageWidth - 50, 10, 'F');
+            doc.text("Subject Name", 30, y + 2);
+            doc.text("Marks", pageWidth - 60, y + 2);
+            doc.line(25, y + 5, pageWidth - 25, y + 5);
+            y += 10;
+
+            doc.setFont('times', 'normal');
+            student.subjects.forEach((sub, index) => {
+                if (y > 230) { doc.addPage(); y = 20; }
+                doc.text(sub.name, 30, y);
+                doc.text(sub.total.toString(), pageWidth - 55, y);
+                doc.line(25, y + 2, pageWidth - 25, y + 2);
+                y += 8;
+            });
+        }
+
         // Footer
-        const footerY = 250;
+        const footerY = 275;
         doc.line(20, footerY - 10, pageWidth - 20, footerY - 10);
         doc.setFont('times', 'italic');
         doc.setFontSize(10);
@@ -197,6 +224,29 @@ const ResultSearch = () => {
                                                     </p>
                                                 </div>
                                             </div>
+
+                                            {/* Subject Table in Card */}
+                                            {student.subjects && student.subjects.length > 0 && (
+                                                <div className="col-span-2 mt-4 overflow-hidden border border-gray-100 rounded-xl">
+                                                    <table className="w-full text-left bg-gray-50/50">
+                                                        <thead className="bg-gray-100 text-[10px] uppercase font-bold text-gray-500">
+                                                            <tr>
+                                                                <th className="px-4 py-2">Subject</th>
+                                                                <th className="px-4 py-2 text-right">Marks</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-gray-100">
+                                                            {student.subjects.map((sub, idx) => (
+                                                                <tr key={idx} className="text-xs text-gray-600">
+                                                                    <td className="px-4 py-2 font-medium">{sub.name}</td>
+                                                                    <td className="px-4 py-2 text-right font-bold text-[#133b5c]">{sub.total}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            )}
+
                                             <button
                                                 onClick={() => downloadResultPDF(student)}
                                                 className="mt-4 col-span-2 w-full py-4 bg-[#c6b677] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#133b5c] transition-all"

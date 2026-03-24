@@ -2,74 +2,32 @@ const Result = require('../models/Result');
 const csv = require('csv-parser');
 const fs = require('fs');
 
-// Upload Results via CSV
-exports.uploadResults = async (req, res) => {
+// Bulk Save Results (from Spreadsheet Grid)
+exports.bulkSaveResults = async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: "Please upload a CSV file." });
+        const { results } = req.body;
+        
+        if (!results || !Array.isArray(results) || results.length === 0) {
+            return res.status(400).json({ message: "No result data provided." });
         }
 
-        const results = [];
-        const filePath = req.file.path;
-        const { semester: bodySemester, branch: bodyBranch } = req.body;
+        // Bulk upsert logic
+        const ops = results.map(result => ({
+            updateOne: {
+                filter: { registrationNo: result.registrationNo },
+                update: { $set: result },
+                upsert: true
+            }
+        }));
 
-        fs.createReadStream(filePath)
-            .pipe(csv())
-            .on('data', (data) => {
-                // Determine values based on flexible header names
-                const regNo = data.registrationNo || data.RegistrationNo || data["Registration No"] || data["REGISTRATION NO"] || data["Reg No"] || data["regNo"];
-                const roll = data.rollNo || data.RollNo || data["Roll No"] || data["ROLL NO"] || data["roll_no"];
-                const stdName = data.name || data.Name || data["NAME"] || data["Student Name"] || data["studentName"];
-                const sem = data.semester || data.Semester || data["SEMESTER"] || data["Sem"];
-                const br = data.branch || data.Branch || data["BRANCH"] || data["Department"];
-                const s = data.sgpa || data.SGPA || data["SGPA"];
-                const c = data.cgpa || data.CGPA || data["CGPA"];
-                const stat = data.status || data.Status || data["STATUS"];
-
-                if (regNo && stdName) {
-                    results.push({
-                        registrationNo: regNo.toString().trim(),
-                        rollNo: (roll || "N/A").toString().trim(),
-                        name: stdName.toString().trim(),
-                        semester: (bodySemester || sem || "1st Semester").toString().trim(),
-                        branch: (bodyBranch || br || "General").toString().trim(),
-                        sgpa: parseFloat(s) || 0,
-                        cgpa: parseFloat(c) || 0,
-                        status: (stat || 'Pass').toString().trim()
-                    });
-                }
-            })
-            .on('end', async () => {
-                console.log(`Finished parsing CSV. Total rows: ${results.length}`);
-                try {
-                    if (results.length === 0) {
-                        return res.status(400).json({ message: "CSV file is empty or formatted incorrectly." });
-                    }
-                    // Bulk upsert logic to avoid duplicates
-                    const ops = results.map(result => ({
-                        updateOne: {
-                            filter: { registrationNo: result.registrationNo },
-                            update: { $set: result },
-                            upsert: true
-                        }
-                    }));
-
-                    await Result.bulkWrite(ops);
-                    
-                    // Cleanup uploaded file
-                    fs.unlinkSync(filePath);
-                    
-                    res.status(200).json({ 
-                        message: `Successfully processed ${results.length} results.`,
-                        count: results.length 
-                    });
-                } catch (error) {
-                    res.status(500).json({ message: "Error saving to database", error: error.message });
-                }
-            });
-
+        await Result.bulkWrite(ops);
+        
+        res.status(200).json({ 
+            message: `Successfully processed ${results.length} results.`,
+            count: results.length 
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: "Error saving results", error: error.message });
     }
 };
 

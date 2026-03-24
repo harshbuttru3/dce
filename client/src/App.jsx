@@ -13,6 +13,7 @@ import AicteApproval from './pages/Approval/AicteApproval';
 import NirfApproval from './pages/Approval/NirfApproval';
 import BeuApproval from './pages/Approval/BeuApproval';
 import Admin from './pages/Admin';
+import AdminResultSpreadsheet from './pages/AdminResultSpreadsheet';
 import Login from './pages/Login';
 import CoordinatorLogin from './pages/CoordinatorLogin';
 import CoordinatorDashboard from './pages/CoordinatorDashboard'; // New Import
@@ -36,7 +37,7 @@ import DepartmentPage from './pages/Department/DepartmentPage';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const noLayoutPaths = ['/login', '/Admin', '/coordinator-login', '/coordinator/dashboard']; // Hide layout for coordinator dashboard
+  const noLayoutPaths = ['/login', '/Admin', '/admin/results/spreadsheet', '/coordinator-login', '/coordinator/dashboard']; // Hide layout for coordinator dashboard
   const hideLayout = noLayoutPaths.includes(location.pathname);
   const isHomePageorotherpageimpo = location.pathname === '/' || hideLayout == true;
 
@@ -63,6 +64,7 @@ function App() {
           <Route path="/approval/beu" element={<BeuApproval />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Admin" element={<Admin />} />
+          <Route path="/admin/results/spreadsheet" element={<AdminResultSpreadsheet />} />
           <Route path="/coordinator-login" element={<CoordinatorLogin />} />
           <Route path="/coordinator/dashboard" element={<CoordinatorDashboard />} />
 
