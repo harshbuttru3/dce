@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     ArrowLeft, Save, Plus, Trash2, ChevronDown, 
     Download, Upload, Search, Filter, RefreshCw, 
-    CheckCircle2, AlertCircle, Maximize2, Minimize2 
+    CheckCircle2, AlertCircle, Maximize2, Minimize2, X 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -62,8 +62,6 @@ const AdminResultSpreadsheet = () => {
                     rollNo: '',
                     semester: semester,
                     branch: branch,
-                    sgpa: 0,
-                    cgpa: 0,
                     status: 'Pass',
                     subjects: subjects.map(s => ({ name: s, total: 0 }))
                 })));
@@ -97,8 +95,7 @@ const AdminResultSpreadsheet = () => {
             rollNo: '',
             semester: semester,
             branch: branch,
-            sgpa: 0,
-            cgpa: 0,
+            branch: branch,
             status: 'Pass',
             subjects: subjects.map(s => ({ name: s, total: 0 }))
         }]);
@@ -106,6 +103,17 @@ const AdminResultSpreadsheet = () => {
 
     const removeRow = (idx) => {
         setRows(rows.filter((_, i) => i !== idx));
+    };
+
+    const removeSubject = (subIdx) => {
+        if (confirm(`Remove column "${subjects[subIdx]}"?`)) {
+            const newSubjects = subjects.filter((_, i) => i !== subIdx);
+            setSubjects(newSubjects);
+            setRows(rows.map(row => ({
+                ...row,
+                subjects: row.subjects.filter((_, i) => i !== subIdx)
+            })));
+        }
     };
 
     const addSubject = () => {
@@ -237,15 +245,20 @@ const AdminResultSpreadsheet = () => {
                                 <th className="p-3 min-w-[120px] border-r border-gray-200 text-left">Roll No.</th>
                                 {/* Subject Columns */}
                                 {subjects.map((sub, idx) => (
-                                    <th key={idx} className="p-3 min-w-[100px] border-r border-gray-200 text-center bg-blue-50/30 text-[#133b5c]">
-                                        <div className="flex flex-col gap-1">
+                                    <th key={idx} className="p-3 min-w-[120px] border-r border-gray-200 text-center bg-blue-50/30 text-[#133b5c] relative group/header">
+                                        <div className="flex flex-col gap-1 pr-4">
                                             <span>{sub}</span>
                                             <span className="text-[8px] font-normal opacity-60 italic">(Marks)</span>
                                         </div>
+                                        <button 
+                                            onClick={() => removeSubject(idx)}
+                                            className="absolute top-2 right-1 p-1 text-red-300 hover:text-red-500 opacity-0 group-hover/header:opacity-100 transition-opacity"
+                                            title="Remove Column"
+                                        >
+                                            <X size={12} />
+                                        </button>
                                     </th>
                                 ))}
-                                <th className="p-3 w-20 border-r border-gray-200">SGPA</th>
-                                <th className="p-3 w-20 border-r border-gray-200">CGPA</th>
                                 <th className="p-3 w-28 border-r border-gray-200">Status</th>
                                 <th className="p-3 w-16">Actions</th>
                             </tr>
@@ -297,26 +310,6 @@ const AdminResultSpreadsheet = () => {
                                             />
                                         </td>
                                     ))}
-
-                                    <td className="p-0 border-r border-gray-200">
-                                        <input 
-                                            type="number" 
-                                            step="0.01"
-                                            value={row.sgpa}
-                                            onChange={(e) => handleCellChange(rIdx, 'sgpa', e.target.value)}
-                                            className="w-full h-full p-3 text-xs text-center outline-none focus:bg-blue-50 focus:ring-1 focus:ring-blue-400 font-bold text-[#133b5c]"
-                                        />
-                                    </td>
-
-                                    <td className="p-0 border-r border-gray-200">
-                                        <input 
-                                            type="number" 
-                                            step="0.01"
-                                            value={row.cgpa}
-                                            onChange={(e) => handleCellChange(rIdx, 'cgpa', e.target.value)}
-                                            className="w-full h-full p-3 text-xs text-center outline-none focus:bg-blue-50 focus:ring-1 focus:ring-blue-400 font-bold"
-                                        />
-                                    </td>
 
                                     <td className="p-0 border-r border-gray-200">
                                         <select 

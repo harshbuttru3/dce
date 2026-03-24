@@ -7,7 +7,8 @@ import { jsPDF } from 'jspdf';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const ResultSearch = () => {
-    const [query, setQuery] = useState('');
+    const [registrationNo, setRegistrationNo] = useState('');
+    const [studentName, setStudentName] = useState('');
     const [semester, setSemester] = useState('');
     const [branch, setBranch] = useState('');
     const [results, setResults] = useState([]);
@@ -19,7 +20,7 @@ const ResultSearch = () => {
         setLoading(true);
         try {
             const response = await axios.get(`${API_URL}/results/search`, {
-                params: { query, semester, branch }
+                params: { registrationNo, name: studentName, semester, branch }
             });
             setResults(response.data);
             setSearched(true);
@@ -127,31 +128,54 @@ const ResultSearch = () => {
                 </div>
 
                 {/* Search Bar */}
-                <div className="bg-white rounded-3xl shadow-xl p-6 mb-12">
-                    <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="relative md:col-span-2">
-                            <FaSearch className="absolute left-4 top-4 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Registration No or Student Name..."
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#133b5c] outline-none transition-all"
-                            />
+                <div className="bg-white rounded-3xl shadow-xl p-8 mb-12">
+                    <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="relative group">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Registration Number</label>
+                            <div className="relative">
+                                <FaIdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-hover:text-[#133b5c] transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder="e.g. 21105..."
+                                    value={registrationNo}
+                                    onChange={(e) => setRegistrationNo(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium"
+                                />
+                            </div>
                         </div>
-                        <select
-                            value={semester}
-                            onChange={(e) => setSemester(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#133b5c] outline-none"
-                        >
-                            <option value="">All Semesters</option>
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <option key={s} value={s}>{s}th Semester</option>)}
-                        </select>
-                        <select
-                            value={branch}
-                            onChange={(e) => setBranch(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#133b5c] outline-none"
-                        >
+
+                        <div className="relative group">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Student Name</label>
+                            <div className="relative">
+                                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-hover:text-[#133b5c] transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder="e.g. John Doe"
+                                    value={studentName}
+                                    onChange={(e) => setStudentName(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium"
+                                />
+                            </div>
+                        </div>
+                        <div className="group">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Semester</label>
+                            <select
+                                value={semester}
+                                onChange={(e) => setSemester(e.target.value)}
+                                className="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium"
+                            >
+                                <option value="">All Semesters</option>
+                                {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <option key={s} value={s}>{s}th Semester</option>)}
+                            </select>
+                        </div>
+
+                        <div className="group">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Branch / Discipline</label>
+                            <select
+                                value={branch}
+                                onChange={(e) => setBranch(e.target.value)}
+                                className="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium text-ellipsis"
+                            >
                             <option value="">All Branches</option>
                             {[
                                 "COMPUTER SCIENCE AND ENGINEERING",
@@ -165,6 +189,7 @@ const ResultSearch = () => {
                                 <option key={b} value={b}>{b}</option>
                             ))}
                         </select>
+                        </div>
                         <div className="md:col-span-4 flex justify-center mt-4">
                             <button
                                 type="submit"

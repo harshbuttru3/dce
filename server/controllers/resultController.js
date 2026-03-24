@@ -34,11 +34,15 @@ exports.bulkSaveResults = async (req, res) => {
 // Search Results
 exports.getResults = async (req, res) => {
     try {
-        const { query, semester, branch } = req.query;
+        const { query, registrationNo, name, semester, branch } = req.query;
         
         let filter = {};
         
-        if (query) {
+        if (registrationNo) {
+            filter.registrationNo = { $regex: registrationNo, $options: 'i' };
+        } else if (name) {
+            filter.name = { $regex: name, $options: 'i' };
+        } else if (query) {
             filter.$or = [
                 { registrationNo: { $regex: query, $options: 'i' } },
                 { name: { $regex: query, $options: 'i' } }
