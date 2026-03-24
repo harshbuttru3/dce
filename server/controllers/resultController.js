@@ -34,7 +34,7 @@ exports.bulkSaveResults = async (req, res) => {
 // Search Results
 exports.getResults = async (req, res) => {
     try {
-        const { query, registrationNo, name, semester, branch } = req.query;
+        const { query, registrationNo, name, semester, branch, batch } = req.query;
         
         let filter = {};
         
@@ -51,6 +51,7 @@ exports.getResults = async (req, res) => {
 
         if (semester) filter.semester = semester;
         if (branch) filter.branch = branch;
+        if (batch) filter.batch = batch;
 
         const results = await Result.find(filter).sort({ createdAt: -1 });
         res.status(200).json(results);

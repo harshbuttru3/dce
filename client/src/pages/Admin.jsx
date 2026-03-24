@@ -1806,10 +1806,10 @@ const Admin = () => {
                       <input type="text" name="name" defaultValue={editingResult?.name} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium" />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Semester *</label>
-                        <select name="semester" defaultValue={editingResult?.semester || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                        <select name="semester" defaultValue={editingResult?.semester || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium text-ellipsis">
                           <option value="" disabled>Select</option>
                           {["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"].map(sem => (
                             <option key={sem} value={sem}>{sem}</option>
@@ -1818,9 +1818,17 @@ const Admin = () => {
                       </div>
                       <div>
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Branch *</label>
-                        <select name="branch" defaultValue={editingResult?.branch || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                        <select name="branch" defaultValue={editingResult?.branch || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium text-ellipsis">
                           <option value="" disabled>Select</option>
                           {["COMPUTER SCIENCE AND ENGINEERING", "CIVIL ENGINEERING", "Computer Science and Engineering(Cyber Security)", "ELECTRICAL AND ELECTRONICS ENGINEERING", "MECHANICAL ENGINEERING", "FIRE TECHNOLOGY AND SAFETY", "Power System"].map(b => (
+                            <option key={b} value={b}>{b}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Batch *</label>
+                        <select name="batch" defaultValue={editingResult?.batch || "2023-27"} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                          {["2020-24", "2021-25", "2022-26", "2023-27", "2024-28", "2025-29"].map(b => (
                             <option key={b} value={b}>{b}</option>
                           ))}
                         </select>

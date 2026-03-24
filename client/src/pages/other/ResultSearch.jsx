@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch, FaFileDownload, FaUserGraduate, FaIdCard, FaBookOpen, FaLayerGroup } from 'react-icons/fa';
 import axios from 'axios';
@@ -11,16 +11,17 @@ const ResultSearch = () => {
     const [studentName, setStudentName] = useState('');
     const [semester, setSemester] = useState('');
     const [branch, setBranch] = useState('');
+    const [batch, setBatch] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
 
-    const handleSearch = async (e) => {
+    const handleSearch = useCallback(async (e) => {
         if (e) e.preventDefault();
         setLoading(true);
         try {
             const response = await axios.get(`${API_URL}/results/search`, {
-                params: { registrationNo, name: studentName, semester, branch }
+                params: { registrationNo, name: studentName, semester, branch, batch }
             });
             setResults(response.data);
             setSearched(true);
@@ -29,7 +30,7 @@ const ResultSearch = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [semester, branch, batch, registrationNo, studentName, API_URL]);
 
     const downloadResultPDF = (student) => {
         const doc = new jsPDF('p', 'mm', 'a4');
@@ -55,32 +56,45 @@ const ResultSearch = () => {
         // Student Details Table
         doc.setLineWidth(0.5);
         doc.rect(20, 55, pageWidth - 40, 40); // Detail box
+        
+        // Horizontal lines
         doc.line(20, 65, pageWidth - 20, 65);
         doc.line(20, 75, pageWidth - 20, 75);
         doc.line(20, 85, pageWidth - 20, 85);
-        doc.line(pageWidth / 2, 55, pageWidth / 2, 95);
+        
+        // Vertical lines (except for the branch row)
+        doc.line(pageWidth / 2, 55, pageWidth / 2, 75); // Top two rows
+        doc.line(pageWidth / 2, 85, pageWidth / 2, 95); // Bottom row (Semester/Date)
 
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setFont('times', 'bold');
         
+        // Row 1
         doc.text("NAME", 25, 62);
-        doc.text("REGISTRATION NO.", 25, 72);
-        doc.text("BRANCH", 25, 82);
-        doc.text("SEMESTER", 25, 92);
-        
         doc.text("ROLL NO.", pageWidth/2 + 5, 62);
+        
+        // Row 2
+        doc.text("REGISTRATION NO.", 25, 72);
         doc.text("STATUS", pageWidth/2 + 5, 72);
-        doc.text("DATE", pageWidth/2 + 5, 82);
+        
+        // Row 3
+        doc.text("BRANCH", 25, 82);
+        
+        // Row 4
+        doc.text("SEMESTER", 25, 92);
+        doc.text("DATE", pageWidth/2 + 5, 92);
         
         doc.setFont('times', 'normal');
         doc.text(student.name, 70, 62);
-        doc.text(student.registrationNo, 70, 72);
-        doc.text(student.branch, 70, 82);
-        doc.text(student.semester, 70, 92);
-        
         doc.text(student.rollNo, pageWidth/2 + 45, 62);
+        
+        doc.text(student.registrationNo, 70, 72);
         doc.text(student.status, pageWidth/2 + 45, 72);
-        doc.text(new Date().toLocaleDateString(), pageWidth/2 + 45, 82);
+        
+        doc.text(student.branch, 70, 82);
+        
+        doc.text(student.semester, 70, 92);
+        doc.text(new Date().toLocaleDateString(), pageWidth/2 + 45, 92);
 
         // Subject Table
         if (student.subjects && student.subjects.length > 0) {
@@ -108,48 +122,6 @@ const ResultSearch = () => {
                 doc.text(sub.total.toString(), pageWidth - 40, tableY);
                 doc.line(20, tableY + 2, pageWidth - 20, tableY + 2);
                 tableY += 8;
-            });
-
-            // Graph / Chart
-            let chartY = tableY + 15;
-            if (chartY > 230) { doc.addPage(); chartY = 30; }
-            
-            doc.setFontSize(14);
-            doc.setFont('times', 'bold');
-            doc.text("Performance Graph", 20, chartY);
-            
-            chartY += 10;
-            const chartLeft = 30;
-            const chartBottom = chartY + 60;
-            const chartWidth = pageWidth - 60;
-            const chartHeight = 60;
-
-            // Draw Axis
-            doc.setLineWidth(0.8);
-            doc.line(chartLeft, chartY, chartLeft, chartBottom); // Y Axis
-            doc.line(chartLeft, chartBottom, chartLeft + chartWidth, chartBottom); // X Axis
-
-            // Draw Bars
-            const barWidth = Math.min(25, (chartWidth / student.subjects.length) - 5);
-            doc.setFontSize(8);
-            
-            student.subjects.forEach((sub, i) => {
-                const x = chartLeft + (i * (barWidth + 5)) + 5;
-                const h = (sub.total / 100) * chartHeight;
-                
-                doc.setFillColor(198, 182, 119); // #c6b677
-                doc.rect(x, chartBottom - h, barWidth, h, 'F');
-                
-                // Labels
-                doc.saveGraphicsState();
-                doc.setTextColor(0,0,0);
-                doc.text(sub.total.toString(), x + (barWidth/4), chartBottom - h - 2);
-                
-                // Rotated subject names (optional or just index)
-                doc.setFontSize(7);
-                const shortName = sub.name.length > 10 ? sub.name.substring(0, 10) + '..' : sub.name;
-                doc.text(shortName, x, chartBottom + 5, { angle: 45 });
-                doc.restoreGraphicsState();
             });
         }
 
@@ -222,12 +194,26 @@ const ResultSearch = () => {
                         </div>
 
                         <div className="group">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Branch / Discipline</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Batch</label>
                             <select
-                                value={branch}
-                                onChange={(e) => setBranch(e.target.value)}
-                                className="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium text-ellipsis"
+                                value={batch}
+                                onChange={(e) => setBatch(e.target.value)}
+                                className="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium"
                             >
+                                <option value="">All Batches</option>
+                                {["2020-24", "2021-25", "2022-26", "2023-27", "2024-28", "2025-29"].map(b => (
+                                    <option key={b} value={b}>{b}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="group lg:col-span-2">
+                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1 block">Branch / Discipline</label>
+                             <select
+                                 value={branch}
+                                 onChange={(e) => setBranch(e.target.value)}
+                                 className="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-[#133b5c]/5 focus:border-[#133b5c] outline-none transition-all text-sm font-medium text-ellipsis"
+                             >
                             <option value="">All Branches</option>
                             {[
                                 "COMPUTER SCIENCE AND ENGINEERING",

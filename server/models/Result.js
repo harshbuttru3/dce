@@ -23,6 +23,11 @@ const resultSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    batch: {
+        type: String,
+        required: true,
+        default: '2023-27'
+    },
     subjects: [
         {
             name: { type: String, required: true },

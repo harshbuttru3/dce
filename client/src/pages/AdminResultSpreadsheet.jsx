@@ -17,6 +17,7 @@ const AdminResultSpreadsheet = () => {
     // Filter State
     const [semester, setSemester] = useState('1st Semester');
     const [branch, setBranch] = useState('COMPUTER SCIENCE AND ENGINEERING');
+    const [batch, setBatch] = useState('2023-27');
     
     // Grid Data State
     // Format: [{ registrationNo, name, rollNo, sgpa, cgpa, subjects: [{ name, marks }] }]
@@ -35,12 +36,13 @@ const AdminResultSpreadsheet = () => {
     ];
 
     const semesters = ["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"];
+    const batches = ["2020-24", "2021-25", "2022-26", "2023-27", "2024-28", "2025-29"];
 
     // Initialize/Fetch Data
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await api.get(`/results/search?semester=${semester}&branch=${branch}`);
+            const response = await api.get(`/results/search?semester=${semester}&branch=${branch}&batch=${batch}`);
             if (response.data.length > 0) {
                 // Map existing data to our grid format
                 const mapped = response.data.map(r => ({
@@ -62,6 +64,7 @@ const AdminResultSpreadsheet = () => {
                     rollNo: '',
                     semester: semester,
                     branch: branch,
+                    batch: batch,
                     status: 'Pass',
                     subjects: subjects.map(s => ({ name: s, total: 0 }))
                 })));
@@ -95,7 +98,7 @@ const AdminResultSpreadsheet = () => {
             rollNo: '',
             semester: semester,
             branch: branch,
-            branch: branch,
+            batch: batch,
             status: 'Pass',
             subjects: subjects.map(s => ({ name: s, total: 0 }))
         }]);
@@ -198,6 +201,15 @@ const AdminResultSpreadsheet = () => {
                     >
                         {branches.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
+
+                    <select 
+                        value={batch} 
+                        onChange={e => setBatch(e.target.value)}
+                        className="bg-gray-50 border border-gray-200 text-xs font-bold p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#133b5c]/20"
+                    >
+                        {batches.map(b => <option key={b} value={b}>{b}</option>)}
+                    </select>
+
                     <select 
                         value={semester} 
                         onChange={e => setSemester(e.target.value)}
