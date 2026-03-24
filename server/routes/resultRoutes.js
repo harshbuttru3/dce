@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const resultController = require('../controllers/resultController');
 const multer = require('multer');
-const { protect, admin } = require('../controllers/authController'); // Assuming these exist
+const { protect, admin } = require('../middleware/authMiddleware');
 
 // Configure Multer for CSV Uploads
 const upload = multer({ dest: 'uploads/' });

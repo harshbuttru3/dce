@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
-import { Trash2, Search, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X, BookOpen, Layers, FileCode, Upload } from "lucide-react";
+import { Trash2, Search, Edit, FileText, Image as ImageIcon, Mail, LayoutDashboard, Link as LinkIcon, Bell, LogOut, User, Plus, ExternalLink, ChevronRight, BarChart3, Clock, CheckCircle2, ShieldCheck, MessageSquare, X, BookOpen, Layers, FileCode, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ManageDepartments from "../components/ManageDepartments";
 
@@ -529,6 +529,61 @@ const Admin = () => {
       setMessage("Failed to upload results. " + (error.response?.data?.message || error.message));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAdminResults = async () => {
+    try {
+      const url = resultSearchQuery ? `${RESULT_API_URL}?search=${resultSearchQuery}` : RESULT_API_URL;
+      const response = await api.get(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAdminResults(response.data);
+    } catch (error) {
+      console.error("Error fetching results:", error);
+    }
+  };
+
+  const handleManualResultSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const resultData = Object.fromEntries(formData.entries());
+    
+    setLoading(true);
+    try {
+      if (editingResult) {
+        await api.put(`${RESULT_API_URL}/${editingResult._id}`, resultData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMessage("Result updated successfully");
+      } else {
+        await api.post(`${RESULT_API_URL}`, resultData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMessage("Result added successfully");
+      }
+      setShowResultForm(false);
+      setEditingResult(null);
+      fetchAdminResults();
+    } catch (error) {
+      console.error("Error saving result:", error);
+      setMessage("Failed to save result. " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteResult = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this result?")) return;
+    try {
+      await api.delete(`${RESULT_API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAdminResults(adminResults.filter(r => r._id !== id));
+      setMessage("Result deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting result:", error);
+      setMessage("Failed to delete result.");
     }
   };
 
