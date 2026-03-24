@@ -12,9 +12,11 @@ import { useLocation } from 'react-router-dom';
 import { FaQuestionCircle, FaSearch } from "react-icons/fa";
 import { HiClipboardDocumentList } from "react-icons/hi2";
 import { BiMessageSquareDetail } from "react-icons/bi"
+import Cse from '../pages/Department/Cse';
 
 
 const Header = () => {
+
 
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -65,7 +67,16 @@ const Header = () => {
       children: [
         {
           label: "Department",
-          children: [] // Will be populated dynamically
+          children: [
+            { label:"ComputerScience & Engineering", path:"/department/Cse"},
+                       
+                        { label:"Cyber Security Engineering", path:"/department/Cyber"},
+                        { label:"Civil Engineering" , path:"/department/Civil"},
+                        { label:"Electrical and Electronic Engineering", path:"/department/Eee"},
+                        { label:"Fire and Safety Engineering", path:"/department/Fire"},
+                        { label:"Mechanical Engineering", path:"/department/Mech"},
+                        { label:"Power System Engineering", path:"/department/PowerSystem"}
+          ] // Will be populated dynamically
         },
         {
           label: "Programmes",

@@ -34,6 +34,13 @@ import Notice from './pages/Acedmics/Notice';
 import ImportantLinksPage from './pages/other/ImportantLinksPage';
 
 import DepartmentPage from './pages/Department/DepartmentPage';
+import Cse from './pages/Department/Cse';
+import Cyber from './pages/Department/Cyber';
+import Civil from './pages/Department/Civil';
+import Eee from './pages/Department/Eee';
+import Fire from './pages/Department/Fire';
+import Mech from './pages/Department/Mech';
+import PowerSystem from './pages/Department/PowerSystem';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -70,6 +77,15 @@ function App() {
 
           {/* Dynamic Department Route */}
           <Route path="/department/:slug" element={<DepartmentPage />} />
+          <Route path = "/department/Cse" element={<Cse />} />
+          <Route path = "/department/Cyber" element={<Cyber />} />
+          <Route path = "/department/Civil" element={<Civil />} />
+          <Route path = "/department/Eee" element={<Eee />} />
+          <Route path = "/department/Fire" element={<Fire />} />
+          <Route path = "/department/Mech" element={<Mech />} />
+          <Route path = "/department/PowerSystem" element={<PowerSystem />} />
+         
+
           <Route path="/holiday-calendar" element={<HolidayCalendar />} />
           <Route path="/admission" element={<Admission />} />
           <Route path="/academic-calendar" element={<Calender />} />
