@@ -11,7 +11,9 @@ const upload = multer({ dest: 'uploads/' });
 router.get('/search', resultController.getResults);
 
 // Admin Protected Routes
-// If 'protect' and 'admin' are available, use them. Otherwise, we'll need to check the exact auth implementation.
-router.post('/upload', upload.single('file'), resultController.uploadResults);
+router.post('/upload', protect, admin, upload.single('file'), resultController.uploadResults);
+router.post('/', protect, admin, resultController.addResult);
+router.put('/:id', protect, admin, resultController.updateResult);
+router.delete('/:id', protect, admin, resultController.deleteResult);
 
 module.exports = router;

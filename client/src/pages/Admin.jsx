@@ -27,6 +27,11 @@ const Admin = () => {
   const [documentCategory, setDocumentCategory] = useState("holiday_calendar");
   const [userInfo, setuserInfo] = useState(null);
   const [resultFile, setResultFile] = useState(null); // Added for Results
+  const [adminResults, setAdminResults] = useState([]); // Added for Results
+  const [editingResult, setEditingResult] = useState(null); // Added for Edit
+  const [showResultForm, setShowResultForm] = useState(false); // Added for Modal
+  const [resultSearchQuery, setResultSearchQuery] = useState(""); // Added for Search
+// Added for Results
 
   // Image Gallery State
   const [images, setImages] = useState([]);
@@ -111,6 +116,7 @@ const Admin = () => {
     if (activeTab === "magazines") fetchMagazines();
     if (activeTab === "carousel") fetchCarousels();
     if (activeTab === "documents") fetchDocuments();
+    if (activeTab === "results") fetchAdminResults(); // Added for Results
   }, [activeTab, navigate, token]); // Removed userInfo causes wo rerendering kr rha tha token better rhega..
 
   const fetchMagazines = async () => {
@@ -1624,7 +1630,194 @@ const Admin = () => {
                   <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">Standard format: registrationNo, rollNo, name, semester, branch, sgpa, cgpa, status</p>
                 </div>
               </div>
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mt-8">
+              <div className="p-8 border-b border-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-[#133b5c]">Student Results Database</h3>
+                  <p className="text-xs text-gray-400 mt-1">Manage individual records manually</p>
+                </div>
+                
+                <div className="flex w-full md:w-auto items-center gap-4">
+                  <div className="relative flex-1 md:w-64">
+                    <input
+                      type="text"
+                      placeholder="Search Reg No or Name..."
+                      value={resultSearchQuery}
+                      onChange={(e) => setResultSearchQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && fetchAdminResults()}
+                      className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none text-sm"
+                    />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <button 
+                      onClick={fetchAdminResults}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 text-xs font-bold"
+                    >
+                      Find
+                    </button>
+                  </div>
+                  
+                  <button 
+                    onClick={() => { setEditingResult(null); setShowResultForm(true); }}
+                    className="bg-[#133b5c] text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-[#1a4b73] transition-colors text-sm font-bold whitespace-nowrap"
+                  >
+                    <Plus size={16} /> Add Student
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-gray-50/50 text-[#133b5c] border-b border-gray-100">
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest">Student</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest">Details</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest">Scores</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {adminResults.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-12 text-center text-gray-400 font-medium text-sm">
+                          No results found. Search or add a new record.
+                        </td>
+                      </tr>
+                    ) : adminResults.map((res) => (
+                      <tr key={res._id} className="hover:bg-blue-50/20 transition-colors">
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-[#133b5c]">{res.name}</p>
+                          <p className="text-xs text-blue-600 font-medium">Reg: {res.registrationNo}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="text-sm text-gray-600">{res.branch}</p>
+                          <p className="text-xs text-gray-400 uppercase tracking-wider">{res.semester}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <span className="text-[10px] uppercase text-gray-400 font-bold block">SGPA</span>
+                              <span className="font-bold text-[#133b5c]">{res.sgpa}</span>
+                            </div>
+                            <div className="h-6 w-px bg-gray-200"></div>
+                            <div>
+                              <span className="text-[10px] uppercase text-gray-400 font-bold block">CGPA</span>
+                              <span className="font-bold text-[#133b5c]">{res.cgpa}</span>
+                            </div>
+                            <span className={`ml-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${res.status?.toLowerCase() === 'pass' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                              {res.status || 'Pass'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button 
+                              onClick={() => { setEditingResult(res); setShowResultForm(true); }}
+                              className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100 shadow-sm"
+                              title="Edit Result"
+                            >
+                              <Edit size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteResult(res._id)}
+                              className="p-2 text-red-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100 shadow-sm"
+                              title="Delete Result"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
+
+            {/* Modal for Add/Edit Result */}
+            {showResultForm && (
+              <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-zoom-in text-left">
+                  <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-[#133b5c] text-white">
+                    <h3 className="font-serif font-bold text-xl flex items-center gap-2">
+                      <FileText size={20} className="text-[#c6b677]" />
+                      {editingResult ? "Edit Student Result" : "Add New Result"}
+                    </h3>
+                    <button onClick={() => setShowResultForm(false)} className="text-white/70 hover:text-white">
+                      <X size={24} />
+                    </button>
+                  </div>
+                  
+                  <form onSubmit={handleManualResultSubmit} className="p-6 space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Registration No *</label>
+                        <input type="text" name="registrationNo" defaultValue={editingResult?.registrationNo} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Roll No</label>
+                        <input type="text" name="rollNo" defaultValue={editingResult?.rollNo} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Student Name *</label>
+                      <input type="text" name="name" defaultValue={editingResult?.name} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium" />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Semester *</label>
+                        <select name="semester" defaultValue={editingResult?.semester || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                          <option value="" disabled>Select</option>
+                          {["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"].map(sem => (
+                            <option key={sem} value={sem}>{sem}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Branch *</label>
+                        <select name="branch" defaultValue={editingResult?.branch || ""} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                          <option value="" disabled>Select</option>
+                          {["Civil Engineering", "Mechanical Engineering", "Electrical and Electronics Engineering", "Computer Science & Engineering", "Fire Technology & Safety"].map(b => (
+                            <option key={b} value={b}>{b}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">SGPA *</label>
+                        <input type="number" step="0.01" max="10" min="0" name="sgpa" defaultValue={editingResult?.sgpa} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-bold" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">CGPA *</label>
+                        <input type="number" step="0.01" max="10" min="0" name="cgpa" defaultValue={editingResult?.cgpa} required className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-bold" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Status</label>
+                        <select name="status" defaultValue={editingResult?.status || "Pass"} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#c6b677]/30 outline-none mt-1 text-sm text-[#133b5c] font-medium">
+                          <option value="Pass">Pass</option>
+                          <option value="Fail">Fail</option>
+                          <option value="Promoted">Promoted</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="pt-6 flex gap-3">
+                      <button type="button" onClick={() => setShowResultForm(false)} className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-colors">
+                        Cancel
+                      </button>
+                      <button type="submit" disabled={loading} className="flex-1 py-3 bg-[#133b5c] text-white rounded-xl font-bold shadow-lg hover:bg-[#1a4b73] transition-colors flex justify-center items-center gap-2">
+                        {loading ? "Saving..." : <><Plus size={18} /> Save Result</>}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
           )}
         </main>
       </div>
