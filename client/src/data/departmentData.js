@@ -19,17 +19,21 @@ export const departmentData = {
             { name: "B.Tech Computer Science & Engineering", intake: 60, duration: "4 Years", eligibility: "Passed 10+2 with Physics, Maths & Chemistry (as per BEU norms)" }
         ],
         hod: {
-            name: "Dr. Rohit Verma",
-            designation: "Professor & Head",
-            qualification: "Ph.D. (IIT Delhi), M.Tech (CSE)",
-            image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop",
+            name: "Mr. Ajeet Kumar Gupta",
+
+            designation: "Professor & HOD",
+            qualification: "PHD (NIT Patna), M.Tech (CSE)",
+            image: "/Ajit.jpg",
             message: "The CSE department is dedicated to providing students with the skills and knowledge to lead the technological revolution. Join us in shaping the digital future.",
-            email: "hod.cse@dcedarbhanga.ac.in"
+            email: "ajeetkgupta12@gmail.com"
         },
         faculty: [
-            { name: "Dr. Amit Sharma", designation: "Professor", specialization: "Machine Learning", image: "" },
-            { name: "Prof. Neha Verma", designation: "Asst. Professor", specialization: "Cyber Security", image: "" },
-            { name: "Mr. Rahul Singh", designation: "Asst. Professor", specialization: "Cloud Computing", image: "" }
+            { name: "Mr. Ajeet Kumar Gupta", designation: "Professor", specialization: " Ai & Machine Learning", image: "/Ajit.jpg" },
+            { name: "Mrs. Shweta kumari", designation: "Asst. Professor", specialization: "Machine Learning", image: "/Shweta.jpg" },
+            { name: "Mrs Pooja", designation: "Asst. Professor", specialization: "Operating System", image: "/pooja.jpg" },
+            { name: "Mr. Vivekanand Jha", designation: "Professor", specialization: " Ai & Machine Learning", image: "" },
+            { name: "Mr. Aditya Ray", designation: "Asst. Professor", specialization: "Machine Learning", image: "/Aditya.jpg" },
+            { name: "MRS. Vandna kumari", designation: "Asst. Professor", specialization: "Cloud Computing", image: "" }
         ],
         labs: [
             { name: "Programming Lab", description: "Equipped with high-performance systems for C, C++, and Java programming.", icon: "", tools: ["VS Code", "GCC", "JDK 21"] },
@@ -66,7 +70,7 @@ export const departmentData = {
             "The specialization in Cyber Security is designed to address the growing global demand for professionals who can protect complex information systems from cyber-attacks.",
             "The program provides deep insights into cryptography, ethical hacking, digital forensics, and network security policies."
         ],
-        intake: 60,
+       
         highlights: [
             { label: "Security Labs", value: "3", icon: "FaShieldAlt" },
             { label: "Specialized Tools", value: "15+", icon: "FaTools" }
@@ -75,15 +79,21 @@ export const departmentData = {
             { name: "B.Tech CSE (Cyber Security)", intake: 60, duration: "4 Years", eligibility: "Passed 10+2 with PCM" }
         ],
         hod: {
-            name: "Dr. C.K. Jha",
+            name: "Mr. Ajeet Kumar Gupta",
             designation: "Head of Specialization",
-            qualification: "Ph.D. (Information Security)",
-            image: "",
+            qualification: "PHD (NIT Patna), M.Tech (CSE)",
+            image: "/Ajit.jpg",
             message: "Information is the new currency, and its security is our paramount mission.",
-            email: "cyber.hod@dcedarbhanga.ac.in"
+            email: "ajeetkgupta12@gmail.com"
         },
         faculty: [
-            { name: "Dr. S. K. Gupta", designation: "Assoc. Professor", specialization: "Cryptography", image: "" }
+          
+            { name: "Mr. Ajeet Kumar Gupta", designation: "Professor", specialization: " Ai & Machine Learning", image: "/Ajit.jpg" },
+            { name: "Mrs. Shweta kumari", designation: "Asst. Professor", specialization: "Machine Learning", image: "/Shweta.jpg" },
+            { name: "Mrs Pooja", designation: "Asst. Professor", specialization: "Operating System", image: "/pooja.jpg" },
+            { name: "Mr. Vivekanand Jha", designation: "Professor", specialization: " Ai & Machine Learning", image: "" },
+            { name: "Mr. Aditya Ray", designation: "Asst. Professor", specialization: "Machine Learning", image: "/Aditya.jpg" },
+            { name: "MRS. Vandna kumari", designation: "Asst. Professor", specialization: "Cloud Computing", image: "" }
         ],
         labs: [
             { name: "Ethical Hacking Lab", description: "Controlled environment for vulnerability assessment and penetration testing.", icon: "", tools: ["Kali Linux", "Metasploit", "Nmap"] }
@@ -125,16 +135,20 @@ export const departmentData = {
             { name: "B.Tech Civil Engineering", intake: 60, duration: "4 Years", eligibility: "10+2 PCM" }
         ],
         hod: {
-            name: "Dr. B. Singh",
+            name: "Mr. Shyam Sundar Choudhary",
             designation: "Professor & HOD",
-            qualification: "Ph.D. (Structural Engineering)",
-            image: "",
+            qualification: "Phd",
+            image: "/Shyamsundar.jpg",
             message: "Build it strong, build it to last. We train engineers with integrity and technical prowess.",
-            email: "hod.ce@dcedarbhanga.ac.in"
+            email: "shyams_choudhary@rediffmail.com"
         },
         faculty: [
-            { name: "Prof. R. Prasad", designation: "Asst. Professor", specialization: "Geo-Tech Engineering", image: "" }
+            { name: "Mr. Shyam Sundar Choudhary", designation: " Professor | HOD", specialization: "Masters in structural engineering", image: "/Shyamsundar.jpg" },
+            { name: "Mr. RAVI RANJAN KUMAR", designation: "Asst. Professor", specialization: "Masters in structural engineering", image: "/Raviranjan.jpg" },
+            { name: "Mr. Ishant Kumar", designation: "Asst. Professor", specialization: "Masters in structural engineering", image: "/Ishant.jpg" },
+            { name: "Dr. Ishwar Chandra Thakur", designation: "Asst. Professor", specialization: "Masters in structural engineering", image: "/Ishwarchandra.jpg" },
         ],
+        
         labs: [
             { name: "Structural Lab", description: "Testing the strength and durability of construction materials.", icon: "", tools: ["UTM Machine", "Concrete Mixer"] }
         ],
@@ -174,15 +188,25 @@ export const departmentData = {
             { name: "B.Tech Mechanical Engineering", intake: 60, duration: "4 Years", eligibility: "10+2 PCM" }
         ],
         hod: {
-            name: "Dr. C. Roy",
+            name: "Dr. Md Asjad Mokhtar",
             designation: "Professor & HOD",
-            qualification: "Ph.D. (Thermal Engineering)",
-            image: "",
+            qualification: "Ph.D (2018), Deptt. of Mech. Engg., IIT Delhi",
+            image: "/Asjad.jpg",
             message: "Mechanical Engineering is the evergreen branch of engineering. We focus on innovation and precision.",
-            email: "hod.me@dcedarbhanga.ac.in"
+            email: "drasjadmokhtar@gmail.com"
         },
         faculty: [
-            { name: "Prof. S. Das", designation: "Asst. Professor", specialization: "Manufacturing", image: "" }
+            { name: "Prof. Chandan Kumar", designation: "Professor", specialization: "Manufacturing", image: "/chandan-sir.jpeg" },
+            { name: "Dr. Md Asjad Mokhtar", designation: "Professor | HOD", specialization: "Thermal Engineering", image: "/Asjad.jpg" },
+            { name: "Mr. Ankit Kumar", designation: "Asst. Professor", specialization: "Fault Diagnosis, Condition Monitoring", image: "/Ankit.jpg" },
+            { name: "Mr. Vinayak Jha", designation: "Asst. Professor", specialization: "Design of Machine Elements", image: "/Vinayak.jpeg" },
+            { name: "Mr. Javed Akhtar", designation: "Asst. Professor", specialization: "Fluid Mechanics", image: "/javed.jpeg" },
+            { name: "Mr. Shravan Kumar Gupta", designation: "Asst. Professor", specialization: "Manufacturing Technology", image: "/Shravan.jpeg" },
+            { name: "Mohammad Alimullah Anwar", designation: "Asst. Professor", specialization: "Manufacturing Technology", image: "/Allimulah.jpg" },
+            { name: "Mr. Vishal Kumar", designation: "Asst. Professor", specialization: "Manufacturing Technology", image: "/Vishal.jpg" },
+            { name: "Dr. Shashi Bhushan", designation: "Asst. Professor", specialization: "Manufacturing Technology", image: "" },
+         
+
         ],
         labs: [
             { name: "Thermal Engineering Lab", description: "Study of heat transfer and internal combustion engines.", icon: "", tools: ["Diesel Engines", "Heat Exchangers"] }
@@ -223,15 +247,23 @@ export const departmentData = {
             { name: "B.Tech Electrical & Electronics Engineering", intake: 60, duration: "4 Years", eligibility: "10+2 PCM" }
         ],
         hod: {
-            name: "Dr. D. Jha",
+            name: "Dr. Anamika",
             designation: "Professor & HOD",
             qualification: "Ph.D. (Power Electronics)",
-            image: "",
+            image: "/Anamika.jpeg",
             message: "EEE is about understanding the flow of energy that powers civilizations.",
-            email: "hod.eee@dcedarbhanga.ac.in"
+            email: "dr.anamika.dce@gmail.com"
+
         },
         faculty: [
-            { name: "Dr. K. Singh", designation: "Assoc. Professor", specialization: "Control Systems", image: "" }
+            { name: "Dr. Anamika", designation: " Professor", specialization: "Control Systems", image: "/Anamika.jpeg" },
+            { name: "Dr. Tarique Rashid", designation: "Assoc. Professor", specialization: "Control Systems", image: "" },
+            { name: "Mr. Prabhat Kumar", designation: "Assoc. Professor", specialization: "Power System, Electrical Machines", image: "/Prabhat.jpeg" },
+            { name: "Mr.Nitish Kumar", designation: "Assoc. Professor", specialization: "Basic Electronics, Digital Electronics, Microprocessor,VLSI, Control System", image: "/Nitish.png" },
+            { name: "Md. Mazharul Haque", designation: "Assoc. Professor", specialization: "Network Theory, Universal Human Values, Electrical Machines, Power Electronics", image: "/Mazaharul.jpeg" },
+            { name: "Mr. Mayank Kumar Singh", designation: "Assoc. Professor", specialization: "Power system", image: "/Mayank.jpg" },
+            { name: "Mr. Ajit Kumar Upadhiya", designation: "Assoc. Professor", specialization: "Control Systems", image: "" },
+           
         ],
         labs: [
             { name: "Power Electronics Lab", description: "Designing and testing power converter circuits.", icon: "", tools: ["DSO", "MOSFET Modules"] }
