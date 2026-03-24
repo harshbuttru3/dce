@@ -116,6 +116,17 @@ const AdminResultSpreadsheet = () => {
         }
     };
 
+    const handleSubjectRename = (idx, newName) => {
+        const newSubjects = [...subjects];
+        newSubjects[idx] = newName;
+        setSubjects(newSubjects);
+        // Also update all rows
+        setRows(rows.map(row => ({
+            ...row,
+            subjects: row.subjects.map((s, i) => i === idx ? { ...s, name: newName } : s)
+        })));
+    };
+
     const addSubject = () => {
         const subName = prompt("Enter Subject Name:");
         if (subName) {
@@ -245,10 +256,15 @@ const AdminResultSpreadsheet = () => {
                                 <th className="p-3 min-w-[120px] border-r border-gray-200 text-left">Roll No.</th>
                                 {/* Subject Columns */}
                                 {subjects.map((sub, idx) => (
-                                    <th key={idx} className="p-3 min-w-[120px] border-r border-gray-200 text-center bg-blue-50/30 text-[#133b5c] relative group/header">
+                                    <th key={idx} className="p-3 min-w-[140px] border-r border-gray-200 text-center bg-blue-50/30 text-[#133b5c] relative group/header transition-all">
                                         <div className="flex flex-col gap-1 pr-4">
-                                            <span>{sub}</span>
-                                            <span className="text-[8px] font-normal opacity-60 italic">(Marks)</span>
+                                            <input 
+                                                type="text" 
+                                                value={sub}
+                                                onChange={(e) => handleSubjectRename(idx, e.target.value)}
+                                                className="bg-transparent text-center border-none outline-none focus:ring-1 focus:ring-blue-400 rounded px-1 w-full font-bold uppercase text-[10px]"
+                                            />
+                                            <span className="text-[8px] font-normal opacity-60 italic">(Edit Name)</span>
                                         </div>
                                         <button 
                                             onClick={() => removeSubject(idx)}

@@ -50,65 +50,117 @@ const ResultSearch = () => {
         // Title
         doc.setFontSize(18);
         const title = "STATEMENT OF MARKS";
-        doc.text(title, (pageWidth - doc.getTextWidth(title)) / 2, 50);
+        doc.text(title, (pageWidth - doc.getTextWidth(title)) / 2, 45);
 
-        // Student Info Table style
-        doc.setFontSize(12);
-        doc.setFont('times', 'normal');
+        // Student Details Table
+        doc.setLineWidth(0.5);
+        doc.rect(20, 55, pageWidth - 40, 40); // Detail box
+        doc.line(20, 65, pageWidth - 20, 65);
+        doc.line(20, 75, pageWidth - 20, 75);
+        doc.line(20, 85, pageWidth - 20, 85);
+        doc.line(pageWidth / 2, 55, pageWidth / 2, 95);
+
+        doc.setFontSize(10);
+        doc.setFont('times', 'bold');
         
-        let y = 65;
-        const drawRow = (label, value) => {
-            doc.setFont('times', 'bold');
-            doc.text(label, 30, y);
-            doc.setFont('times', 'normal');
-            doc.text(": " + value, 80, y);
-            y += 10;
-        };
-
-        drawRow("Name", student.name);
-        drawRow("Registration No.", student.registrationNo);
-        drawRow("Roll No.", student.rollNo);
-        drawRow("Branch", student.branch);
-        drawRow("Semester", student.semester);
-        drawRow("SGPA", student.sgpa.toString());
-        drawRow("CGPA", student.cgpa.toString());
-        drawRow("Status", student.status);
+        doc.text("NAME", 25, 62);
+        doc.text("REGISTRATION NO.", 25, 72);
+        doc.text("BRANCH", 25, 82);
+        doc.text("SEMESTER", 25, 92);
+        
+        doc.text("ROLL NO.", pageWidth/2 + 5, 62);
+        doc.text("STATUS", pageWidth/2 + 5, 72);
+        doc.text("DATE", pageWidth/2 + 5, 82);
+        
+        doc.setFont('times', 'normal');
+        doc.text(student.name, 70, 62);
+        doc.text(student.registrationNo, 70, 72);
+        doc.text(student.branch, 70, 82);
+        doc.text(student.semester, 70, 92);
+        
+        doc.text(student.rollNo, pageWidth/2 + 45, 62);
+        doc.text(student.status, pageWidth/2 + 45, 72);
+        doc.text(new Date().toLocaleDateString(), pageWidth/2 + 45, 82);
 
         // Subject Table
         if (student.subjects && student.subjects.length > 0) {
-            y += 10;
+            let tableY = 105;
             doc.setFont('times', 'bold');
             doc.setFontSize(14);
-            doc.text("Subject-wise Performance", 30, y);
-            y += 8;
+            doc.text("Subject-wise Performance", 20, tableY);
+            tableY += 8;
 
             // Table Header
-            doc.setFontSize(11);
-            doc.setFillColor(240, 240, 240);
-            doc.rect(25, y - 5, pageWidth - 50, 10, 'F');
-            doc.text("Subject Name", 30, y + 2);
-            doc.text("Marks", pageWidth - 60, y + 2);
-            doc.line(25, y + 5, pageWidth - 25, y + 5);
-            y += 10;
+            doc.setFontSize(10);
+            doc.setFillColor(19, 59, 92); // #133b5c
+            doc.rect(20, tableY - 5, pageWidth - 40, 8, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.text("Subject Name", 25, tableY);
+            doc.text("Maximum", pageWidth - 70, tableY);
+            doc.text("Obtained", pageWidth - 45, tableY);
+            
+            doc.setTextColor(0, 0, 0);
+            tableY += 8;
 
-            doc.setFont('times', 'normal');
-            student.subjects.forEach((sub, index) => {
-                if (y > 230) { doc.addPage(); y = 20; }
-                doc.text(sub.name, 30, y);
-                doc.text(sub.total.toString(), pageWidth - 55, y);
-                doc.line(25, y + 2, pageWidth - 25, y + 2);
-                y += 8;
+            student.subjects.forEach((sub) => {
+                doc.text(sub.name, 25, tableY);
+                doc.text("100", pageWidth - 65, tableY);
+                doc.text(sub.total.toString(), pageWidth - 40, tableY);
+                doc.line(20, tableY + 2, pageWidth - 20, tableY + 2);
+                tableY += 8;
+            });
+
+            // Graph / Chart
+            let chartY = tableY + 15;
+            if (chartY > 230) { doc.addPage(); chartY = 30; }
+            
+            doc.setFontSize(14);
+            doc.setFont('times', 'bold');
+            doc.text("Performance Graph", 20, chartY);
+            
+            chartY += 10;
+            const chartLeft = 30;
+            const chartBottom = chartY + 60;
+            const chartWidth = pageWidth - 60;
+            const chartHeight = 60;
+
+            // Draw Axis
+            doc.setLineWidth(0.8);
+            doc.line(chartLeft, chartY, chartLeft, chartBottom); // Y Axis
+            doc.line(chartLeft, chartBottom, chartLeft + chartWidth, chartBottom); // X Axis
+
+            // Draw Bars
+            const barWidth = Math.min(25, (chartWidth / student.subjects.length) - 5);
+            doc.setFontSize(8);
+            
+            student.subjects.forEach((sub, i) => {
+                const x = chartLeft + (i * (barWidth + 5)) + 5;
+                const h = (sub.total / 100) * chartHeight;
+                
+                doc.setFillColor(198, 182, 119); // #c6b677
+                doc.rect(x, chartBottom - h, barWidth, h, 'F');
+                
+                // Labels
+                doc.saveGraphicsState();
+                doc.setTextColor(0,0,0);
+                doc.text(sub.total.toString(), x + (barWidth/4), chartBottom - h - 2);
+                
+                // Rotated subject names (optional or just index)
+                doc.setFontSize(7);
+                const shortName = sub.name.length > 10 ? sub.name.substring(0, 10) + '..' : sub.name;
+                doc.text(shortName, x, chartBottom + 5, { angle: 45 });
+                doc.restoreGraphicsState();
             });
         }
 
         // Footer
-        const footerY = 275;
+        const footerY = 285;
         doc.line(20, footerY - 10, pageWidth - 20, footerY - 10);
         doc.setFont('times', 'italic');
         doc.setFontSize(10);
-        doc.text("Generated on: " + new Date().toLocaleString(), 30, footerY);
+        doc.text("This is a computer generated document. Generated on: " + new Date().toLocaleString(), 20, footerY);
         doc.setFont('times', 'bold');
-        doc.text("Controller of Examinations", pageWidth - 70, footerY);
+        doc.text("DCE Exam Cell", pageWidth - 50, footerY);
 
         doc.save(`Result_${student.registrationNo}.pdf`);
     };
@@ -236,12 +288,7 @@ const ResultSearch = () => {
                                                 <FaLayerGroup className="text-[#133b5c]" />
                                                 <span>{student.branch}</span>
                                             </div>
-                                            <div className="mt-4 p-4 bg-gray-50 rounded-2xl col-span-2 flex justify-around items-center border border-gray-200">
-                                                <div className="text-center">
-                                                    <p className="text-xs text-gray-500 uppercase tracking-wider">SGPA</p>
-                                                    <p className="text-2xl font-bold text-[#133b5c]">{student.sgpa}</p>
-                                                </div>
-                                                <div className="w-px h-8 bg-gray-300"></div>
+                                            <div className="mt-4 p-4 bg-gray-50 rounded-2xl col-span-2 flex justify-center items-center border border-gray-200">
                                                 <div className="text-center">
                                                     <p className="text-xs text-gray-500 uppercase tracking-wider">Status</p>
                                                     <p className={`text-lg font-bold ${student.status === 'Pass' ? 'text-green-600' : 'text-red-500'}`}>
