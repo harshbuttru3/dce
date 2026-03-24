@@ -118,7 +118,7 @@ const ResultSearch = () => {
 
             student.subjects.forEach((sub) => {
                 doc.text(sub.name, 25, tableY);
-                doc.text("100", pageWidth - 65, tableY);
+                doc.text("20", pageWidth - 65, tableY);
                 doc.text(sub.total.toString(), pageWidth - 40, tableY);
                 doc.line(20, tableY + 2, pageWidth - 20, tableY + 2);
                 tableY += 8;

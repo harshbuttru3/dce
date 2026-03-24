@@ -334,7 +334,7 @@ const AdminResultSpreadsheet = () => {
                                                 value={sub.total}
                                                 onChange={(e) => handleCellChange(rIdx, 'total', e.target.value, sIdx)}
                                                 className="w-full h-full p-3 text-xs text-center outline-none focus:bg-blue-50 focus:ring-1 focus:ring-blue-400 font-bold"
-                                                min="0" max="100"
+                                                min="0" max="20"
                                             />
                                         </td>
                                     ))}

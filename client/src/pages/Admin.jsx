@@ -620,7 +620,7 @@ const Admin = () => {
   return (
     <div className="min-h-screen flex bg-[#f8fafc] font-sans">
       {/* Sidebar */}
-      <div className="w-72 bg-[#133b5c] text-white fixed h-full transition-all duration-300 shadow-2xl z-30">
+      <div className="w-72 bg-[#133b5c] text-white fixed h-full transition-all duration-300 shadow-2xl z-30 flex flex-col">
         <div className="p-8 border-b border-white/10">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-[#c6b677] rounded-lg flex items-center justify-center text-[#133b5c] shadow-lg">
@@ -631,7 +631,7 @@ const Admin = () => {
           <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">Systems Control Panel</p>
         </div>
 
-        <nav className="p-6">
+        <nav className="p-6 flex-1 overflow-y-auto custom-scrollbar">
           <ul className="space-y-2">
             {[
               { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
@@ -664,7 +664,7 @@ const Admin = () => {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-[#0d2a42]">
+        <div className="w-full p-6 border-t border-white/10 bg-[#0d2a42]">
           <div
             onClick={() => {
               localStorage.removeItem('userInfo');
