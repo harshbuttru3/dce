@@ -29,6 +29,8 @@ import Testimonials from './pages/StudentLife/Testimonials';
 import SocietyPage from './pages/StudentLife/SocietyPage';
 import BonafideForm from './pages/other/BonafideForm';
 import ResultSearch from './pages/other/ResultSearch';
+import Notice from './pages/Acedmics/Notice';
+import ImportantLinksPage from './pages/other/ImportantLinksPage';
 
 import DepartmentPage from './pages/Department/DepartmentPage';
 
@@ -79,6 +81,8 @@ function App() {
           <Route path="/testimonial" element={<Testimonials />} />
           <Route path="/important-link/bonafide" element={<BonafideForm />} />
           <Route path="/important-link/result" element={<ResultSearch />} />
+          <Route path="/Acedmics/Notice" element={<Notice />} />
+          <Route path="/important-links" element={<ImportantLinksPage />} />
 
           {/* nested path for about  */}
           <Route path="/about" element={<About />}>

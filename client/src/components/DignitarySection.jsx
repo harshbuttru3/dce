@@ -6,21 +6,21 @@ const DignitarySection = () => {
             name: "Shri Nitish Kumar",
             title: "Hon'ble Chief Minister, Bihar - cum - Hon'ble Chancellor",
             subtitle: "Bihar Engineering University, Patna",
-            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Nitish_Kumar_working_crop.jpg/330px-Nitish_Kumar_working_crop.jpg",
+            image: "/cm.webp",
             message: "Our vision is to transform Bihar into a hub of technical excellence and innovation. By strengthening our engineering institutions, we are empowering the youth to lead the state's progress and contribute to the nation's development."
         },
         {
             name: "Shri Sunil Kumar",
             title: "Hon'ble Minister",
             subtitle: "Dept. of Science, Technology and Technical Education, Govt. of Bihar",
-            image: "https://dst.bihar.gov.in/images/minister.jpg",
+            image: "/sunil.jpg",
             message: "We are committed to providing state-of-the-art infrastructure and a research-oriented environment in our technical colleges. Our goal is to ensure that every student is equipped with the skills needed for the global industry."
         },
         {
             name: "Prof. Suresh Kant Verma",
             title: "Vice Chancellor",
             subtitle: "Bihar Engineering University, Patna",
-            image: "https://beupatna.ac.in/Static/Images/vc.jpg",
+            image: "/vice.jpg",
             message: "As the Chancellor of Bihar Engineering University, I am focused on academic excellence, interdisciplinary research, and fostering a culture of continuous learning across all our affiliated colleges."
         }
     ];
