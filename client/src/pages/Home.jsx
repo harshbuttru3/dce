@@ -76,7 +76,7 @@ const Home = () => {
     {
       title: 'Exam Results',
       description: 'Access and download your semester-wise academic results and marksheets.',
-      image: 'https://images.unsplash.com/photo-1454165833767-1330084bc6f9?q=80&w=2000&auto=format&fit=crop',
+      image: 'https://assets.timelinedaily.com/2024/04/exam-result-image-e1715162320527.png',
       url: '/important-link/result',
     },
   ];
