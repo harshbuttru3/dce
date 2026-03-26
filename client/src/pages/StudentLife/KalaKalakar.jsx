@@ -128,14 +128,11 @@ const KalaKalakar = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1544928147-79723bd4d284?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1514525253361-bee8d4074da7?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1000&auto=format&fit=crop",
-                        "https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=1000&auto=format&fit=crop"
+                    "https://res.cloudinary.com/dpsseacp9/image/upload/v1774525476/dce_notices/DSC_2718-scaled_1774525474162.jpg",
+            "https://res.cloudinary.com/dpsseacp9/image/upload/v1774525496/dce_notices/1-1_1774525494264.jpg",
+            "https://res.cloudinary.com/dpsseacp9/image/upload/v1773576172/dce_notices/WhatsApp%20Image%202026-03-15%20at%205_1773576170876.jpg",
+            "https://res.cloudinary.com/dpsseacp9/image/upload/v1773574890/dce_notices/OIP%20preholi_1773574889315.jpg",
+            "https://res.cloudinary.com/dpsseacp9/image/upload/v1774525536/dce_notices/4_1774525535273.jpg"
                     ].map((img, i) => (
                         <div key={i} className={`group relative overflow-hidden rounded-xl cursor-pointer ${i === 1 || i === 4 ? 'row-span-2' : ''}`}>
                             <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Club Moment" />
