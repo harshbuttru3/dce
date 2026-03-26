@@ -60,7 +60,7 @@ const CampusLife = () => {
                         className="col-span-1 md:col-span-5 row-span-2 relative group cursor-pointer overflow-hidden origin-bottom"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000&auto=format&fit=crop"
+                            src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773600633/dce_notices/Screenshot_16-3-2026_0169_www_1773600632115.jpg"
                             alt="Events and Celebrations"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
@@ -83,7 +83,7 @@ const CampusLife = () => {
                             className="flex-1 relative group cursor-pointer overflow-hidden h-[300px] md:h-1/2"
                         >
                             <img
-                                src="https://images.unsplash.com/photo-1493225457124-a1a2a5f5f9af?q=80&w=1000&auto=format&fit=crop"
+                                src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773576172/dce_notices/WhatsApp%20Image%202026-03-15%20at%205_1773576170876.jpg"
                                 alt="Art & Culture"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
@@ -107,10 +107,14 @@ const CampusLife = () => {
 
                             <ul className="space-y-4 relative z-10">
                                 {[
-                                    { label: "Sports", path: "/campus-life/sports" },
-                                    { label: "Innovation & Entrepreneurship", path: "/campus-life/innovation" },
-                                    { label: "Magazine", path: "/magazine" },
-                                    { label: "360° Virtual Tour", path: "/campus-life/tour" }
+                                    // { label: "Sports", path: "/campus-life/sports" },
+                                    // { label: "Innovation & Entrepreneurship", path: "/campus-life/innovation" },
+                                    // { label: "Magazine", path: "/magazine" },
+                                    // { label: "360° Virtual Tour", path: "/campus-life/tour" }
+                              { label: "Sports", path: "" },
+                                    { label: "Innovation & Entrepreneurship", path: "" },
+                                    { label: "Magazine", path: "" },
+                                    { label: "360° Virtual Tour", path: "" }
                                 ].map((item, index) => (
                                     <li key={index} className="border-b border-white/20 pb-3 last:border-0 last:pb-0 overflow-hidden">
                                         <Link to={item.path} className="text-white hover:text-yellow-400 transition-colors text-sm sm:text-base font-medium flex items-center group relative w-max">
@@ -135,7 +139,7 @@ const CampusLife = () => {
                                 className="flex-1 relative group cursor-pointer overflow-hidden border-r border-white/30 border-b h-[300px] sm:h-auto"
                             >
                                 <img
-                                    src="https://images.unsplash.com/photo-1596417772648-527fbdd47a3e?q=80&w=1000&auto=format&fit=crop"
+                                    src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773576073/dce_notices/tt%20tounament%20girls_1773576072217.jpg"
                                     alt="Campus Facilities"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
@@ -155,7 +159,7 @@ const CampusLife = () => {
                                 className="flex-1 relative group cursor-pointer overflow-hidden border-b border-white/30 h-[300px] sm:h-auto"
                             >
                                 <img
-                                    src="https://images.unsplash.com/photo-1560523160-754a9e425192?q=80&w=1000&auto=format&fit=crop"
+                                    src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773686260/dce_notices/ScreenshotX2024-05-17X205451_1773686258287.png"
                                     alt="Academic Facilities"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
@@ -176,14 +180,14 @@ const CampusLife = () => {
                             className="flex-1 relative group cursor-pointer overflow-hidden h-[300px] md:h-1/2"
                         >
                             <img
-                                src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1000&auto=format&fit=crop"
+                                src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773576092/dce_notices/volleyball%20tournamen2t_1773576090718.jpg"
                                 alt="Community Focus"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <span className="bg-white/20 backdrop-blur-md border border-white/50 text-white font-medium py-2 px-6 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                    Explore More
+                                    And Much More..
                                 </span>
                             </div>
                         </motion.div>
