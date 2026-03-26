@@ -38,7 +38,7 @@ const Infrastructure = () => {
                 </div>
                 <div className="w-full md:w-1/2 min-h-[400px] animate-fade-in">
                     <img
-                        src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop"
+                        src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773605151/dce_notices/531762656_1259025908844743_1303561602828599073_n_1773605149249.jpg"
                         alt="Campus Overview"
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
                     />
@@ -49,7 +49,7 @@ const Infrastructure = () => {
             <div className="w-full flex flex-col md:flex-row bg-[#133b5c] text-white overflow-hidden">
                 <div className="w-full md:w-1/2 h-[400px] md:h-auto order-2 md:order-1 reveal">
                     <img
-                        src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1000&auto=format&fit=crop"
+                        src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773686420/dce_notices/_con_1773686418329.png"
                         alt="Academic Block"
                         className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-110 transition-all duration-1000"
                     />
@@ -103,8 +103,8 @@ const Infrastructure = () => {
                         </div>
                     </div>
                     <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=600&auto=format&fit=crop" className="rounded-xl shadow-lg h-64 w-full object-cover mt-8 hover:-translate-y-4 transition-transform duration-500" alt="Library 1" />
-                        <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600&auto=format&fit=crop" className="rounded-xl shadow-lg h-64 w-full object-cover hover:-translate-y-4 transition-transform duration-500" alt="Library 2" />
+                        <img src="https://res.cloudinary.com/dpsseacp9/image/upload/v1774525293/dce_notices/aaaa_1774525292652.jpg" className="rounded-xl shadow-lg h-64 w-full object-cover mt-8 hover:-translate-y-4 transition-transform duration-500" alt="Library 1" />
+                        <img src="https://res.cloudinary.com/dpsseacp9/image/upload/v1774528768/dce_notices/ScreenshotX2024-05-17X205515_1774528767008.png" className="rounded-xl shadow-lg h-64 w-full object-cover hover:-translate-y-4 transition-transform duration-500" alt="Library 2" />
                     </div>
                 </div>
             </div>
@@ -140,7 +140,7 @@ const Infrastructure = () => {
                     </div>
                     <div className="w-full md:w-1/2 h-[450px] relative z-10">
                         <img
-                            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop"
+                            src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773686467/dce_notices/ScreenshotX2024-05-17X205451_1773686465529.png"
                             alt="IT Labs"
                             className="w-full h-full object-cover rounded-xl shadow-lg"
                         />
@@ -155,7 +155,7 @@ const Infrastructure = () => {
                     {/* Facility Card 1 */}
                     <div className="group cursor-default reveal">
                         <div className="overflow-hidden rounded-xl mb-6 shadow-md relative h-64">
-                            <img src="https://images.unsplash.com/photo-1555854817-5b2260d5bcc6?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Hostels" />
+                            <img src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773606230/dce_notices/537519818_1091310319284685_1557257712333653517_n_1773606229065.jpg" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Hostels" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
                                 <h4 className="text-white font-bold text-xl uppercase tracking-wide group-hover:text-yellow-400 transition-colors">Residential Facilities</h4>
                             </div>
@@ -166,7 +166,7 @@ const Infrastructure = () => {
                     {/* Facility Card 2 */}
                     <div className="group cursor-default reveal">
                         <div className="overflow-hidden rounded-xl mb-6 shadow-md relative h-64">
-                            <img src="https://images.unsplash.com/photo-1541250848049-b4f71413cc30?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Sports" />
+                            <img src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773408475/dce_notices/IMG_2489_1773408472272.jpg" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Sports" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
                                 <h4 className="text-white font-bold text-xl uppercase tracking-wide group-hover:text-yellow-400 transition-colors">Sports & Events</h4>
                             </div>
@@ -177,7 +177,7 @@ const Infrastructure = () => {
                     {/* Facility Card 3 */}
                     <div className="group cursor-default reveal">
                         <div className="overflow-hidden rounded-xl mb-6 shadow-md relative h-64">
-                            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Cafeteria" />
+                            <img src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773572647/dce_notices/deccapus_1773572646765.jpg" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Cafeteria" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
                                 <h4 className="text-white font-bold text-xl uppercase tracking-wide group-hover:text-yellow-400 transition-colors">Campus Amenities</h4>
                             </div>
