@@ -26,14 +26,14 @@ const Placements = () => {
     };
 
     const recruiters = [
-        { name: 'TCS', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg' },
+        { name: 'TCS', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Tata_Consultancy_Services_old_logo.svg/1280px-Tata_Consultancy_Services_old_logo.svg.png' },
         { name: 'Infosys', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg' },
         { name: 'Wipro', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg' },
         { name: 'Cognizant', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg' },
-        { name: 'L&T', category: 'Core', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Larsen_%26_Toubro_logo.svg' },
-        { name: 'Adani', category: 'Core', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Adani_Group_logo.svg' },
-        { name: 'HCL', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/HCL_Technologies_logo.svg' },
-        { name: 'Byju\'s', category: 'Startup', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Byju%27s_Logo.svg' },
+        { name: 'L&T', category: 'Core', logo: 'https://seekvectorlogo.com/wp-content/uploads/2018/01/larsen-toubro-vector-logo.png' },
+        { name: 'Adani', category: 'Core', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Adani_logo_2012.svg/3840px-Adani_logo_2012.svg.png' },
+        { name: 'HCL', category: 'IT', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/HCL_Technologies_logo.svg/1280px-HCL_Technologies_logo.svg.png' },
+        { name: 'Byju\'s', category: 'Startup', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Byju%27s_logo.svg/1280px-Byju%27s_logo.svg.png' },
     ];
 
     const filteredRecruiters = recruiterFilter === 'All'
