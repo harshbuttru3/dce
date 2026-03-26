@@ -46,7 +46,7 @@ const History = () => {
         {/* Right Side Image */}
         <div className="w-full md:w-7/12 min-h-[300px] md:min-h-[600px] z-10 animate-fade-in">
           <img
-            src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop"
+            src="https://res.cloudinary.com/dpsseacp9/image/upload/v1773605151/dce_notices/531762656_1259025908844743_1303561602828599073_n_1773605149249.jpg"
             alt="Institute Campus"
             className="w-full h-full object-cover shadow-inner hover:scale-110 transition-transform duration-1000"
           />
