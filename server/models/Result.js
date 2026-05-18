@@ -57,4 +57,11 @@ const resultSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// --- Query Optimization Indexes ---
+// Text index allows lightning-fast search on the 'name' field
+resultSchema.index({ name: 'text' });
+
+// Compound index speeds up queries that filter by these fields simultaneously
+resultSchema.index({ semester: 1, branch: 1, batch: 1 });
+
 module.exports = mongoose.model('Result', resultSchema);
